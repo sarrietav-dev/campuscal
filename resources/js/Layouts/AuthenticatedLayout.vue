@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import CreateActionButton from "@/Components/CreateActionButton.vue";
 import Links from "@/Components/Links.vue";
+import LogoutButton from "@/Components/LogoutButton.vue";
 import ThemeToggle from "@/Components/ThemeToggle.vue";
 import { Button } from "@/Components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/Components/ui/sheet";
