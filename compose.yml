@@ -1,0 +1,31 @@
+services:
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: campuscal_laravel
+      MYSQL_USER: sail
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+  mailpit:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+  minio:
+    image: minio/minio
+    entrypoint: sh
+    command: -c 'mkdir -p /data/campuscal && /usr/bin/minio server /data'
+    environment:
+      MINIO_ACCESS_KEY: campuscal
+      MINIO_SECRET_KEY: campuscal
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./minio:/data
