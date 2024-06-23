@@ -12,7 +12,7 @@ import { BookMarked } from "lucide-vue-next";
         <span className="sr-only">CampusCal</span>
     </Link>
     <Link
-        href="/admin/campus"
+        :href="route('campus')"
         className="text-muted-foreground transition-colors hover:text-foreground [&.active]:font-bold"
     >
         Espacios
