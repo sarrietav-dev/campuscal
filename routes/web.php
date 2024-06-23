@@ -19,11 +19,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get("/campus", function () {
-    return Inertia::render("Spaces/Campus");
+    return Inertia::render("Spaces/Campuses");
 })->name("campus");
 
 Route::get("/campus/{id}", function (string $id) {
-    return Inertia::render("Spaces/Campuses", [
+    return Inertia::render("Spaces/Campus", [
         "id" => $id
     ]);
 })->name("campuses");
