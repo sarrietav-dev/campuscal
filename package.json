@@ -6,6 +6,8 @@
         "build": "vue-tsc && vite build"
     },
     "devDependencies": {
+        "@iconify-json/radix-icons": "^1.1.14",
+        "@iconify/vue": "^4.1.2",
         "@inertiajs/vue3": "^1.0.0",
         "@tailwindcss/forms": "^0.5.3",
         "@vitejs/plugin-vue": "^5.0.0",
@@ -20,8 +22,10 @@
         "vue-tsc": "^1.8.27"
     },
     "dependencies": {
+        "@vueuse/core": "^10.11.0",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "embla-carousel-vue": "^8.1.5",
         "lucide-vue-next": "^0.396.0",
         "radix-vue": "^1.8.4",
         "tailwind-merge": "^2.3.0",
