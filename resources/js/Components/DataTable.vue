@@ -34,6 +34,7 @@ import {
     TableRow,
 } from "./ui/table";
 import { valueUpdater } from "@/lib/utils";
+import { columns, Request } from "@/Components/columnDef";
 
 export interface Payment {
     id: string;
@@ -42,103 +43,34 @@ export interface Payment {
     email: string;
 }
 
-const data: Payment[] = [
+const data: Request[] = [
     {
-        id: "m5gr84i9",
-        amount: 316,
-        status: "success",
-        email: "ken99@yahoo.com",
-    },
-    {
-        id: "3u1reuv4",
-        amount: 242,
-        status: "success",
-        email: "Abe45@gmail.com",
-    },
-    {
-        id: "derv1ws0",
-        amount: 837,
-        status: "processing",
-        email: "Monserrat44@gmail.com",
-    },
-    {
-        id: "5kma53ae",
-        amount: 874,
-        status: "success",
-        email: "Silas22@gmail.com",
-    },
-    {
-        id: "bhqecj4p",
-        amount: 721,
-        status: "failed",
-        email: "carmella@hotmail.com",
-    },
-];
-
-const columns: ColumnDef<Payment>[] = [
-    {
-        id: "select",
-        header: ({ table }) =>
-            h(Checkbox, {
-                checked:
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate"),
-                "onUpdate:checked": (value) =>
-                    table.toggleAllPageRowsSelected(!!value),
-                ariaLabel: "Select all",
-            }),
-        cell: ({ row }) =>
-            h(Checkbox, {
-                checked: row.getIsSelected(),
-                "onUpdate:checked": (value) => row.toggleSelected(!!value),
-                ariaLabel: "Select row",
-            }),
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) =>
-            h("div", { class: "capitalize" }, row.getValue("status")),
-    },
-    {
-        accessorKey: "email",
-        header: ({ column }) => {
-            return h(
-                Button,
-                {
-                    variant: "ghost",
-                    onClick: () =>
-                        column.toggleSorting(column.getIsSorted() === "asc"),
-                },
-                () => ["Email", h(ArrowUpDown, { class: "ml-2 h-4 w-4" })],
-            );
-        },
-        cell: ({ row }) =>
-            h("div", { class: "lowercase" }, row.getValue("email")),
-    },
-    {
-        accessorKey: "amount",
-        header: () => h("div", { class: "text-right" }, "Amount"),
-        cell: ({ row }) => {
-            const amount = Number.parseFloat(row.getValue("amount"));
-
-            // Format the amount as a dollar amount
-            const formatted = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            }).format(amount);
-
-            return h("div", { class: "text-right font-medium" }, formatted);
+        id: "1",
+        details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        assistanceCount: 2,
+        createdAt: "2021-09-01T00:00:00.000Z",
+        status: "pending",
+        requester: {
+            id: "1",
+            name: "John",
+            surname: "Doe",
+            email: "sebas@arrieta.com",
         },
     },
     {
-        id: "actions",
-        enableHiding: false,
+        id: "2",
+        details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        assistanceCount: 2,
+        createdAt: "2021-09-01T00:00:00.000Z",
+        status: "pending",
+        requester: {
+            id: "1",
+            name: "John",
+            surname: "Doe",
+            email: "isa@alva.com",
+        },
     },
 ];
-
 const sorting = ref<SortingState>([]);
 const columnFilters = ref<ColumnFiltersState>([]);
 const columnVisibility = ref<VisibilityState>({});
