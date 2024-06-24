@@ -4,7 +4,7 @@ import { useForm } from "@inertiajs/vue3";
 import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
 import { Checkbox } from "@/Components/ui/checkbox";
-import { watchEffect } from "vue";
+import { computed, watchEffect } from "vue";
 
 const audienceList = [
     {
@@ -32,16 +32,16 @@ const audienceList = [
 interface Form {
     details: string;
     audience: string[];
+    external: string;
 }
 
 const form = useForm<Form>({
     details: "",
     audience: [],
+    external: "",
 });
 
-watchEffect(() => {
-    console.log(form.audience);
-});
+const hasExternal = computed(() => form.audience.includes("External"));
 
 function handleCheckboxChange(value: string, checked: boolean) {
     if (checked) {
@@ -90,7 +90,17 @@ function handleCheckboxChange(value: string, checked: boolean) {
                     </div>
                 </div>
             </div>
-            <div></div>
+            <div v-show="hasExternal">
+                <Label for="external">External</Label>
+                <Textarea
+                    v-model="form.external"
+                    id="external"
+                    name="external"
+                    rows="4"
+                    cols="50"
+                    placeholder="Enter external details"
+                ></Textarea>
+            </div>
         </form>
     </AuthenticatedLayout>
 </template>
