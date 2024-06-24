@@ -13,7 +13,7 @@ const props = defineProps<{
             <CardContent class="aspect-square p-0 relative">
                 <UseImage
                     :src="props.image"
-                    class="object-cover absolute size-full"
+                    class="object-cover absolute size-full rounded-lg"
                     alt="Space image"
                     loading="lazy"
                 >
