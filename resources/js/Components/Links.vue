@@ -6,22 +6,22 @@ import { BookMarked } from "lucide-vue-next";
 <template>
     <Link
         :href="route('dashboard')"
-        className="flex items-center gap-2 text-lg font-semibold md:text-base"
+        class="flex items-center gap-2 text-lg font-semibold md:text-base"
     >
-        <BookMarked className="h-6 w-6" />
-        <span className="sr-only">CampusCal</span>
+        <BookMarked class="h-6 w-6" />
+        <span class="sr-only">CampusCal</span>
     </Link>
     <Link
         :href="route('campus')"
-        className="text-muted-foreground transition-colors hover:text-foreground"
+        class="text-muted-foreground transition-colors hover:text-foreground"
         :class="{ 'font-bold': $page.component === 'Spaces/Campuses' }"
     >
         Espacios
     </Link>
     <Link
-        href="/admin/requests"
-        className="text-muted-foreground transition-colors hover:text-foreground [&.active]:font-bold"
-        :class="{ 'font-bold': $page.component === 'Admin/Requests' }"
+        :href="route('bookings')"
+        class="text-muted-foreground transition-colors hover:text-foreground [&.active]:font-bold"
+        :class="{ 'font-bold': $page.component === 'Booking/Bookings' }"
     >
         Solicitudes
     </Link>

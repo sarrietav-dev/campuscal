@@ -42,6 +42,10 @@ Route::middleware(["auth", "verified"])->group(function () {
             "id" => $id
         ]);
     })->name("booking");
+
+    Route::get("/bookings", function () {
+        return Inertia::render("Booking/Bookings");
+    })->name("bookings");
 });
 
 Route::middleware('auth')->group(function () {
