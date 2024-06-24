@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 const props = defineProps<{
     id: number;
@@ -8,6 +7,6 @@ const props = defineProps<{
 
 <template>
     <div>
-        <h1>Campus {{ propsl.id }}</h1>
+        <h1>Campus {{ props.id }}</h1>
     </div>
 </template>
