@@ -36,6 +36,12 @@ Route::middleware(["auth", "verified"])->group(function () {
             "id" => $id
         ]);
     })->name("spaces");
+
+    Route::get("/booking/{id}", function (string $id) {
+        return Inertia::render("Booking/Index", [
+            "id" => $id
+        ]);
+    })->name("booking");
 });
 
 Route::middleware('auth')->group(function () {
