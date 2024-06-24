@@ -4,8 +4,8 @@ import { ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 import SpaceCard from "@/Components/SpaceCard.vue";
 
-const props = defineProps<{
-    id: number;
+defineProps<{
+    id: string;
 }>();
 
 const spaces = ref([
