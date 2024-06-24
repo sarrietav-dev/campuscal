@@ -9,15 +9,16 @@ import {
 } from "@/Components/ui/carousel";
 import { Card, CardContent } from "@/Components/ui/card";
 import { ref } from "vue";
+import CarouselImage from "@/Components/CarouselImage.vue";
 
 const props = defineProps<{
     id: number;
 }>();
 
 const images = ref<string[]>([
-    "https://picsum.photos/500/500",
-    "https://picsum.photos/500/500",
-    "https://picsum.photos/500/500",
+    "https://picsum.photos/800/800",
+    "https://picsum.photos/800/800",
+    "https://picsum.photos/800/800",
 ]);
 </script>
 
@@ -29,19 +30,7 @@ const images = ref<string[]>([
                     <CarouselContent>
                         <template v-if="images.length > 0">
                             <CarouselItem v-for="image in images" :key="image">
-                                <div class="p-1">
-                                    <Card>
-                                        <CardContent
-                                            class="aspect-square p-0 relative"
-                                        >
-                                            <img
-                                                :src="image"
-                                                alt="Space image"
-                                                class="object-contain absolute inset-0 size-full rounded-lg"
-                                            />
-                                        </CardContent>
-                                    </Card>
-                                </div>
+                                <CarouselImage :image="image" />
                             </CarouselItem>
                         </template>
                         <CarouselItem v-else>
