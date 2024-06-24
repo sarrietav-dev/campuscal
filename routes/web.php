@@ -14,6 +14,9 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/booking', function () {
+    return Inertia::render('Booking/CreateBooking');
+})->name('booking');
 
 Route::middleware(["auth", "verified"])->group(function () {
     Route::get('/dashboard', function () {
