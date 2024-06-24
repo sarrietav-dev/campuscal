@@ -14,26 +14,29 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get("/campus", function () {
-    return Inertia::render("Spaces/Campuses");
-})->name("campus")->middleware(["auth", "verified"]);
+Route::middleware(["auth", "verified"])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::get("/campus", function () {
+        return Inertia::render("Spaces/Campuses");
+    })->name("campus");
 
 
-Route::get("/campus/{id}", function (string $id) {
-    return Inertia::render("Spaces/Campus", [
-        "id" => $id
-    ]);
-})->name("campuses")->middleware(["auth", "verified"]);
+    Route::get("/campus/{id}", function (string $id) {
+        return Inertia::render("Spaces/Campus", [
+            "id" => $id
+        ]);
+    })->name("campuses");
 
-Route::get("/space/{id}", function (string $id) {
-    return Inertia::render("Spaces/Space", [
-        "id" => $id
-    ]);
-})->name("spaces")->middleware(["auth", "verified"]);
+    Route::get("/space/{id}", function (string $id) {
+        return Inertia::render("Spaces/Space", [
+            "id" => $id
+        ]);
+    })->name("spaces");
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
