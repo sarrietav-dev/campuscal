@@ -97,7 +97,7 @@ const audienceList = [
         <div class="container max-w-screen-md">
             <div class="space-y-16">
                 <section>
-                    <Text variant="heading4" class="mb-5 text-center">
+                    <Text variant="heading2" class="mb-5 text-center">
                         Detalles de la actividad
                     </Text>
 
@@ -182,7 +182,7 @@ const audienceList = [
                     </ul>
                 </section>
                 <section>
-                    <Text variant="heading4" class="mb-5 text-center">
+                    <Text variant="heading2" class="mb-5 text-center">
                         Espacios escogidos
                     </Text>
                     <ul class="space-y-5">

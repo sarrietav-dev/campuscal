@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { computed } from "vue";
 
-const textVariants = cva("text-sm font-medium", {
+const textVariants = cva("", {
     variants: {
         variant: {
             default: "leading-7 [&:not(:first-child)]:mt-6",
@@ -22,14 +23,12 @@ const textVariants = cva("text-sm font-medium", {
 interface Props extends /* @vue-ignore */ VariantProps<typeof textVariants> {}
 
 const props = defineProps<Props>();
+
+const classes = computed(() => cn(textVariants({ variant: props.variant })));
 </script>
 
 <template>
-    <p
-        :class="
-            cn(textVariants({ variant: props.variant }), $props.class as string)
-        "
-    >
+    <p :class="classes">
         <slot />
     </p>
 </template>
