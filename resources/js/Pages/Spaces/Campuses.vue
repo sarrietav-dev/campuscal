@@ -38,7 +38,7 @@ const spaces = ref([
         <div
             class="space-y-5 sm:grid sm:grid-cols-2 sm:gap-5 sm:space-y-0 lg:grid-cols-3"
         >
-            <Link v-for="campus in spaces" :href="`campus/${campus.id}`">
+            <Link v-for="campus in spaces" :href="`/campus/${campus.id}`">
                 <SpaceCard
                     :title="campus.title"
                     :key="campus.id"
