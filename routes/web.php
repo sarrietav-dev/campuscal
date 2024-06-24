@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -20,19 +20,20 @@ Route::get('/dashboard', function () {
 
 Route::get("/campus", function () {
     return Inertia::render("Spaces/Campuses");
-})->name("campus");
+})->name("campus")->middleware(["auth", "verified"]);
+
 
 Route::get("/campus/{id}", function (string $id) {
     return Inertia::render("Spaces/Campus", [
         "id" => $id
     ]);
-})->name("campuses");
+})->name("campuses")->middleware(["auth", "verified"]);
 
 Route::get("/space/{id}", function (string $id) {
     return Inertia::render("Spaces/Space", [
         "id" => $id
     ]);
-})->name("spaces");
+})->name("spaces")->middleware(["auth", "verified"]);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
