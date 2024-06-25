@@ -1,20 +1,27 @@
 <script setup lang="ts">
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { Link } from '@inertiajs/vue3';
+import { BookMarked } from "lucide-vue-next";
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-        <div>
-            <Link href="/">
-                <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
-            </Link>
-        </div>
-
+    <div class="font-sans text-foreground bg-background">
         <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg"
+            className="flex min-h-screen items-center justify-center font-sans"
         >
-            <slot />
+            <div className="flex min-h-screen w-full flex-col">
+                <header
+                    className="sticky top-0 z-10 flex h-16 w-full items-center gap-4 border-b bg-background px-4 md:px-6"
+                >
+                    <div
+                        class="flex items-center gap-2 text-lg font-semibold md:text-base"
+                    >
+                        <BookMarked class="h-6 w-6" />
+                        <span class="sr-only">CampusCal</span>
+                    </div>
+                </header>
+                <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8">
+                    <slot />
+                </main>
+            </div>
         </div>
     </div>
 </template>

@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import SpaceDialog from "@/Components/SpaceDialog.vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
 
 const audienceList = [
     {
@@ -92,7 +93,7 @@ function handleFileChange(event: Event) {
 </script>
 
 <template>
-    <AuthenticatedLayout>
+    <GuestLayout>
         <form>
             <div>
                 <Label for="details">Details</Label>
@@ -275,5 +276,5 @@ function handleFileChange(event: Event) {
             </div>
             <SpaceDialog @create="(v) => console.log(v)" />
         </form>
-    </AuthenticatedLayout>
+    </GuestLayout>
 </template>
