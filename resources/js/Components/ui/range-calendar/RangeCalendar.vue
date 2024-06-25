@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type HTMLAttributes, computed } from "vue";
+import { type HTMLAttributes, computed, ref, watchEffect } from "vue";
 import {
     RangeCalendarRoot,
     type RangeCalendarRootEmits,
@@ -28,8 +28,6 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/Components/ui/tooltip";
-import { Button } from "@/Components/ui/button";
-import { MessageCircleQuestion } from "lucide-vue-next";
 
 const props = defineProps<
     RangeCalendarRootProps & { class?: HTMLAttributes["class"] }
@@ -44,6 +42,9 @@ const delegatedProps = computed(() => {
 });
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const startTime = defineModel<string | undefined>("startTime");
+const endTime = defineModel<string | undefined>("endTime");
 </script>
 
 <template>
@@ -100,7 +101,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
         >
             <div class="w-full flex flex-col gap-2">
                 <Label>Hora de inicio</Label>
-                <Input type="time" />
+                <Input v-model="startTime" type="time" />
             </div>
             <div class="w-full flex flex-col gap-2">
                 <Label>
@@ -122,7 +123,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
                         </Tooltip>
                     </TooltipProvider>
                 </Label>
-                <Input type="time" />
+                <Input v-model="endTime" type="time" />
             </div>
         </div>
     </RangeCalendarRoot>
