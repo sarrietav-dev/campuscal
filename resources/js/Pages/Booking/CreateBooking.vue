@@ -7,6 +7,7 @@ import { Checkbox } from "@/Components/ui/checkbox";
 import { computed, watchEffect } from "vue";
 import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
 import { Input } from "@/Components/ui/input";
+import { Button } from "@/Components/ui/button";
 
 const audienceList = [
     {
@@ -38,6 +39,17 @@ interface Form {
     minors: string;
     interadministrative: string;
     interadministrativeFile?: File;
+    assistance: number;
+    requester: {
+        name: string;
+        surname: string;
+        identification: string;
+        phone: string;
+        email: string;
+        companyName: string;
+        companyRole: string;
+        academicUnit: string;
+    };
 }
 
 const form = useForm<Form>({
@@ -46,6 +58,17 @@ const form = useForm<Form>({
     external: "",
     minors: "",
     interadministrative: "",
+    assistance: 0,
+    requester: {
+        name: "",
+        surname: "",
+        identification: "",
+        phone: "",
+        email: "",
+        companyName: "",
+        companyRole: "",
+        academicUnit: "",
+    },
 });
 
 const hasExternal = computed(() => form.audience.includes("External"));
@@ -60,11 +83,16 @@ function handleCheckboxChange(value: string, checked: boolean) {
         form.audience = form.audience.filter((audience) => audience !== value);
     }
 }
+
+function handleFileChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    form.interadministrativeFile = target.files?.[0];
+}
 </script>
 
 <template>
     <AuthenticatedLayout>
-        <form action="">
+        <form>
             <div>
                 <Label for="details">Details</Label>
                 <Textarea
@@ -152,10 +180,97 @@ function handleCheckboxChange(value: string, checked: boolean) {
                 >
                 <Input
                     type="file"
-                    v-model="form.interadministrativeFile"
+                    @change="handleFileChange($event)"
                     id="interadministrative"
                     name="interadministrative"
                 />
+            </div>
+            <div>
+                <Label for="assistance">Número de asistentes</Label>
+                <Input
+                    type="number"
+                    v-model.number="form.assistance"
+                    id="assistance"
+                    name="assistance"
+                    min="1"
+                />
+            </div>
+            <div>
+                <Label for="requester.name">Nombre</Label>
+                <Input
+                    v-model="form.requester.name"
+                    id="requester.name"
+                    name="requester.name"
+                    type="text"
+                />
+            </div>
+            <div>
+                <Label for="requester.surname">Apellido</Label>
+                <Input
+                    v-model="form.requester.surname"
+                    id="requester.surname"
+                    name="requester.surname"
+                    type="text"
+                />
+            </div>
+            <div>
+                <Label for="requester.identification">Identificación</Label>
+                <Input
+                    v-model="form.requester.identification"
+                    id="requester.identification"
+                    name="requester.identification"
+                    type="text"
+                />
+            </div>
+            <div>
+                <Label for="requester.phone">Teléfono</Label>
+                <Input
+                    v-model="form.requester.phone"
+                    id="requester.phone"
+                    name="requester.phone"
+                    type="tel"
+                />
+            </div>
+            <div>
+                <Label for="requester.email">Correo electrónico</Label>
+                <Input
+                    v-model="form.requester.email"
+                    id="requester.email"
+                    name="requester.email"
+                    type="email"
+                />
+            </div>
+            <div>
+                <Label for="requester.companyName">Nombre de la empresa</Label>
+                <Input
+                    v-model="form.requester.companyName"
+                    id="requester.companyName"
+                    name="requester.companyName"
+                    type="text"
+                />
+            </div>
+            <div>
+                <Label for="requester.companyRole">Cargo en la empresa</Label>
+                <Input
+                    v-model="form.requester.companyRole"
+                    id="requester.companyRole"
+                    name="requester.companyRole"
+                    type="text"
+                />
+            </div>
+            <div>
+                <Label for="requester.academicUnit"
+                    >Unidad académica a la que pertenece</Label
+                >
+                <Input
+                    v-model="form.requester.academicUnit"
+                    id="requester.academicUnit"
+                    name="requester.academicUnit"
+                    type="text"
+                />
+            </div>
+            <div>
+                <Button type="submit">Submit</Button>
             </div>
         </form>
     </AuthenticatedLayout>
