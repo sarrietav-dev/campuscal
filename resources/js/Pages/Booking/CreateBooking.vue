@@ -6,6 +6,7 @@ import { Textarea } from "@/Components/ui/textarea";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { computed, watchEffect } from "vue";
 import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
+import { Input } from "@/Components/ui/input";
 
 const audienceList = [
     {
@@ -35,6 +36,8 @@ interface Form {
     audience: string[];
     external: string;
     minors: string;
+    interadministrative: string;
+    interadministrativeFile?: File;
 }
 
 const form = useForm<Form>({
@@ -42,9 +45,13 @@ const form = useForm<Form>({
     audience: [],
     external: "",
     minors: "",
+    interadministrative: "",
 });
 
 const hasExternal = computed(() => form.audience.includes("External"));
+const hasInteradministrative = computed(
+    () => form.interadministrative === "Yes",
+);
 
 function handleCheckboxChange(value: string, checked: boolean) {
     if (checked) {
@@ -120,6 +127,35 @@ function handleCheckboxChange(value: string, checked: boolean) {
                         <Label for="No">No</Label>
                     </div>
                 </RadioGroup>
+            </div>
+            <div>
+                <Label>
+                    ¿La actividad a realizar se llevará a cabo en cumplimiento
+                    de obligaciones en el marco de un Convenio o Contrato
+                    Interadministrativo? (Si marca Si, favor anexar copia del
+                    convenio o contrato)
+                </Label>
+                <RadioGroup v-model="form.interadministrative">
+                    <div>
+                        <RadioGroupItem value="Yes" />
+                        <Label for="Yes">Sí</Label>
+                    </div>
+                    <div>
+                        <RadioGroupItem value="No" />
+                        <Label for="No">No</Label>
+                    </div>
+                </RadioGroup>
+            </div>
+            <div v-show="hasInteradministrative">
+                <Label for="interadministrative"
+                    >Anexar copia del convenio o contrato</Label
+                >
+                <Input
+                    type="file"
+                    v-model="form.interadministrativeFile"
+                    id="interadministrative"
+                    name="interadministrative"
+                />
             </div>
         </form>
     </AuthenticatedLayout>
