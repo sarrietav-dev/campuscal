@@ -5,6 +5,7 @@ import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { computed, watchEffect } from "vue";
+import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
 
 const audienceList = [
     {
@@ -33,12 +34,14 @@ interface Form {
     details: string;
     audience: string[];
     external: string;
+    minors: string;
 }
 
 const form = useForm<Form>({
     details: "",
     audience: [],
     external: "",
+    minors: "",
 });
 
 const hasExternal = computed(() => form.audience.includes("External"));
@@ -100,6 +103,23 @@ function handleCheckboxChange(value: string, checked: boolean) {
                     cols="50"
                     placeholder="Enter external details"
                 ></Textarea>
+            </div>
+            <div>
+                <Label>
+                    ¿El evento contará con la presencia de menores de edad
+                    (niños y/o adolescentes) que no están matriculados en la
+                    institución? (Marque una opción)
+                </Label>
+                <RadioGroup v-model="form.minors">
+                    <div>
+                        <RadioGroupItem value="Yes" />
+                        <Label for="Yes">Sí</Label>
+                    </div>
+                    <div>
+                        <RadioGroupItem value="No" />
+                        <Label for="No">No</Label>
+                    </div>
+                </RadioGroup>
             </div>
         </form>
     </AuthenticatedLayout>
