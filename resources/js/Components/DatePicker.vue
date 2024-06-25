@@ -39,8 +39,11 @@ const value = defineModel<DateRange>();
                 <CalendarIcon class="mr-2 h-4 w-4" />
                 {{
                     value
-                        ? df.format(value.toDate(getLocalTimeZone()))
-                        : "Pick a date"
+                        ? `${df.format(value?.start?.toDate(getLocalTimeZone()) ?? new Date())} - ${df.format(
+                              value?.end?.toDate(getLocalTimeZone()) ??
+                                  new Date(),
+                          )}`
+                        : "Select a date"
                 }}
             </Button>
         </PopoverTrigger>
@@ -51,6 +54,11 @@ const value = defineModel<DateRange>();
                 v-model="value"
                 initial-focus
                 :number-of-months="2"
+                @update:start-value="
+                    (startDate) => {
+                        if (value) value.start = startDate;
+                    }
+                "
             />
             <Calendar v-else locale="es-ES" initial-focus />
         </PopoverContent>
