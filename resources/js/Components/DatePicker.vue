@@ -19,7 +19,7 @@ import { RangeCalendar } from "@/Components/ui/range-calendar";
 import { DateRange } from "radix-vue";
 import { cn } from "@/lib/utils";
 
-const df = new DateFormatter("en-US", {
+const df = new DateFormatter("es-CO", {
     dateStyle: "long",
 });
 
