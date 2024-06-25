@@ -28,6 +28,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/Components/ui/tooltip";
+import { useColorMode } from "@vueuse/core";
 
 const props = defineProps<
     RangeCalendarRootProps & { class?: HTMLAttributes["class"] }
@@ -45,6 +46,8 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
 const startTime = defineModel<string | undefined>("startTime");
 const endTime = defineModel<string | undefined>("endTime");
+
+const mode = useColorMode();
 </script>
 
 <template>
@@ -101,7 +104,7 @@ const endTime = defineModel<string | undefined>("endTime");
         >
             <div class="w-full flex flex-col gap-2">
                 <Label>Hora de inicio</Label>
-                <Input v-model="startTime" type="time" />
+                <Input v-model="startTime" type="time" :data-color="mode" />
             </div>
             <div class="w-full flex flex-col gap-2">
                 <Label>
@@ -123,8 +126,19 @@ const endTime = defineModel<string | undefined>("endTime");
                         </Tooltip>
                     </TooltipProvider>
                 </Label>
-                <Input v-model="endTime" type="time" />
+                <Input v-model="endTime" type="time" :data-color="mode" />
             </div>
         </div>
     </RangeCalendarRoot>
 </template>
+
+<style scoped>
+input[type="time"][data-color="light"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}
+
+input[type="time"][data-color="dark"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+</style>
