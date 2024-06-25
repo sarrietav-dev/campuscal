@@ -273,7 +273,7 @@ function handleFileChange(event: Event) {
             <div>
                 <Button type="submit">Submit</Button>
             </div>
-            <SpaceDialog />
+            <SpaceDialog @create="(v) => console.log(v)" />
         </form>
     </AuthenticatedLayout>
 </template>
