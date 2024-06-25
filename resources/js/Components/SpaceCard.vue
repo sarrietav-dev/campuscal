@@ -21,7 +21,7 @@ const spaceImage = computed(() => {
                 <UseImage
                     :src="spaceImage"
                     :alt="props.title"
-                    class="transform transition-transform group-hover:scale-105"
+                    class="transform transition-transform group-hover:scale-105 w-full"
                 >
                     <template #loading>
                         <span

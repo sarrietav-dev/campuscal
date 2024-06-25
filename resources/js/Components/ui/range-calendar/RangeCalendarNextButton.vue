@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { type HTMLAttributes, computed } from "vue";
 import {
-    CalendarNext,
-    type CalendarNextProps,
+    RangeCalendarNext,
+    type RangeCalendarNextProps,
     useForwardProps,
 } from "radix-vue";
 import { ChevronRight } from "lucide-vue-next";
@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/Components/ui/button";
 
 const props = defineProps<
-    CalendarNextProps & { class?: HTMLAttributes["class"] }
+    RangeCalendarNextProps & { class?: HTMLAttributes["class"] }
 >();
 
 const delegatedProps = computed(() => {
@@ -23,7 +23,7 @@ const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
-    <CalendarNext
+    <RangeCalendarNext
         :class="
             cn(
                 buttonVariants({ variant: 'outline' }),
@@ -36,5 +36,5 @@ const forwardedProps = useForwardProps(delegatedProps);
         <slot>
             <ChevronRight class="h-4 w-4" />
         </slot>
-    </CalendarNext>
+    </RangeCalendarNext>
 </template>

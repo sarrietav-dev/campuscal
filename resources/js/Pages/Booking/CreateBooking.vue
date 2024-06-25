@@ -8,6 +8,7 @@ import { computed, watchEffect } from "vue";
 import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
+import SpaceDialog from "@/Components/SpaceDialog.vue";
 
 const audienceList = [
     {
@@ -272,6 +273,7 @@ function handleFileChange(event: Event) {
             <div>
                 <Button type="submit">Submit</Button>
             </div>
+            <SpaceDialog />
         </form>
     </AuthenticatedLayout>
 </template>
