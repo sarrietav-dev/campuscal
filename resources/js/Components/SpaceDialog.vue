@@ -91,7 +91,9 @@ function handleCreate() {
 <template>
     <ResponsiveModal>
         <template #trigger>
-            <Button>Open Space Dialog</Button>
+            <Button class="w-full border-dashed py-10" variant="outline">
+                Elige aquí el espacio que quieres usar
+            </Button>
         </template>
         <template #title v-if="!isCampusSelected">Campuses</template>
         <template #title v-else-if="!isSpaceSelected"> Spaces</template>
