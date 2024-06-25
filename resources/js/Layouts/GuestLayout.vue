@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { BookMarked } from "lucide-vue-next";
+import ThemeToggle from "@/Components/ThemeToggle.vue";
+import LogoutButton from "@/Components/LogoutButton.vue";
+import CreateActionButton from "@/Components/CreateActionButton.vue";
 </script>
 
 <template>
@@ -16,6 +19,9 @@ import { BookMarked } from "lucide-vue-next";
                     >
                         <BookMarked class="h-6 w-6" />
                         <span class="sr-only">CampusCal</span>
+                    </div>
+                    <div className="ml-auto flex items-center gap-5">
+                        <ThemeToggle />
                     </div>
                 </header>
                 <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8">
