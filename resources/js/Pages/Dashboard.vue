@@ -2,6 +2,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { ref } from "vue";
+import LineChart from "@/Components/LineChart.vue";
 
 interface Stat {
     title: string;
@@ -78,10 +79,10 @@ const mostRequestedSpaces = ref<MostRequestedSpace[]>([
     <AuthenticatedLayout>
         <div class="container max-w-5xl mx-auto grid grid-cols-12">
             <div
-                class="grid rounded-lg shadow-lg grid-cols-1 gap-4 bg-muted sm:grid-cols-2 md:grid-cols-4 col-span-12"
+                class="grid rounded-lg shadow-lg grid-cols-1 gap-4 bg-accent sm:grid-cols-2 md:grid-cols-4 col-span-12"
             >
                 <template v-for="stat in stats">
-                    <div class="p-6 text-white">
+                    <div class="p-6 text-accent-foreground">
                         <div class="flex items center justify-between">
                             <div class="flex items center">
                                 <i
@@ -101,16 +102,16 @@ const mostRequestedSpaces = ref<MostRequestedSpace[]>([
                     </div>
                 </template>
             </div>
-            <div class="col-span-4 grid grid-cols-subgrid">
+            <div class="col-span-12 grid grid-cols-subgrid">
                 <div class="col-span-3">
-                    <div class="py-6 text-white">
+                    <div class="py-6 text-accent-foreground">
                         <div class="text-sm font-semibold">
                             Espacios más solicitados
                         </div>
                         <div class="grid grid-cols-1 gap-4 mt-4">
                             <template v-for="space in mostRequestedSpaces">
                                 <div
-                                    class="flex items center justify-between bg-muted rounded-lg p-4"
+                                    class="flex items center justify-between bg-accent rounded-lg p-4"
                                 >
                                     <div class="flex items center">
                                         <img
@@ -132,6 +133,11 @@ const mostRequestedSpaces = ref<MostRequestedSpace[]>([
                             </template>
                         </div>
                     </div>
+                </div>
+                <div
+                    class="col-start-5 col-end-13 col-span-8 content-center py-6"
+                >
+                    <LineChart />
                 </div>
             </div>
         </div>
