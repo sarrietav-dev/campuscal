@@ -46,7 +46,7 @@ class BookingController extends Controller
     public function show(Booking $booking): Response
     {
         return Inertia::render('Booking/Index', [
-            'booking' => $booking->load('requester', 'audience', 'appointments'),
+            'booking' => $booking->load('requester', 'audience', 'appointments', 'appointments.space', 'appointments.space.images'),
         ]);
     }
 

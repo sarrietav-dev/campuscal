@@ -21,9 +21,11 @@ class BookingFactory extends Factory
         return [
             'details' => $this->faker->sentence(),
             'minors' => $this->faker->boolean(),
-            'agreementContract' => $this->faker->boolean(),
+            'agreement_contract' => $this->faker->boolean(),
             'assistance' => $this->faker->numberBetween(1, 200),
             'status' => $this->faker->randomElement(["pending", "approved", "rejected"]),
+            'external_details' => $this->faker->sentence(),
+            'observations' => $this->faker->sentence(),
         ];
     }
 

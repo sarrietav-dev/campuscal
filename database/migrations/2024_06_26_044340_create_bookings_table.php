@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,10 +14,12 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string("details");
+            $table->string('external_details')->nullable();
             $table->boolean("minors");
-            $table->boolean("agreementContract");
-            $table->string("agreementContractFile")->nullable();
+            $table->boolean("agreement_contract");
+            $table->string("agreement_contract_file")->nullable();
             $table->integer("assistance");
+            $table->string("observations")->nullable();
             $table->enum("status", ["pending", "approved", "rejected"]);
         });
     }

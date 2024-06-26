@@ -13,80 +13,44 @@ import {
     UsersRound,
 } from "lucide-vue-next";
 import BookingStateIndicator from "@/Components/BookingStateIndicator.vue";
-import { ref } from "vue";
 import Text from "@/Components/ui/Text.vue";
 import Chip from "@/Components/Chip.vue";
 import SelectedSpaceCard from "@/Components/SelectedSpaceCard.vue";
 import ObservationForm from "@/Components/ObservationForm.vue";
 
-const request = ref({
-    details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-    audience: ["Students"],
-    externalAudienceDetails:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-    areMinorsIncluded: true,
-    hasAgreementContract: true,
-    agreementContractFilePath: "https://via.placeholder.com/800x600",
-    assistanceCount: 10,
-    appointments: [
-        {
-            spaceId: 1,
-            spaceName: "Salón 1",
-            date: {
-                from: "2022-12-12",
-                to: "2022-12-12",
-            },
-            startTime: "12:00",
-            endTime: "14:00",
-            imageUrl: "https://via.placeholder.com/800x600",
-        },
-        {
-            spaceId: 2,
-            spaceName: "Salón 2",
-            date: {
-                from: "2022-12-12",
-                to: "2022-12-12",
-            },
-            startTime: "12:00",
-            endTime: "14:00",
-            imageUrl: "https://via.placeholder.com/800x600",
-        },
-    ],
-    requester: {
-        name: "John Doe",
-        identityNumber: "123456789",
-        phoneNumber: "123456789",
-        email: "sdjk@gmail.com",
-        companyName: "Company",
-        companyRole: "Role",
-        academicUnit: "Unit",
-    },
-    state: "Pending",
-    observations: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-});
+const { booking } = defineProps<{
+    booking: {
+        agreement_contract: boolean;
+        agreement_contract_file_path: string;
+        appointments: {
+            booking_id: number;
+            end: string;
+            start: string;
+            space_id: number;
+            space: { name: string; images: { path: string }[] };
+        }[];
+        assistance: number;
+        audience: { name: string }[];
+        details: string;
+        id: number;
+        external_details?: string;
+        minors: boolean;
+        status: string;
+        observations: string;
+        requester: {
+            academic_unit: string;
+            company_name: string;
+            company_role: string;
+            email: string;
+            identification: string;
+            name: string;
+            surname: string;
+            phone: string;
+        };
+    };
+}>();
 
-const audienceList = [
-    {
-        label: "Estudiantes",
-        value: "Students",
-    },
-    {
-        label: "Docentes",
-        value: "Teachers",
-    },
-    {
-        label: "Administrativos",
-        value: "AdministrativeStaff",
-    },
-    {
-        label: "Egresados",
-        value: "Graduates",
-    },
-    {
-        label: "Personal externo",
-        value: "External",
-    },
-];
+console.log(booking);
 </script>
 
 <template>
@@ -100,7 +64,7 @@ const audienceList = [
 
                     <ul class="space-y-5">
                         <li>
-                            <p>{{ request.details }}</p>
+                            <p>{{ booking.details }}</p>
                         </li>
 
                         <li class="space-y-3">
@@ -109,25 +73,18 @@ const audienceList = [
                                 Público dirigido de la actividad
                             </p>
                             <div class="flex flex-wrap gap-5">
-                                <Chip v-for="audience in request.audience">
-                                    {{
-                                        audienceList.find(
-                                            (item) => item.value === audience,
-                                        )?.label
-                                    }}
+                                <Chip v-for="audience in booking.audience">
+                                    {{ audience.name }}
                                 </Chip>
                             </div>
                         </li>
-                        <li
-                            v-if="request.externalAudienceDetails"
-                            class="space-y-3"
-                        >
+                        <li v-if="booking.external_details" class="space-y-3">
                             <template>
                                 <p class="font-semibold">
                                     <UsersRound class="inline" />
                                     Detalle del personal externo
                                 </p>
-                                <p>{request.externalAudienceDetails}</p>
+                                <p>{{ booking.external_details }}</p>
                             </template>
                         </li>
                         <li>
@@ -135,12 +92,12 @@ const audienceList = [
                                 class="font-semibold"
                                 :class="{
                                     'text-neutral-300 dark:text-muted':
-                                        !request.areMinorsIncluded,
+                                        !booking.minors,
                                 }"
                             >
                                 <Baby class="inline" />
                                 Este evento
-                                {{ request.areMinorsIncluded ? "sí" : "no" }}
+                                {{ booking.minors ? "sí" : "no" }}
                                 contará con la presencia de menores de edad
                             </p>
                         </li>
@@ -149,16 +106,16 @@ const audienceList = [
                                 class="font-semibold"
                                 :class="{
                                     'text-neutral-300 dark:text-muted':
-                                        !request.areMinorsIncluded,
+                                        !booking.agreement_contract,
                                 }"
                             >
                                 <ReceiptText class="inline" />
                                 Esta actividad
-                                {{ request.areMinorsIncluded ? "sí" : "no" }}
+                                {{ booking.agreement_contract ? "sí" : "no" }}
                                 se llevará acabo dentro del marco de un convenio
                                 o contrato interadministrativo:
                                 <a
-                                    :href="request.agreementContractFilePath"
+                                    :href="booking.agreement_contract_file_path"
                                     target="_blank"
                                 >
                                     <strong class="font-semibold">
@@ -172,7 +129,7 @@ const audienceList = [
                                 <BookUser class="inline" />
                                 El numero de asistentes será
                                 <span class="rounded bg-muted p-1">
-                                    {{ request.assistanceCount }}
+                                    {{ booking.assistance }}
                                 </span>
                             </p>
                         </li>
@@ -184,13 +141,20 @@ const audienceList = [
                     </Text>
                     <ul class="space-y-5">
                         <li
-                            v-for="appointment in request.appointments"
-                            :key="appointment.spaceId"
+                            v-for="appointment in booking.appointments"
+                            :key="appointment.space_id"
                         >
                             <SelectedSpaceCard
-                                :date="appointment.date"
-                                :image-url="appointment.imageUrl"
-                                :space-name="appointment.spaceName"
+                                :date="{
+                                    from: new Date(
+                                        appointment.start,
+                                    ).toLocaleDateString(),
+                                    to: new Date(
+                                        appointment.end,
+                                    ).toLocaleDateString(),
+                                }"
+                                :image-url="appointment.space.images[0].path"
+                                :space-name="appointment.space.name"
                             />
                         </li>
                     </ul>
@@ -205,7 +169,7 @@ const audienceList = [
                                 <CircleUserRound class="inline" />
                                 {{ " " }}
                                 <p class="inline font-semibold">Nombre:</p>
-                                {{ request.requester.name }}
+                                {{ booking.requester.name }}
                             </li>
 
                             <li>
@@ -214,14 +178,14 @@ const audienceList = [
                                 <p class="inline font-semibold">
                                     Numero de identificación:
                                 </p>
-                                : {{ request.requester.identityNumber }}
+                                : {{ booking.requester.identification }}
                             </li>
 
                             <li>
                                 <Phone class="inline" />
                                 {{ " " }}
                                 <p class="inline font-semibold">Celular:</p>
-                                {{ request.requester.phoneNumber }}
+                                {{ booking.requester.phone }}
                             </li>
 
                             <li>
@@ -230,8 +194,8 @@ const audienceList = [
                                 <p class="inline font-semibold">
                                     Correo institucional:
                                 </p>
-                                <a :href="`mailto:${request.requester.email}`">
-                                    {{ request.requester.email }}
+                                <a :href="`mailto:${booking.requester.email}`">
+                                    {{ booking.requester.email }}
                                 </a>
                             </li>
 
@@ -240,31 +204,31 @@ const audienceList = [
                                 <p class="inline font-semibold">
                                     Entidad o empresa:
                                 </p>
-                                {{ request.requester.companyName }}
+                                {{ booking.requester.company_name }}
                             </li>
 
                             <li>
                                 <BriefcaseBusiness class="inline" />
                                 {{ " " }}
                                 <p class="inline font-semibold">Cargo:</p>
-                                {{ request.requester.companyRole }}
+                                {{ booking.requester.company_role }}
                             </li>
                             <li>
                                 <BriefcaseBusiness class="inline" />
                                 <p class="inline font-semibold">
                                     Unidad académica:
                                 </p>
-                                {{ request.requester.academicUnit }}
+                                {{ booking.requester.academic_unit }}
                             </li>
                         </ul>
                     </div>
                 </section>
                 <section>
-                    <ObservationForm v-if="request.state === 'Pending'" />
+                    <ObservationForm v-if="booking.status === 'pending'" />
                     <BookingStateIndicator
                         v-else
-                        :status="request.state as any"
-                        :observations="request.observations"
+                        :status="booking.status as any"
+                        :observations="booking.observations"
                     />
                 </section>
             </div>
