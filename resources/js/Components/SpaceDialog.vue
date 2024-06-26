@@ -26,18 +26,32 @@ const spaceId = ref<string | undefined>(undefined);
 const date = ref<DateRange>();
 const startTime = ref<string | undefined>();
 const endTime = ref<string | undefined>();
+const props = defineProps<{
+    open?: boolean;
+}>();
 
 const emit = defineEmits<{
     create: [
         {
-            spaceId: string;
+            id: string;
+            name: string;
+            imageUrl: string;
             date: {
                 start: Date;
                 end: Date;
             };
         },
     ];
+    "update:open": [boolean];
 }>();
+
+function handleModalOpen(open: boolean) {
+    if (!open) {
+        campusId.value = undefined;
+        spaceId.value = undefined;
+    }
+    emit("update:open", open);
+}
 
 const campuses = ref([
     {
@@ -94,7 +108,9 @@ function handleCreate() {
     }
 
     emit("create", {
-        spaceId: spaceId.value,
+        id: spaceId.value,
+        name: space.value.name,
+        imageUrl: space.value.images[0],
         date: {
             start: toCalendarDateTime(
                 date.value.start,
@@ -106,11 +122,12 @@ function handleCreate() {
             ).toDate(getLocalTimeZone()),
         },
     });
+    emit("update:open", false);
 }
 </script>
 
 <template>
-    <ResponsiveModal>
+    <ResponsiveModal :open="props.open" @update:open="handleModalOpen($event)">
         <template #trigger>
             <Button class="w-full border-dashed py-10" variant="outline">
                 Elige aquí el espacio que quieres usar
@@ -151,42 +168,44 @@ function handleCreate() {
             </div>
         </div>
         <div
-            class="flex flex-col gap-10 overflow-y-auto"
+            class="flex flex-col gap-10 overflow-y-auto align-center max-w-[368px] sm:max-w-full self-center w-full"
             v-show="isSpaceSelected"
         >
             <div
-                class="flex flex-col md:flex-row md:justify-between md:px-10 items-center"
+                class="flex flex-col sm:flex-row sm:justify-between sm:px-12 items-center"
             >
-                <Carousel class="mx-auto w-full max-w-full lg:max-w-lg">
-                    <CarouselContent>
-                        <template v-if="space.images.length > 0">
-                            <CarouselItem
-                                v-for="image in space.images"
-                                :key="image"
-                            >
-                                <CarouselImage :image="image" />
+                <div class="w-6/12 p-12 sm:p-0">
+                    <Carousel class="mx-auto w-full max-w-full lg:max-w-lg">
+                        <CarouselContent>
+                            <template v-if="space.images.length > 0">
+                                <CarouselItem
+                                    v-for="image in space.images"
+                                    :key="image"
+                                >
+                                    <CarouselImage :image="image" />
+                                </CarouselItem>
+                            </template>
+                            <CarouselItem v-else>
+                                <div class="p-1">
+                                    <Card>
+                                        <CardContent
+                                            class="flex aspect-square items-center justify-center p-6"
+                                        >
+                                            <img
+                                                src="https://picsum.photos/300/300"
+                                                alt="Space image"
+                                                class="object-contain absolute size-full"
+                                            />
+                                        </CardContent>
+                                    </Card>
+                                </div>
                             </CarouselItem>
-                        </template>
-                        <CarouselItem v-else>
-                            <div class="p-1">
-                                <Card>
-                                    <CardContent
-                                        class="flex aspect-square items-center justify-center p-6"
-                                    >
-                                        <img
-                                            src="https://picsum.photos/300/300"
-                                            alt="Space image"
-                                            class="object-contain absolute size-full"
-                                        />
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </CarouselItem>
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                </Carousel>
-                <ul>
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
+                </div>
+                <ul class="ml-16 grow">
                     <li>Nombre: {{ space?.name }}</li>
                     <li>Capacidad: {{ space?.capacity }}</li>
                     <li v-if="space.availableResources.length > 0">
@@ -203,7 +222,7 @@ function handleCreate() {
                 </ul>
             </div>
             <div
-                className="col-span-3 flex flex-col items-stretch md:flex-row gap-5 md:gap-0 justify-between mb-5 md:mb-0"
+                className="col-span-3 flex flex-col items-stretch md:flex-row gap-5 md:gap-3 justify-between mb-5 md:mb-0 self-stretch"
             >
                 <DatePicker
                     :range="true"

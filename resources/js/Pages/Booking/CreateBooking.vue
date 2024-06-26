@@ -4,12 +4,13 @@ import { useForm } from "@inertiajs/vue3";
 import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
 import { Checkbox } from "@/Components/ui/checkbox";
-import { computed, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import SpaceDialog from "@/Components/SpaceDialog.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
+import SelectedSpaceCard from "@/Components/SelectedSpaceCard.vue";
 
 const audienceList = [
     {
@@ -34,6 +35,12 @@ const audienceList = [
     },
 ];
 
+const modalOpen = ref(false);
+
+function handleModalOpen(open: boolean) {
+    modalOpen.value = open;
+}
+
 interface Form {
     details: string;
     audience: string[];
@@ -42,6 +49,15 @@ interface Form {
     interadministrative: string;
     interadministrativeFile?: File;
     assistance: number;
+    spaces: {
+        id: string;
+        name: string;
+        imageUrl: string;
+        date: {
+            start: Date;
+            end: Date;
+        };
+    }[];
     requester: {
         name: string;
         surname: string;
@@ -61,6 +77,7 @@ const form = useForm<Form>({
     minors: "",
     interadministrative: "",
     assistance: 0,
+    spaces: [],
     requester: {
         name: "",
         surname: "",
@@ -89,6 +106,14 @@ function handleCheckboxChange(value: string, checked: boolean) {
 function handleFileChange(event: Event) {
     const target = event.target as HTMLInputElement;
     form.interadministrativeFile = target.files?.[0];
+}
+
+function handleSpacesChange(spaces: Form["spaces"][0]) {
+    form.spaces = [...form.spaces, spaces];
+}
+
+function handleSpaceDelete(index: number) {
+    form.spaces.splice(index, 1);
 }
 </script>
 
@@ -274,7 +299,22 @@ function handleFileChange(event: Event) {
             <div>
                 <Button type="submit">Submit</Button>
             </div>
-            <SpaceDialog @create="(v) => console.log(v)" />
+            <SelectedSpaceCard
+                deletable
+                v-for="(space, index) in form.spaces"
+                :space-name="space.name"
+                @delete="handleSpaceDelete(index)"
+                :date="{
+                    to: space.date.end.toLocaleDateString(),
+                    from: space.date.start.toLocaleDateString(),
+                }"
+                :image-url="space.imageUrl"
+            />
+            <SpaceDialog
+                :open="modalOpen"
+                @update:open="handleModalOpen($event)"
+                @create="handleSpacesChange($event)"
+            />
         </form>
     </GuestLayout>
 </template>

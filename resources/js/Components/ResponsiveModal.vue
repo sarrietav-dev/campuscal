@@ -6,29 +6,46 @@ import { createReusableTemplate } from "@vueuse/core";
 
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
 
-const isDesktop = useMediaQuery("(min-width: 768px)");
+const isDesktop = useMediaQuery("(min-width: 640px)");
+
+const props = defineProps<{
+    open?: boolean;
+    class?: string;
+}>();
+
+const emit = defineEmits<{
+    "update:open": [boolean];
+}>();
 </script>
 
 <template>
     <DefineTemplate>
         <slot />
     </DefineTemplate>
-    <Dialog v-if="isDesktop">
+    <Dialog
+        :open="props.open"
+        @update:open="emit('update:open', $event)"
+        v-if="isDesktop"
+    >
         <DialogTrigger as-child>
             <slot name="trigger" />
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent :class="props.class">
             <DialogTitle>
                 <slot name="title" />
             </DialogTitle>
             <ReuseTemplate />
         </DialogContent>
     </Dialog>
-    <Drawer v-else>
+    <Drawer
+        :open="props.open"
+        @update:open="emit('update:open', $event)"
+        v-else
+    >
         <DrawerTrigger as-child>
             <slot name="trigger" />
         </DrawerTrigger>
-        <DrawerContent class="max-h-[95%]">
+        <DrawerContent class="max-h-[95%]" :class="props.class">
             <ReuseTemplate />
         </DrawerContent>
     </Drawer>

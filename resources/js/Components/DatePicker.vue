@@ -55,7 +55,7 @@ const model = defineModel<DateRange>({
                         {{ df.format(model.start.toDate(getLocalTimeZone())) }}
                     </template>
                 </template>
-                <template v-else> Pick a date</template>
+                <template v-else> Seleccione un rango de fechas</template>
             </Button>
         </PopoverTrigger>
         <PopoverContent class="w-auto p-0">
