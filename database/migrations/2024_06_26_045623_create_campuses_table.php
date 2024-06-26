@@ -18,12 +18,6 @@ return new class extends Migration {
             $table->string("name");
         });
 
-        Schema::create('campuses_images', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->foreignIdFor(Campus::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(File::class)->constrained()->cascadeOnDelete();
-        });
     }
 
     /**
@@ -32,6 +26,5 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('campuses');
-        Schema::dropIfExists('campuses_images');
     }
 };

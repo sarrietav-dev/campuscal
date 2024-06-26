@@ -21,12 +21,6 @@ return new class extends Migration {
             $table->foreignIdFor(Campus::class);
         });
 
-        Schema::create('spaces_images', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(Space::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(File::class)->constrained()->cascadeOnDelete();
-        });
-
         Schema::create('space_resources', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
@@ -41,7 +35,6 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('spaces');
-        Schema::dropIfExists('spaces_images');
         Schema::dropIfExists('space_resources');
     }
 };

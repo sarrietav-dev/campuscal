@@ -17,7 +17,8 @@ class AppointmentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "start" => $this->faker->dateTime(),
+            "end" => $this->faker->dateTime(),
         ];
     }
 }
