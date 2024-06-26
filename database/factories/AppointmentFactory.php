@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Booking;
+use App\Models\Space;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,6 +21,8 @@ class AppointmentFactory extends Factory
         return [
             "start" => $this->faker->dateTime(),
             "end" => $this->faker->dateTime(),
+            "space_id" => Space::factory(),
+            "booking_id" => Booking::factory(),
         ];
     }
 }

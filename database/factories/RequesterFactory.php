@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Booking;
+use App\Models\Requester;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Requester>
+ * @extends Factory<Requester>
  */
 class RequesterFactory extends Factory
 {
@@ -26,6 +28,7 @@ class RequesterFactory extends Factory
             "company_role" => $this->faker->jobTitle(),
             "company_address" => $this->faker->address(),
             "academic_unit" => $this->faker->word(),
+            "booking_id" => Booking::factory(),
         ];
     }
 }

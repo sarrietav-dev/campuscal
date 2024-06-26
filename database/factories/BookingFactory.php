@@ -22,7 +22,6 @@ class BookingFactory extends Factory
             'details' => $this->faker->sentence(),
             'minors' => $this->faker->boolean(),
             'agreementContract' => $this->faker->boolean(),
-            'agreementContractFile' => $this->faker->file(),
             'assistance' => $this->faker->numberBetween(1, 200),
             'status' => $this->faker->randomElement(["pending", "approved", "rejected"]),
         ];

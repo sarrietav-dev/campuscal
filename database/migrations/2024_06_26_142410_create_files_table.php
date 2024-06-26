@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Booking;
 use App\Models\Campus;
 use App\Models\File;
 use App\Models\Space;
@@ -21,17 +22,24 @@ return new class extends Migration {
             $table->string("type");
         });
 
-        Schema::create('spaces_images', function (Blueprint $table) {
+        Schema::create('space_file', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Space::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(File::class)->constrained()->cascadeOnDelete();
         });
 
-        Schema::create('campuses_images', function (Blueprint $table) {
+        Schema::create('campus_file', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignIdFor(Campus::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(File::class)->constrained()->cascadeOnDelete();
+        });
+
+        Schema::create('booking_file', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->foreignIdFor(File::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Booking::class)->constrained()->cascadeOnDelete();
         });
     }
 
@@ -41,7 +49,8 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('files');
-        Schema::dropIfExists('spaces_images');
-        Schema::dropIfExists('campuses_images');
+        Schema::dropIfExists('space_file');
+        Schema::dropIfExists('campus_file');
+        Schema::dropIfExists('booking_file');
     }
 };

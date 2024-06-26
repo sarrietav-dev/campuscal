@@ -19,7 +19,7 @@ class SpaceFactory extends Factory
     {
         return [
             "name" => $this->faker->city(),
-
+            "campus_id" => Campus::factory(),
         ];
     }
 }

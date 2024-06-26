@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $campuses = Campus::factory(5)
-            ->has(File::factory())
+            ->has(File::factory()->count(3), 'images')
             ->create();
 
         $space_resources = SpaceResource::factory(10)->create();
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         $spaces = Space::factory(10)
             ->recycle($campuses)
             ->recycle($space_resources)
-            ->has(File::factory())
+            ->has(File::factory()->count(3), 'images')
             ->create();
 
         $audiences = Audience::factory(5)->sequence(
@@ -50,7 +50,8 @@ class DatabaseSeeder extends Seeder
 
         Booking::factory(50)
             ->has(Requester::factory())
-            ->has(Appointment::factory(5)->recycle($spaces))
+            ->has(Appointment::factory(5)->recycle($spaces), 'appointments')
+            ->has(File::factory()->count(3), 'agreementContracts')
             ->recycle($audiences)
             ->create();
     }

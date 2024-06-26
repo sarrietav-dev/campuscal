@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Space;
+use App\Models\SpaceResource;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,6 +18,13 @@ return new class extends Migration
             $table->timestamps();
             $table->string("name");
         });
+
+        Schema::create('space_space_resources', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->foreignIdFor(Space::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(SpaceResource::class)->constrained()->cascadeOnDelete();
+        });
     }
 
     /**
@@ -24,5 +33,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('space_resources');
+        Schema::dropIfExists('space_space_resources');
     }
 };

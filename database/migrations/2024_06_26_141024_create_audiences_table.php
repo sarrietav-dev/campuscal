@@ -14,11 +14,13 @@ return new class extends Migration {
     {
         Schema::create('audiences', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
             $table->string("name");
         });
 
         Schema::create('audience_request', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
             $table->foreignIdFor(Booking::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Audience::class)->constrained()->cascadeOnDelete();
         });
