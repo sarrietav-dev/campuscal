@@ -96,7 +96,6 @@ const isSpaceSelected = computed(
 );
 
 function handleCreate() {
-    console.log(spaceId.value, date.value, startTime.value, endTime.value);
     if (
         !spaceId.value ||
         !date.value ||

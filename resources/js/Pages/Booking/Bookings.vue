@@ -20,8 +20,6 @@ export interface BookingProps {
 }
 
 const props = defineProps<BookingProps>();
-
-console.log(props);
 </script>
 
 <template>
