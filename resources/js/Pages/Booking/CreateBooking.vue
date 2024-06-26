@@ -48,8 +48,8 @@ interface Form {
     audience: string[];
     external: string;
     minors: string;
-    interadministrative: string;
-    interadministrativeFile?: File;
+    agreementContract: string;
+    agreementContractFile?: File;
     assistance: number;
     spaces: {
         id: string;
@@ -77,7 +77,7 @@ const form = useForm<Form>({
     audience: [],
     external: "",
     minors: "",
-    interadministrative: "",
+    agreementContract: "",
     assistance: 0,
     spaces: [],
     requester: {
@@ -93,9 +93,7 @@ const form = useForm<Form>({
 });
 
 const hasExternal = computed(() => form.audience.includes("External"));
-const hasInteradministrative = computed(
-    () => form.interadministrative === "Yes",
-);
+const hasAgreementContract = computed(() => form.agreementContract === "Yes");
 
 function handleCheckboxChange(value: string, checked: boolean) {
     if (checked) {
@@ -107,7 +105,7 @@ function handleCheckboxChange(value: string, checked: boolean) {
 
 function handleFileChange(event: Event) {
     const target = event.target as HTMLInputElement;
-    form.interadministrativeFile = target.files?.[0];
+    form.agreementContractFile = target.files?.[0];
 }
 
 function handleSpacesChange(spaces: Form["spaces"][0]) {
@@ -184,12 +182,12 @@ function handleSpaceDelete(index: number) {
                 </Label>
                 <RadioGroup v-model="form.minors">
                     <div class="flex gap-2 items-center">
-                        <RadioGroupItem value="Yes" />
-                        <Label for="Yes">Sí</Label>
+                        <RadioGroupItem id="MinorsYes" value="Yes" />
+                        <Label for="MinorsYes">Sí</Label>
                     </div>
                     <div class="flex gap-2 items-center">
-                        <RadioGroupItem value="No" />
-                        <Label for="No">No</Label>
+                        <RadioGroupItem id="MinorsNo" value="No" />
+                        <Label for="MinorsNo">No</Label>
                     </div>
                 </RadioGroup>
             </FormItem>
@@ -197,29 +195,29 @@ function handleSpaceDelete(index: number) {
                 <Label>
                     ¿La actividad a realizar se llevará a cabo en cumplimiento
                     de obligaciones en el marco de un Convenio o Contrato
-                    Interadministrativo? (Si marca Si, favor anexar copia del
+                    Inter-administrativo? (Si marca Si, favor anexar copia del
                     convenio o contrato)
                 </Label>
-                <RadioGroup v-model="form.interadministrative">
+                <RadioGroup v-model="form.agreementContract">
                     <div class="flex gap-2 items-center">
-                        <RadioGroupItem value="Yes" />
-                        <Label for="Yes">Sí</Label>
+                        <RadioGroupItem id="agreementContractYes" value="Yes" />
+                        <Label for="agreementContractYes">Sí</Label>
                     </div>
                     <div class="flex gap-2 items-center">
-                        <RadioGroupItem value="No" />
-                        <Label for="No">No</Label>
+                        <RadioGroupItem id="agreementContractNo" value="No" />
+                        <Label for="agreementContractNo">No</Label>
                     </div>
                 </RadioGroup>
             </FormItem>
-            <FormItem v-show="hasInteradministrative">
-                <Label for="interadministrative">
+            <FormItem v-show="hasAgreementContract">
+                <Label for="agreementContract">
                     Anexar copia del convenio o contrato
                 </Label>
                 <Input
                     type="file"
                     @change="handleFileChange($event)"
-                    id="interadministrative"
-                    name="interadministrative"
+                    id="agreementContract"
+                    name="agreementContract"
                 />
             </FormItem>
             <SelectedSpaceCard
