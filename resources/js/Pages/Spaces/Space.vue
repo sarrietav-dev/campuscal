@@ -8,18 +8,18 @@ import {
     CarouselPrevious,
 } from "@/Components/ui/carousel";
 import { Card, CardContent } from "@/Components/ui/card";
-import { ref } from "vue";
 import CarouselImage from "@/Components/CarouselImage.vue";
 
 const props = defineProps<{
-    id: number;
+    space: {
+        id: number;
+        name: string;
+        images: { path: string }[];
+        resources: { name: string }[];
+        campus_id: number;
+        capacity: string;
+    };
 }>();
-
-const images = ref<string[]>([
-    "https://picsum.photos/800/800",
-    "https://picsum.photos/800/800",
-    "https://picsum.photos/800/800",
-]);
 </script>
 
 <template>
@@ -28,9 +28,12 @@ const images = ref<string[]>([
             <div class="px-12 lg:px-5">
                 <Carousel class="mx-auto max-w-full lg:max-w-lg">
                     <CarouselContent>
-                        <template v-if="images.length > 0">
-                            <CarouselItem v-for="image in images" :key="image">
-                                <CarouselImage :image="image" />
+                        <template v-if="props.space.images.length > 0">
+                            <CarouselItem
+                                v-for="image in props.space.images"
+                                :key="image.path"
+                            >
+                                <CarouselImage :image="image.path" />
                             </CarouselItem>
                         </template>
                         <CarouselItem v-else>
@@ -54,7 +57,7 @@ const images = ref<string[]>([
                 </Carousel>
             </div>
             <div>
-                <h2>Page {{ props.id }}</h2>
+                <h2>{{ props.space.name }}</h2>
             </div>
         </div>
     </AuthenticatedLayout>

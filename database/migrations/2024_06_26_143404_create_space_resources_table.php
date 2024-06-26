@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("name");
         });
 
-        Schema::create('space_space_resources', function (Blueprint $table) {
+        Schema::create('space_space_resource', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignIdFor(Space::class)->constrained()->cascadeOnDelete();
@@ -33,6 +33,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('space_resources');
-        Schema::dropIfExists('space_space_resources');
+        Schema::dropIfExists('space_space_resource');
     }
 };

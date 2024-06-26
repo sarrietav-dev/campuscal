@@ -7,12 +7,18 @@ import FormItem from "@/Components/FormItem.vue";
 import { Button } from "@/Components/ui/button";
 import FileInput from "@/Components/FileInput.vue";
 
+const props = defineProps<{
+    campus: string;
+}>();
+
 const form = useForm<{
     name: string;
     images: FileList | null;
+    campus_id: string;
 }>({
     name: "",
     images: null,
+    campus_id: props.campus,
 });
 
 function handleSubmit() {

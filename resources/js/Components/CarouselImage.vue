@@ -15,7 +15,6 @@ const props = defineProps<{
                     :src="props.image"
                     class="object-cover absolute size-full rounded-lg"
                     alt="Space image"
-                    loading="lazy"
                 >
                     <template #loading>
                         <span
