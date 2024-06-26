@@ -38,7 +38,7 @@ const model = defineModel<DateRange>({
                 variant="outline"
                 :class="
                     cn(
-                        'w-[280px] justify-start text-left font-normal',
+                        'w-full justify-start text-left font-normal',
                         !model && 'text-muted-foreground',
                     )
                 "
@@ -60,6 +60,7 @@ const model = defineModel<DateRange>({
         </PopoverTrigger>
         <PopoverContent class="w-auto p-0">
             <RangeCalendar
+                class="w-full"
                 v-model="model"
                 initial-focus
                 :number-of-months="2"

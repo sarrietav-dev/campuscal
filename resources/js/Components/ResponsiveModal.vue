@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import { useMediaQuery } from "@vueuse/core";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogTitle,
-    DialogTrigger,
-} from "@/Components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/Components/ui/drawer";
 import { createReusableTemplate } from "@vueuse/core";
 
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
 
-const isDesktop = useMediaQuery("(min-width: 1024px)");
+const isDesktop = useMediaQuery("(min-width: 768px)");
 </script>
 
 <template>
@@ -34,7 +28,7 @@ const isDesktop = useMediaQuery("(min-width: 1024px)");
         <DrawerTrigger as-child>
             <slot name="trigger" />
         </DrawerTrigger>
-        <DrawerContent>
+        <DrawerContent class="max-h-[95%]">
             <ReuseTemplate />
         </DrawerContent>
     </Drawer>
