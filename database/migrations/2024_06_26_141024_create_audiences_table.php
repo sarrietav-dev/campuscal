@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string("name");
         });
 
-        Schema::create('audience_request', function (Blueprint $table) {
+        Schema::create('audience_booking', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignIdFor(Booking::class)->constrained()->cascadeOnDelete();

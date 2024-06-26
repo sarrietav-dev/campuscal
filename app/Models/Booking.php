@@ -22,9 +22,9 @@ class Booking extends Model
         return $this->hasMany(Appointment::class);
     }
 
-    public function audience(): HasMany
+    public function audience(): BelongsToMany
     {
-        return $this->hasMany(Audience::class);
+        return $this->belongsToMany(Audience::class);
     }
 
     public function agreementContracts(): BelongsToMany
