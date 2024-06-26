@@ -3,6 +3,7 @@ import { computed, getCurrentInstance } from "vue";
 import { Trash } from "lucide-vue-next";
 
 const props = defineProps<{
+    deletable?: boolean;
     spaceName: string;
     imageUrl: string;
     date: {
@@ -22,7 +23,7 @@ const hasDelete = computed(() => !!getCurrentInstance()?.vnode.props?.onDelete);
         class="group relative flex w-full items-center justify-center rounded-md border border-input bg-background bg-[image:var(--image-url)] bg-cover bg-center text-sm font-medium"
     >
         <button
-            v-if="hasDelete"
+            v-if="deletable"
             @click="emit('delete')"
             class="invisible absolute -right-3 -top-3 z-10 flex size-7 scale-0 cursor-pointer items-center justify-center rounded-full border border-input bg-background text-foreground transition group-hover:visible group-hover:scale-100"
         >
