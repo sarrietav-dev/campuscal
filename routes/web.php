@@ -23,24 +23,9 @@ Route::middleware(["auth", "verified"])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get("/campus", function () {
-        return Inertia::render("Spaces/Campuses");
-    })->name("campus");
-
-    Route::get("/campus/create", function () {
-        return Inertia::render("Spaces/CreateCampus");
-    })->name("createCampus");
-
     Route::get("/space/create", function () {
         return Inertia::render("Spaces/CreateSpace");
     })->name("createSpace");
-
-
-    Route::get("/campus/{id}", function (string $id) {
-        return Inertia::render("Spaces/Campus", [
-            "id" => $id
-        ]);
-    })->name("campuses");
 
     Route::get("/space/{id}", function (string $id) {
         return Inertia::render("Spaces/Space", [
@@ -59,6 +44,10 @@ Route::middleware(["auth", "verified"])->group(function () {
     })->name("bookings");
 
 });
+
+Route::resource('campus', \App\Http\Controllers\CampusController::class)
+    ->only(['index', 'create', 'show'])
+    ->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

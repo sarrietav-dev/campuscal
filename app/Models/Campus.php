@@ -11,6 +11,10 @@ class Campus extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name'
+    ];
+
     public function spaces(): HasMany
     {
         return $this->hasMany(Space::class);

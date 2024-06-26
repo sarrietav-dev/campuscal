@@ -4,33 +4,13 @@ import SpaceCard from "@/Components/SpaceCard.vue";
 import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 
-const spaces = ref([
-    {
-        id: 1,
-        title: "Campus 1",
-        imageSrc: "https://picsum.photos/600/800",
-    },
-    {
-        id: 2,
-        title: "Campus 2",
-        imageSrc: "https://picsum.photos/600/800",
-    },
-    {
-        id: 3,
-        title: "Campus 3",
-        imageSrc: "https://picsum.photos/600/800",
-    },
-    {
-        id: 4,
-        title: "Campus 4",
-        imageSrc: "https://picsum.photos/600/800",
-    },
-    {
-        id: 5,
-        title: "Campus 5",
-        imageSrc: "https://picsum.photos/600/800",
-    },
-]);
+const spaces = defineProps<{
+    campuses: {
+        id: number;
+        name: string;
+        images: { path: string }[];
+    }[];
+}>();
 </script>
 
 <template>
@@ -38,11 +18,14 @@ const spaces = ref([
         <div
             class="space-y-5 sm:grid sm:grid-cols-2 sm:gap-5 sm:space-y-0 lg:grid-cols-3"
         >
-            <Link v-for="campus in spaces" :href="`/campus/${campus.id}`">
+            <Link
+                v-for="campus in spaces.campuses"
+                :href="`/campus/${campus.id}`"
+            >
                 <SpaceCard
-                    :title="campus.title"
+                    :title="campus.name"
                     :key="campus.id"
-                    :image-src="campus.imageSrc"
+                    :image-src="campus.images[0].path"
                 />
             </Link>
         </div>
