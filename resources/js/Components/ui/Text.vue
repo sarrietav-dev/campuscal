@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { cva, VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-import { computed } from "vue";
-
 interface Props {
     variant?: "heading1" | "heading2" | "heading3" | "heading4";
 }

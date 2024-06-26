@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { BookMarked } from "lucide-vue-next";
 import ThemeToggle from "@/Components/ThemeToggle.vue";
-import LogoutButton from "@/Components/LogoutButton.vue";
-import CreateActionButton from "@/Components/CreateActionButton.vue";
 </script>
 
 <template>

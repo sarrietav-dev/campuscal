@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type HTMLAttributes, computed, ref, watchEffect } from "vue";
+import { type HTMLAttributes, computed } from "vue";
 import {
     RangeCalendarRoot,
     type RangeCalendarRootEmits,

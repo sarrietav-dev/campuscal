@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type {
-    ColumnDef,
     ColumnFiltersState,
     SortingState,
     VisibilityState,
@@ -13,11 +12,10 @@ import {
     getSortedRowModel,
     useVueTable,
 } from "@tanstack/vue-table";
-import { ArrowUpDown, ChevronDown } from "lucide-vue-next";
+import { ChevronDown } from "lucide-vue-next";
 
-import { h, ref } from "vue";
+import { ref } from "vue";
 import { Button } from "./ui/button";
-import { Checkbox } from "./ui/checkbox";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
