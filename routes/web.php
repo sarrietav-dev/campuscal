@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\SpaceController;
+use App\Http\Controllers\BookingController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -16,34 +17,23 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/booking', function () {
-    return Inertia::render('Booking/CreateBooking');
-})->name('booking');
-
 Route::middleware(["auth", "verified"])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-
-    Route::get("/booking/{id}", function (string $id) {
-        return Inertia::render("Booking/Index", [
-            "id" => $id
-        ]);
-    })->name("booking");
-
-    Route::get("/bookings", function () {
-        return Inertia::render("Booking/Bookings");
-    })->name("bookings");
-
 });
 
-Route::resource('campus', CampusController::class)
+Route::resource('campuses', CampusController::class)
     ->only(['index', 'create', 'show'])
     ->middleware('auth');
 
-Route::resource('campus.spaces', SpaceController::class)
+Route::resource('campuses.spaces', SpaceController::class)
     ->shallow()
     ->only(['create', 'store', 'show'])
+    ->middleware('auth');
+
+Route::resource('bookings', BookingController::class)
+    ->only(['index', 'show'])
     ->middleware('auth');
 
 Route::middleware('auth')->group(function () {

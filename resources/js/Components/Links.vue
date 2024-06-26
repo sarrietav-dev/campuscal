@@ -12,7 +12,7 @@ import { BookMarked } from "lucide-vue-next";
         <span class="sr-only">CampusCal</span>
     </Link>
     <Link
-        :href="route('campus.index')"
+        :href="route('campuses.index')"
         class="text-muted-foreground transition-colors hover:text-foreground"
         :class="{
             'font-bold':
@@ -24,7 +24,7 @@ import { BookMarked } from "lucide-vue-next";
         Espacios
     </Link>
     <Link
-        :href="route('bookings')"
+        :href="route('bookings.index')"
         class="text-muted-foreground transition-colors hover:text-foreground [&.active]:font-bold"
         :class="{ 'font-bold': $page.component === 'Booking/Bookings' }"
     >

@@ -20,7 +20,7 @@ const spaces = defineProps<{
         >
             <Link
                 v-for="campus in spaces.campuses"
-                :href="`/campus/${campus.id}`"
+                :href="`/campuses/${campus.id}`"
             >
                 <SpaceCard
                     :title="campus.name"

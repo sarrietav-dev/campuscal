@@ -33,42 +33,10 @@ import {
 } from "./ui/table";
 import { valueUpdater } from "@/lib/utils";
 import { columns, Request } from "@/Components/columnDef";
+import { BookingProps } from "@/Pages/Booking/Bookings.vue";
 
-export interface Payment {
-    id: string;
-    amount: number;
-    status: "pending" | "processing" | "success" | "failed";
-    email: string;
-}
+const { bookings: data } = defineProps<BookingProps>();
 
-const data: Request[] = [
-    {
-        id: "1",
-        details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        assistanceCount: 2,
-        createdAt: "2021-09-01T00:00:00.000Z",
-        status: "pending",
-        requester: {
-            id: "1",
-            name: "John",
-            surname: "Doe",
-            email: "sebas@arrieta.com",
-        },
-    },
-    {
-        id: "2",
-        details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        assistanceCount: 2,
-        createdAt: "2021-09-01T00:00:00.000Z",
-        status: "pending",
-        requester: {
-            id: "1",
-            name: "John",
-            surname: "Doe",
-            email: "isa@alva.com",
-        },
-    },
-];
 const sorting = ref<SortingState>([]);
 const columnFilters = ref<ColumnFiltersState>([]);
 const columnVisibility = ref<VisibilityState>({});

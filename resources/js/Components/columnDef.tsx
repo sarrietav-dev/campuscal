@@ -8,6 +8,7 @@ import {
 import { Button } from "./ui/button";
 import { Link } from "@inertiajs/vue3";
 import { ArrowRight } from "lucide-vue-next";
+import { BookingProps } from "@/Pages/Booking/Bookings.vue";
 
 export type Request = {
     id: string;
@@ -23,7 +24,13 @@ export type Request = {
     };
 };
 
-export const columns: ColumnDef<Request>[] = [
+const statusES: { [k: string]: string } = {
+    pending: "Pendiente",
+    approved: "Aprobado",
+    rejected: "Rechazado",
+};
+
+export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
     { accessorKey: "id", header: "ID" },
     {
         accessorKey: "details",
@@ -36,7 +43,8 @@ export const columns: ColumnDef<Request>[] = [
     },
     { accessorKey: "assistanceCount", header: "Asistencias" },
     {
-        accessorFn: ({ createdAt }) => new Date(createdAt).toLocaleDateString(),
+        accessorFn: ({ created_at }) =>
+            new Date(created_at).toLocaleDateString(),
         header: "Creado",
     },
     {
@@ -59,7 +67,7 @@ export const columns: ColumnDef<Request>[] = [
                               : "bg-red-100 text-red-800",
                     ]}
                 >
-                    {status}
+                    {statusES[status]}
                 </span>
             );
         },
@@ -82,7 +90,7 @@ export const columns: ColumnDef<Request>[] = [
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Button asChild variant="default" size="icon">
-                                <Link href={`/booking/${row.getValue("id")}`}>
+                                <Link href={`/bookings/${row.getValue("id")}`}>
                                     <ArrowRight />
                                 </Link>
                             </Button>

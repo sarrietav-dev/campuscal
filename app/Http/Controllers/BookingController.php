@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class BookingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
-        //
+        $bookings = Booking::with(
+            'requester:id,name,surname,email,booking_id',
+        )->select(['id', 'details', 'assistance', 'created_at', 'status'])->get();
+
+        return Inertia::render('Booking/Bookings', [
+            'bookings' => $bookings,
+        ]);
     }
 
     /**
@@ -34,9 +43,11 @@ class BookingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking)
+    public function show(Booking $booking): Response
     {
-        //
+        return Inertia::render('Bookings/Index', [
+            'booking' => $booking->load('requester', 'audience', 'appointments'),
+        ]);
     }
 
     /**
