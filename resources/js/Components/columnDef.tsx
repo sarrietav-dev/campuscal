@@ -41,7 +41,7 @@ export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
             </div>
         ),
     },
-    { accessorKey: "assistanceCount", header: "Asistencias" },
+    { accessorKey: "assistance", header: "Asistencias" },
     {
         accessorFn: ({ created_at }) =>
             new Date(created_at).toLocaleDateString(),
