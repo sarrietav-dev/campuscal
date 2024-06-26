@@ -5,9 +5,9 @@ import { Link } from "@inertiajs/vue3";
 </script>
 
 <template>
-    <Link :href="route('logout')" method="post">
-        <Button variant="outline" size="icon">
+    <Button as-child variant="outline" size="icon">
+        <Link :href="route('logout')" method="post" as="button">
             <LogOut className="h-5 w-5" />
-        </Button>
-    </Link>
+        </Link>
+    </Button>
 </template>

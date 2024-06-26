@@ -27,6 +27,14 @@ Route::middleware(["auth", "verified"])->group(function () {
         return Inertia::render("Spaces/Campuses");
     })->name("campus");
 
+    Route::get("/campus/create", function () {
+        return Inertia::render("Spaces/CreateCampus");
+    })->name("createCampus");
+
+    Route::get("/space/create", function () {
+        return Inertia::render("Spaces/CreateSpace");
+    })->name("createSpace");
+
 
     Route::get("/campus/{id}", function (string $id) {
         return Inertia::render("Spaces/Campus", [
@@ -49,6 +57,7 @@ Route::middleware(["auth", "verified"])->group(function () {
     Route::get("/bookings", function () {
         return Inertia::render("Booking/Bookings");
     })->name("bookings");
+
 });
 
 Route::middleware('auth')->group(function () {
