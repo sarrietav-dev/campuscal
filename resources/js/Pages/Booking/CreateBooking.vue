@@ -11,6 +11,8 @@ import { Button } from "@/Components/ui/button";
 import SpaceDialog from "@/Components/SpaceDialog.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import SelectedSpaceCard from "@/Components/SelectedSpaceCard.vue";
+import Text from "@/Components/ui/Text.vue";
+import FormItem from "@/Components/FormItem.vue";
 
 const audienceList = [
     {
@@ -27,7 +29,7 @@ const audienceList = [
     },
     {
         label: "Egresados",
-        value: "Guaduates",
+        value: "Graduates",
     },
     {
         label: "Personal externo",
@@ -119,71 +121,79 @@ function handleSpaceDelete(index: number) {
 
 <template>
     <GuestLayout>
-        <form>
-            <div>
-                <Label for="details">Details</Label>
+        <form class="container mx-auto max-w-4xl space-y-5">
+            <Text variant="heading2">Datos de la petición</Text>
+            <FormItem>
+                <Label for="details">Detalle de la actividad a realizar</Label>
                 <Textarea
                     v-model="form.details"
                     id="details"
                     name="details"
                     rows="4"
                     cols="50"
-                    placeholder="Enter booking details"
+                    placeholder="Anote detalladamente la actividad que desea realizar"
                 ></Textarea>
-            </div>
-            <div>
-                <Label for="audience">Audience</Label>
-                <div class="space-y-2">
-                    <div
-                        class="flex items-center gap-1"
-                        v-for="audience in audienceList"
+            </FormItem>
+            <div class="grid grid-cols-2">
+                <FormItem>
+                    <Label for="audience"
+                        >¿A qué público está dirigida la actividad?</Label
                     >
-                        <Checkbox
-                            :key="audience.value"
-                            :checked="form.audience.includes(audience.value)"
-                            @update:checked="
-                                (checked) =>
-                                    handleCheckboxChange(
-                                        audience.value,
-                                        checked,
-                                    )
-                            "
-                        />
-                        <Label :for="audience.value">
-                            {{ audience.label }}
-                        </Label>
+                    <div class="space-y-2">
+                        <div
+                            class="flex items-center gap-1"
+                            v-for="audience in audienceList"
+                        >
+                            <Checkbox
+                                :id="audience.value"
+                                :key="audience.value"
+                                :checked="
+                                    form.audience.includes(audience.value)
+                                "
+                                @update:checked="
+                                    (checked) =>
+                                        handleCheckboxChange(
+                                            audience.value,
+                                            checked,
+                                        )
+                                "
+                            />
+                            <Label :for="audience.value">
+                                {{ audience.label }}
+                            </Label>
+                        </div>
                     </div>
+                </FormItem>
+                <div class="space-y-3" v-show="hasExternal">
+                    <Label for="external">Para personal externo: ¿Cuál?</Label>
+                    <Textarea
+                        v-model="form.external"
+                        id="external"
+                        name="external"
+                        rows="4"
+                        cols="50"
+                        placeholder="Indique el grupo poblacional"
+                    ></Textarea>
                 </div>
             </div>
-            <div v-show="hasExternal">
-                <Label for="external">External</Label>
-                <Textarea
-                    v-model="form.external"
-                    id="external"
-                    name="external"
-                    rows="4"
-                    cols="50"
-                    placeholder="Enter external details"
-                ></Textarea>
-            </div>
-            <div>
+            <FormItem>
                 <Label>
                     ¿El evento contará con la presencia de menores de edad
                     (niños y/o adolescentes) que no están matriculados en la
                     institución? (Marque una opción)
                 </Label>
                 <RadioGroup v-model="form.minors">
-                    <div>
+                    <div class="flex gap-2 items-center">
                         <RadioGroupItem value="Yes" />
                         <Label for="Yes">Sí</Label>
                     </div>
-                    <div>
+                    <div class="flex gap-2 items-center">
                         <RadioGroupItem value="No" />
                         <Label for="No">No</Label>
                     </div>
                 </RadioGroup>
-            </div>
-            <div>
+            </FormItem>
+            <FormItem>
                 <Label>
                     ¿La actividad a realizar se llevará a cabo en cumplimiento
                     de obligaciones en el marco de un Convenio o Contrato
@@ -191,114 +201,27 @@ function handleSpaceDelete(index: number) {
                     convenio o contrato)
                 </Label>
                 <RadioGroup v-model="form.interadministrative">
-                    <div>
+                    <div class="flex gap-2 items-center">
                         <RadioGroupItem value="Yes" />
                         <Label for="Yes">Sí</Label>
                     </div>
-                    <div>
+                    <div class="flex gap-2 items-center">
                         <RadioGroupItem value="No" />
                         <Label for="No">No</Label>
                     </div>
                 </RadioGroup>
-            </div>
-            <div v-show="hasInteradministrative">
-                <Label for="interadministrative"
-                    >Anexar copia del convenio o contrato</Label
-                >
+            </FormItem>
+            <FormItem v-show="hasInteradministrative">
+                <Label for="interadministrative">
+                    Anexar copia del convenio o contrato
+                </Label>
                 <Input
                     type="file"
                     @change="handleFileChange($event)"
                     id="interadministrative"
                     name="interadministrative"
                 />
-            </div>
-            <div>
-                <Label for="assistance">Número de asistentes</Label>
-                <Input
-                    type="number"
-                    v-model.number="form.assistance"
-                    id="assistance"
-                    name="assistance"
-                    min="1"
-                />
-            </div>
-            <div>
-                <Label for="requester.name">Nombre</Label>
-                <Input
-                    v-model="form.requester.name"
-                    id="requester.name"
-                    name="requester.name"
-                    type="text"
-                />
-            </div>
-            <div>
-                <Label for="requester.surname">Apellido</Label>
-                <Input
-                    v-model="form.requester.surname"
-                    id="requester.surname"
-                    name="requester.surname"
-                    type="text"
-                />
-            </div>
-            <div>
-                <Label for="requester.identification">Identificación</Label>
-                <Input
-                    v-model="form.requester.identification"
-                    id="requester.identification"
-                    name="requester.identification"
-                    type="text"
-                />
-            </div>
-            <div>
-                <Label for="requester.phone">Teléfono</Label>
-                <Input
-                    v-model="form.requester.phone"
-                    id="requester.phone"
-                    name="requester.phone"
-                    type="tel"
-                />
-            </div>
-            <div>
-                <Label for="requester.email">Correo electrónico</Label>
-                <Input
-                    v-model="form.requester.email"
-                    id="requester.email"
-                    name="requester.email"
-                    type="email"
-                />
-            </div>
-            <div>
-                <Label for="requester.companyName">Nombre de la empresa</Label>
-                <Input
-                    v-model="form.requester.companyName"
-                    id="requester.companyName"
-                    name="requester.companyName"
-                    type="text"
-                />
-            </div>
-            <div>
-                <Label for="requester.companyRole">Cargo en la empresa</Label>
-                <Input
-                    v-model="form.requester.companyRole"
-                    id="requester.companyRole"
-                    name="requester.companyRole"
-                    type="text"
-                />
-            </div>
-            <div>
-                <Label for="requester.academicUnit"
-                    >Unidad académica a la que pertenece</Label
-                >
-                <Input
-                    v-model="form.requester.academicUnit"
-                    id="requester.academicUnit"
-                    name="requester.academicUnit"
-                    type="text"
-                />
-            </div>
-            <div>
-                <Button type="submit">Submit</Button>
-            </div>
+            </FormItem>
             <SelectedSpaceCard
                 deletable
                 v-for="(space, index) in form.spaces"
@@ -315,6 +238,104 @@ function handleSpaceDelete(index: number) {
                 @update:open="handleModalOpen($event)"
                 @create="handleSpacesChange($event)"
             />
+            <FormItem>
+                <Label for="assistance">Número de asistentes</Label>
+                <Input
+                    type="number"
+                    v-model.number="form.assistance"
+                    id="assistance"
+                    name="assistance"
+                    min="1"
+                />
+            </FormItem>
+            <Text variant="heading2">Datos del solicitante</Text>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <FormItem>
+                    <Label for="requester.name">Nombre</Label>
+                    <Input
+                        v-model="form.requester.name"
+                        id="requester.name"
+                        name="requester.name"
+                        type="text"
+                    />
+                </FormItem>
+                <FormItem>
+                    <Label for="requester.surname">Apellido</Label>
+                    <Input
+                        v-model="form.requester.surname"
+                        id="requester.surname"
+                        name="requester.surname"
+                        type="text"
+                    />
+                </FormItem>
+                <FormItem>
+                    <Label for="requester.identification">
+                        N° de Identificación
+                    </Label>
+                    <Input
+                        v-model="form.requester.identification"
+                        id="requester.identification"
+                        name="requester.identification"
+                        type="text"
+                    />
+                </FormItem>
+                <FormItem>
+                    <Label for="requester.phone">Teléfono</Label>
+                    <Input
+                        v-model="form.requester.phone"
+                        id="requester.phone"
+                        name="requester.phone"
+                        type="tel"
+                    />
+                </FormItem>
+                <FormItem class="sm:col-span-2">
+                    <Label for="requester.email">Correo electrónico</Label>
+                    <Input
+                        v-model="form.requester.email"
+                        id="requester.email"
+                        name="requester.email"
+                        type="email"
+                    />
+                </FormItem>
+                <FormItem>
+                    <Label>
+                        Entidad, empresa u organización a la que se encuentra
+                        afiliado
+                    </Label>
+                    <Input
+                        v-model="form.requester.companyName"
+                        id="requester.companyName"
+                        name="requester.companyName"
+                        type="text"
+                    />
+                </FormItem>
+                <FormItem>
+                    <Label for="requester.companyRole">
+                        Cargo en la empresa
+                    </Label>
+                    <Input
+                        v-model="form.requester.companyRole"
+                        id="requester.companyRole"
+                        name="requester.companyRole"
+                        type="text"
+                    />
+                </FormItem>
+                <FormItem>
+                    <Label for="requester.academicUnit">
+                        Unidad Académica o Administrativa de la U de C a la que
+                        pertenece
+                    </Label>
+                    <Input
+                        v-model="form.requester.academicUnit"
+                        id="requester.academicUnit"
+                        name="requester.academicUnit"
+                        type="text"
+                    />
+                </FormItem>
+            </div>
+            <div>
+                <Button type="submit">Submit</Button>
+            </div>
         </form>
     </GuestLayout>
 </template>

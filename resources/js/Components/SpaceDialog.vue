@@ -130,7 +130,7 @@ function handleCreate() {
     <ResponsiveModal :open="props.open" @update:open="handleModalOpen($event)">
         <template #trigger>
             <Button class="w-full border-dashed py-10" variant="outline">
-                Elige aquí el espacio que quieres usar
+                Elige aquí los espacios que quieres usar
             </Button>
         </template>
         <template #title v-if="!isCampusSelected">Campuses</template>

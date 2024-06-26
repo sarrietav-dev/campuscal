@@ -3,28 +3,21 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { computed } from "vue";
 
-const textVariants = cva("", {
-    variants: {
-        variant: {
-            default: "leading-7 [&:not(:first-child)]:mt-6",
-            heading1:
-                "scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl",
-            heading2:
-                "scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0",
-            heading3: "scroll-m-20 text-2xl font-semibold tracking-tight",
-            heading4: "scroll-m-20 text-xl font-semibold tracking-tight",
-        },
-    },
-    defaultVariants: {
-        variant: "default",
-    },
-});
-
-interface Props extends /* @vue-ignore */ VariantProps<typeof textVariants> {}
+interface Props {
+    variant?: "heading1" | "heading2" | "heading3" | "heading4";
+}
 
 const props = defineProps<Props>();
 
-const classes = computed(() => cn(textVariants({ variant: props.variant })));
+const classes = {
+    "scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0":
+        props.variant === "heading2",
+    "scroll-m-20 text-2xl font-semibold tracking-tight":
+        props.variant === "heading3",
+    "scroll-m-20 text-xl font-semibold tracking-tight":
+        props.variant === "heading4",
+    "leading-7 [&:not(:first-child)]:mt-6": !props.variant,
+};
 </script>
 
 <template>
