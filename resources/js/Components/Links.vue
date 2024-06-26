@@ -14,7 +14,12 @@ import { BookMarked } from "lucide-vue-next";
     <Link
         :href="route('campus')"
         class="text-muted-foreground transition-colors hover:text-foreground"
-        :class="{ 'font-bold': $page.component === 'Spaces/Campuses' }"
+        :class="{
+            'font-bold':
+                $page.component === 'Spaces/Campuses' ||
+                $page.component === 'Spaces/Campus' ||
+                $page.component === 'Spaces/Space',
+        }"
     >
         Espacios
     </Link>
