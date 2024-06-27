@@ -44,7 +44,7 @@
 
         --vis-primary-color: var(--primary);
         /* change to any hsl value you want */
-        --vis-secondary-color: 160 81% 40%;
+        --vis-secondary-color: 47.9 95.8% 53.1%;
         --vis-text-color: var(--muted-foreground);
     }
 
@@ -87,7 +87,7 @@
 
         --vis-primary-color: var(--primary);
         /* change to any hsl value you want */
-        --vis-secondary-color: 160 81% 40%;
+        --vis-secondary-color: 47.9 95.8% 53.1%;
         --vis-text-color: var(--muted-foreground);
     }
 }
