@@ -12,6 +12,12 @@ class File extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'path',
+        'type',
+        'size',
+    ];
+
     public function space(): BelongsToMany
     {
         return $this->belongsToMany(Space::class,);

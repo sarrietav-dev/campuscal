@@ -16,6 +16,7 @@ const form = useForm<{
 });
 
 function handleSubmit() {
+    console.log(form);
     form.post(route("campuses.store"));
 }
 </script>
@@ -27,11 +28,23 @@ function handleSubmit() {
                 <FormItem class="mb-4">
                     <Label for="name">Nombre del campus</Label>
                     <Input id="name" type="text" v-model="form.name" />
+                    <p
+                        v-show="form.errors.name"
+                        class="text-red-500 text-xs italic"
+                    >
+                        {{ form.errors.name }}
+                    </p>
                 </FormItem>
 
                 <FormItem class="mb-4">
                     <Label for="image">Imagen</Label>
                     <FileInput id="image" type="file" v-model="form.images" />
+                    <p
+                        v-show="form.errors.images"
+                        class="text-red-500 text-xs italic"
+                    >
+                        {{ form.errors.images }}
+                    </p>
                 </FormItem>
 
                 <div class="mb-4">

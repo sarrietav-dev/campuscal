@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCampusRequest;
 use App\Models\Campus;
-use GuzzleHttp\Promise\Create;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -40,14 +40,25 @@ class CampusController extends Controller
     {
         $validated = $request->validated();
 
+        $files = $request->file('images');
+        $paths = [];
+
+        if ($request->hasFile('images')) {
+            foreach ($files as $file) {
+                $path = $file->store();
+                $paths[] = $path;
+            }
+        }
+
         $campus = Campus::create([
             'name' => $validated['name'],
         ]);
 
-        $campus->name = $validated['name'];
-        $campus->images()->createMany($validated['images']);
+        $campus->images()->createMany(array_map(function ($path) {
+            return ['path' => Storage::url($path)];
+        }, $paths));
 
-        return redirect(route('campus.index'));
+        return redirect(route('campuses.index'));
     }
 
     /**

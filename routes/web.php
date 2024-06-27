@@ -24,7 +24,7 @@ Route::middleware(["auth", "verified"])->group(function () {
 });
 
 Route::resource('campuses', CampusController::class)
-    ->only(['index', 'create', 'show'])
+    ->only(['index', 'create', 'show', 'store'])
     ->middleware('auth');
 
 Route::resource('campuses.spaces', SpaceController::class)

@@ -17,9 +17,7 @@ return new class extends Migration {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("name");
             $table->string("path");
-            $table->string("type");
         });
 
         Schema::create('space_file', function (Blueprint $table) {

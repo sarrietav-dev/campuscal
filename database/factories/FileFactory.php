@@ -20,8 +20,6 @@ class FileFactory extends Factory
 
         return [
             "path" => $url . $this->faker->numberBetween(1, 100),
-            "name" => $this->faker->word(),
-            "type" => $this->faker->mimeType(),
         ];
     }
 }
