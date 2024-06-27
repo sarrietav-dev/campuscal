@@ -8,7 +8,9 @@
         "php": "^8.2",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.9",
+        "laravel/pulse": "^1.2",
         "laravel/sanctum": "^4.0",
+        "laravel/telescope": "^5.1",
         "laravel/tinker": "^2.9",
         "league/flysystem-aws-s3-v3": "3.0",
         "tightenco/ziggy": "^2.0"
