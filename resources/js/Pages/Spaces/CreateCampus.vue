@@ -16,7 +16,7 @@ const form = useForm<{
 });
 
 function handleSubmit() {
-    form.post(route("spaces.store"));
+    form.post(route("campuses.store"));
 }
 </script>
 

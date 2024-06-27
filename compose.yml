@@ -78,6 +78,21 @@ services:
         - 'http://localhost:9000/minio/health/live'
       retries: 3
       timeout: 5s
+  create-buckets:
+    image: 'minio/mc:latest'
+    depends_on:
+      - minio
+    entrypoint: /etc/minio/create_buckets.sh
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_BUCKET: ${AWS_BUCKET}
+      AWS_BUCKET_PRIVATE: ${AWS_BUCKET_PRIVATE}
+      AWS_ENDPOINT: ${AWS_ENDPOINT}
+    volumes:
+      - './docker/minio:/etc/minio'
+    networks:
+      - sail
   mailpit:
     image: 'axllent/mailpit:latest'
     ports:
