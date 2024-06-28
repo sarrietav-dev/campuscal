@@ -62,7 +62,7 @@ const isSpaceSelected = computed(
 );
 
 watch(campusId, async () => {
-    if (isSpaceSelected) {
+    if (isCampusSelected) {
         isSpacesLoading.value = true;
         const newSpaces = await getSpaces(campusId.value ?? 0);
         spaces.value = newSpaces ?? [];
@@ -82,6 +82,7 @@ function handleModalOpen(open: boolean) {
         startTime.value = undefined;
         endTime.value = undefined;
         spaces.value = [];
+        isSpacesLoading.value = false;
     }, 200);
     emit("update:open", open);
 }
@@ -127,7 +128,7 @@ function handleCreate() {
         <template #title v-else-if="!isSpaceSelected"> Spaces</template>
         <div class="overflow-y-auto">
             <div
-                class="sm:grid grid-cols-2 gap-5"
+                class="sm:grid sm:grid-cols-4 gap-5"
                 v-show="campusId === undefined"
             >
                 <SpaceCard
@@ -142,7 +143,7 @@ function handleCreate() {
         </div>
         <div v-show="isSpacesLoading">loading</div>
         <div
-            class="sm:grid grid-cols-2 gap-5 overflow-y-auto"
+            class="sm:grid grid-cols-4 gap-5 overflow-y-auto"
             v-show="
                 campusId !== undefined &&
                 spaceId === undefined &&
