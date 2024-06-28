@@ -10,7 +10,14 @@ import { Link } from "@inertiajs/vue3";
         </Link>
     </Button>
     <Button as-child v-if="$page.component === 'Spaces/Campus'">
-        <Link :href="route('spaces.create')" as="button">
+        <Link
+            :href="
+                route('campuses.spaces.create', {
+                    campus: route().params.campus,
+                })
+            "
+            as="button"
+        >
             Crear un espacio
         </Link>
     </Button>

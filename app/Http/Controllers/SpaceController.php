@@ -6,6 +6,7 @@ use App\Http\Requests\CreateSpaceRequest;
 use App\Models\Space;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -33,10 +34,10 @@ class SpaceController extends Controller
         );
 
         $space->images()->createMany(
-            collect($request->images)->map(fn($image) => ['path' => $image->store('spaces')])->toArray()
+            collect($request->images)->map(fn($image) => ['path' => Storage::url($image->store())])->toArray()
         );
 
-        return redirect()->route('campus.show', $space->campus_id);
+        return redirect()->route('campuses.show', $space->campus_id);
     }
 
     /**
