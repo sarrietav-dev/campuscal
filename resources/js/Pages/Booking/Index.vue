@@ -21,7 +21,9 @@ import ObservationForm from "@/Components/ObservationForm.vue";
 const { booking } = defineProps<{
     booking: {
         agreement_contract: boolean;
-        agreement_contract_file_path: string;
+        agreement_contracts: {
+            path: string;
+        }[];
         appointments: {
             booking_id: number;
             date_end: string;
@@ -49,8 +51,6 @@ const { booking } = defineProps<{
         };
     };
 }>();
-
-console.log(booking);
 </script>
 
 <template>
@@ -115,7 +115,7 @@ console.log(booking);
                                 se llevará acabo dentro del marco de un convenio
                                 o contrato interadministrativo:
                                 <a
-                                    :href="booking.agreement_contract_file_path"
+                                    :href="booking.agreement_contracts[0].path"
                                     target="_blank"
                                 >
                                     <strong class="font-semibold">
