@@ -26,7 +26,6 @@ class RequesterFactory extends Factory
             "identification" => $this->faker->randomNumber(),
             "company_name" => $this->faker->company(),
             "company_role" => $this->faker->jobTitle(),
-            "company_address" => $this->faker->address(),
             "academic_unit" => $this->faker->word(),
             "booking_id" => Booking::factory(),
         ];

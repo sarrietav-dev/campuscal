@@ -21,7 +21,6 @@ return new class extends Migration {
             $table->string("identification");
             $table->string("company_name");
             $table->string("company_role");
-            $table->string("company_address");
             $table->string("academic_unit");
             $table->foreignIdFor(Booking::class)->constrained()->cascadeOnDelete();
         });
