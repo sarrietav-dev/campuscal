@@ -24,6 +24,7 @@
         "vue-tsc": "^1.8.27"
     },
     "dependencies": {
+        "@tanstack/vue-query": "^5.48.2",
         "@tanstack/vue-table": "^8.17.3",
         "@unovis/ts": "^1.4.1",
         "@unovis/vue": "^1.4.1",

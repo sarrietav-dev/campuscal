@@ -38,8 +38,9 @@ class StoreBookingRequest extends FormRequest
             'requester.identification' => ['required', 'string', 'max:255'],
             'requester.company_name' => ['required', 'string', 'max:255'],
             'requester.company_role' => ['required', 'string', 'max:255'],
-            'requester.company_unit' => ['required', 'string', 'max:255'],
-
+            'requester.academic_unit' => ['required', 'string', 'max:255'],
+            'agreement_contract' => ['required', 'boolean'],
+            'agreement_contract_file' => ['nullable', 'file', 'mimes:pdf'],
         ];
     }
 }

@@ -28,8 +28,8 @@ class File extends Model
         return $this->belongsToMany(Campus::class,);
     }
 
-    public function booking(): BelongsToMany
+    public function booking(): BelongsTo
     {
-        return $this->belongsToMany(Booking::class,);
+        return $this->belongsTo(Booking::class,);
     }
 }

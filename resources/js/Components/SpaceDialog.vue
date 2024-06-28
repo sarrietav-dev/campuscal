@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ResponsiveModal from "@/Components/ResponsiveModal.vue";
-import { computed, ref } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import { Button } from "@/Components/ui/button";
 import SpaceCard from "@/Components/SpaceCard.vue";
 import DatePicker from "@/Components/DatePicker.vue";
@@ -20,9 +20,10 @@ import {
 import CarouselImage from "@/Components/CarouselImage.vue";
 import { Card, CardContent } from "@/Components/ui/card";
 import { Badge } from "@/Components/ui/badge";
+import { useQuery, useQueryClient } from "@tanstack/vue-query";
+import { getCampuses, getSpaces, Space } from "@/lib/api";
+import { useFetch } from "@vueuse/core";
 
-const campusId = ref<string | undefined>(undefined);
-const spaceId = ref<string | undefined>(undefined);
 const date = ref<DateRange>();
 const startTime = ref<string | undefined>();
 const endTime = ref<string | undefined>();
@@ -33,7 +34,7 @@ const props = defineProps<{
 const emit = defineEmits<{
     create: [
         {
-            id: string;
+            id: number;
             name: string;
             imageUrl: string;
             date: {
@@ -45,55 +46,45 @@ const emit = defineEmits<{
     "update:open": [boolean];
 }>();
 
-function handleModalOpen(open: boolean) {
-    if (!open) {
-        campusId.value = undefined;
-        spaceId.value = undefined;
-    }
-    emit("update:open", open);
-}
-
-const campuses = ref([
-    {
-        id: "1",
-        name: "Campus 1",
-        imageUrl: "https://via.placeholder.com/150",
-    },
-    {
-        id: "2",
-        name: "Campus 2",
-        imageUrl: "https://via.placeholder.com/150",
-    },
-]);
-
-const spaces = ref([
-    {
-        id: "1",
-        name: "Space 1",
-        imageUrl: "https://via.placeholder.com/150",
-    },
-    {
-        id: "23",
-        name: "Space 2",
-        imageUrl: "https://via.placeholder.com/150",
-    },
-]);
-
-const space = ref({
-    id: "1",
-    name: "Space 1",
-    capacity: 10,
-    availableResources: ["Proyector", "Pizarra"],
-    images: [
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-    ],
+const { data: campuses } = useQuery({
+    queryKey: ["campuses"],
+    queryFn: () => getCampuses(),
 });
-
+const campusId = ref<number | undefined>(undefined);
 const isCampusSelected = computed(() => campusId.value !== undefined);
+
+const spaces = ref<Space[]>([]);
+const isSpacesLoading = ref(false);
+
+const spaceId = ref<number | undefined>(undefined);
 const isSpaceSelected = computed(
     () => spaceId.value !== undefined && campusId.value !== undefined,
 );
+
+watch(campusId, async () => {
+    if (isSpaceSelected) {
+        isSpacesLoading.value = true;
+        const newSpaces = await getSpaces(campusId.value ?? 0);
+        spaces.value = newSpaces ?? [];
+        isSpacesLoading.value = false;
+    }
+});
+
+const space = computed(() => {
+    return spaces.value?.find((s) => s.id === spaceId.value);
+});
+
+function handleModalOpen(open: boolean) {
+    setTimeout(() => {
+        campusId.value = undefined;
+        spaceId.value = undefined;
+        date.value = undefined;
+        startTime.value = undefined;
+        endTime.value = undefined;
+        spaces.value = [];
+    }, 200);
+    emit("update:open", open);
+}
 
 function handleCreate() {
     if (
@@ -107,9 +98,6 @@ function handleCreate() {
     }
 
     emit("create", {
-        id: spaceId.value,
-        name: space.value.name,
-        imageUrl: space.value.images[0],
         date: {
             start: toCalendarDateTime(
                 date.value.start,
@@ -120,6 +108,9 @@ function handleCreate() {
                 parseTime(endTime.value!),
             ).toDate(getLocalTimeZone()),
         },
+        id: spaceId.value,
+        imageUrl: space.value?.images[0].path ?? "",
+        name: space.value?.name ?? "",
     });
     emit("update:open", false);
 }
@@ -141,7 +132,7 @@ function handleCreate() {
             >
                 <SpaceCard
                     v-for="campus in campuses"
-                    :image-src="campus.imageUrl"
+                    :image-src="campus.images[0].path"
                     :title="campus.name"
                     alt="Campus Image"
                     :key="campus.id"
@@ -149,9 +140,14 @@ function handleCreate() {
                 />
             </div>
         </div>
+        <div v-show="isSpacesLoading">loading</div>
         <div
             class="sm:grid grid-cols-2 gap-5 overflow-y-auto"
-            v-show="campusId !== undefined && spaceId === undefined"
+            v-show="
+                campusId !== undefined &&
+                spaceId === undefined &&
+                !isSpacesLoading
+            "
         >
             <div
                 class="flex items-center gap-2"
@@ -159,7 +155,7 @@ function handleCreate() {
                 :key="space.id"
             >
                 <SpaceCard
-                    :image-src="space.imageUrl"
+                    :image-src="space.images[0].path"
                     :title="space.name"
                     alt="Space Image"
                     @click="spaceId = space.id"
@@ -168,6 +164,7 @@ function handleCreate() {
         </div>
         <div
             class="flex flex-col gap-10 overflow-y-auto align-center max-w-[368px] sm:max-w-full self-center w-full"
+            v-if="space"
             v-show="isSpaceSelected"
         >
             <div
@@ -179,9 +176,9 @@ function handleCreate() {
                             <template v-if="space.images.length > 0">
                                 <CarouselItem
                                     v-for="image in space.images"
-                                    :key="image"
+                                    :key="image.path"
                                 >
-                                    <CarouselImage :image="image" />
+                                    <CarouselImage :image="image.path" />
                                 </CarouselItem>
                             </template>
                             <CarouselItem v-else>
@@ -207,11 +204,11 @@ function handleCreate() {
                 <ul class="ml-16 grow">
                     <li>Nombre: {{ space?.name }}</li>
                     <li>Capacidad: {{ space?.capacity }}</li>
-                    <li v-if="space.availableResources.length > 0">
+                    <li v-if="space.resources?.length > 0">
                         Recursos disponibles:
                         <ul>
                             <li
-                                v-for="resource in space.availableResources"
+                                v-for="resource in space.resources"
                                 :key="resource"
                             >
                                 <Badge>{{ resource }}</Badge>

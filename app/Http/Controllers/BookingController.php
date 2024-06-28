@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookingRequest;
+use App\Models\Audience;
 use App\Models\Booking;
+use App\Models\SpaceResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -30,15 +33,32 @@ class BookingController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Booking/CreateBooking');
+
+        return Inertia::render('Booking/CreateBooking', [
+            'audience' => Audience::get()
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBookingRequest $request)
+    public function store(StoreBookingRequest $request): RedirectResponse
     {
-        //
+        $booking = Booking::create($request->validated());
+
+        $booking->audience()->attach($request->audience);
+
+        $booking->appointments()->createMany(
+            collect($request->appointments)->map(function ($appointment) {
+                return [
+                    'space_id' => $appointment['id'],
+                    'date_start' => $appointment['date']['start'],
+                    'date_end' => $appointment['date']['end'],
+                ];
+            })->toArray()
+        );
+
+        return redirect()->route('bookings.index');
     }
 
     /**

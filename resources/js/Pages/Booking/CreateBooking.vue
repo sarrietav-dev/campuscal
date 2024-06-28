@@ -13,28 +13,12 @@ import SelectedSpaceCard from "@/Components/SelectedSpaceCard.vue";
 import Text from "@/Components/ui/Text.vue";
 import FormItem from "@/Components/FormItem.vue";
 
-const audienceList = [
-    {
-        label: "Estudiantes",
-        value: "Students",
-    },
-    {
-        label: "Docentes",
-        value: "Teachers",
-    },
-    {
-        label: "Administrativos",
-        value: "AdministrativeStaff",
-    },
-    {
-        label: "Egresados",
-        value: "Graduates",
-    },
-    {
-        label: "Personal externo",
-        value: "External",
-    },
-];
+const props = defineProps<{
+    audience: {
+        id: number;
+        name: string;
+    }[];
+}>();
 
 const step = ref<"request" | "requester">("request");
 
@@ -50,14 +34,14 @@ function handleModalOpen(open: boolean) {
 
 interface Form {
     details: string;
-    audience: string[];
+    audience: number[];
     external: string;
     minors: "1" | "0" | "";
-    agreement_contract: string;
+    agreement_contract: "1" | "0" | "";
     agreement_contract_file?: File;
     assistance: number;
     appointments: {
-        id: string;
+        id: number;
         name: string;
         imageUrl: string;
         date: {
@@ -97,10 +81,15 @@ const form = useForm<Form>({
     },
 });
 
-const hasExternal = computed(() => form.audience.includes("External"));
-const hasAgreementContract = computed(() => form.agreement_contract === "Yes");
+const hasExternal = computed(() =>
+    form.audience.includes(
+        props.audience?.find((audience) => audience.name === "Personal externo")
+            ?.id ?? 0,
+    ),
+);
+const hasAgreementContract = computed(() => form.agreement_contract === "1");
 
-function handleCheckboxChange(value: string, checked: boolean) {
+function handleCheckboxChange(value: number, checked: boolean) {
     if (checked) {
         form.audience.push(value);
     } else {
@@ -120,11 +109,18 @@ function handleSpacesChange(spaces: Form["appointments"][0]) {
 function handleSpaceDelete(index: number) {
     form.appointments.splice(index, 1);
 }
+
+function handleSubmit() {
+    form.post(route("bookings.store"));
+}
 </script>
 
 <template>
     <GuestLayout>
-        <form class="container mx-auto max-w-4xl space-y-5">
+        <form
+            @submit.prevent="handleSubmit"
+            class="container mx-auto max-w-4xl space-y-5"
+        >
             <template v-if="step === 'request'">
                 <Text variant="heading2">Datos de la petición</Text>
                 <FormItem>
@@ -148,24 +144,24 @@ function handleSpaceDelete(index: number) {
                         <div class="space-y-2">
                             <div
                                 class="flex items-center gap-1"
-                                v-for="audience in audienceList"
+                                v-for="audience in props.audience"
                             >
                                 <Checkbox
-                                    :id="audience.value"
-                                    :key="audience.value"
+                                    :id="audience.id.toString()"
+                                    :key="audience.id"
                                     :checked="
-                                        form.audience.includes(audience.value)
+                                        form.audience.includes(audience.id)
                                     "
                                     @update:checked="
                                         (checked) =>
                                             handleCheckboxChange(
-                                                audience.value,
+                                                audience.id,
                                                 checked,
                                             )
                                     "
                                 />
-                                <Label :for="audience.value">
-                                    {{ audience.label }}
+                                <Label :for="audience.id.toString()">
+                                    {{ audience.name }}
                                 </Label>
                             </div>
                         </div>
@@ -192,11 +188,11 @@ function handleSpaceDelete(index: number) {
                     </Label>
                     <RadioGroup v-model="form.minors">
                         <div class="flex gap-2 items-center">
-                            <RadioGroupItem id="MinorsYes" value="Yes" />
+                            <RadioGroupItem id="MinorsYes" value="1" />
                             <Label for="MinorsYes">Sí</Label>
                         </div>
                         <div class="flex gap-2 items-center">
-                            <RadioGroupItem id="MinorsNo" value="No" />
+                            <RadioGroupItem id="MinorsNo" value="0" />
                             <Label for="MinorsNo">No</Label>
                         </div>
                     </RadioGroup>
@@ -212,14 +208,14 @@ function handleSpaceDelete(index: number) {
                         <div class="flex gap-2 items-center">
                             <RadioGroupItem
                                 id="agreementContractYes"
-                                value="Yes"
+                                value="1"
                             />
                             <Label for="agreementContractYes">Sí</Label>
                         </div>
                         <div class="flex gap-2 items-center">
                             <RadioGroupItem
                                 id="agreementContractNo"
-                                value="No"
+                                value="0"
                             />
                             <Label for="agreementContractNo">No</Label>
                         </div>

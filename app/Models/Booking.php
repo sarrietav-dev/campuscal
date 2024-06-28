@@ -17,7 +17,11 @@ class Booking extends Model
         'assistance',
         'minors',
         'status',
-
+        'external_details',
+        'agreement_contract',
+        'agreement_contract_file',
+        'observations',
+        'status',
     ];
 
     public function requester(): HasOne
@@ -35,8 +39,8 @@ class Booking extends Model
         return $this->belongsToMany(Audience::class);
     }
 
-    public function agreementContracts(): BelongsToMany
+    public function agreementContracts(): HasOne
     {
-        return $this->belongsToMany(File::class);
+        return $this->hasOne(File::class);
     }
 }
