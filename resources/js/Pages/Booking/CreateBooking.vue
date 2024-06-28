@@ -52,11 +52,11 @@ interface Form {
     details: string;
     audience: string[];
     external: string;
-    minors: string;
-    agreementContract: string;
-    agreementContractFile?: File;
+    minors: "1" | "0" | "";
+    agreement_contract: string;
+    agreement_contract_file?: File;
     assistance: number;
-    spaces: {
+    appointments: {
         id: string;
         name: string;
         imageUrl: string;
@@ -71,9 +71,9 @@ interface Form {
         identification: string;
         phone: string;
         email: string;
-        companyName: string;
-        companyRole: string;
-        academicUnit: string;
+        company_name: string;
+        company_role: string;
+        academic_unit: string;
     };
 }
 
@@ -82,23 +82,23 @@ const form = useForm<Form>({
     audience: [],
     external: "",
     minors: "",
-    agreementContract: "",
+    agreement_contract: "",
     assistance: 0,
-    spaces: [],
+    appointments: [],
     requester: {
         name: "",
         surname: "",
         identification: "",
         phone: "",
         email: "",
-        companyName: "",
-        companyRole: "",
-        academicUnit: "",
+        company_name: "",
+        company_role: "",
+        academic_unit: "",
     },
 });
 
 const hasExternal = computed(() => form.audience.includes("External"));
-const hasAgreementContract = computed(() => form.agreementContract === "Yes");
+const hasAgreementContract = computed(() => form.agreement_contract === "Yes");
 
 function handleCheckboxChange(value: string, checked: boolean) {
     if (checked) {
@@ -110,15 +110,15 @@ function handleCheckboxChange(value: string, checked: boolean) {
 
 function handleFileChange(event: Event) {
     const target = event.target as HTMLInputElement;
-    form.agreementContractFile = target.files?.[0];
+    form.agreement_contract_file = target.files?.[0];
 }
 
-function handleSpacesChange(spaces: Form["spaces"][0]) {
-    form.spaces = [...form.spaces, spaces];
+function handleSpacesChange(spaces: Form["appointments"][0]) {
+    form.appointments = [...form.appointments, spaces];
 }
 
 function handleSpaceDelete(index: number) {
-    form.spaces.splice(index, 1);
+    form.appointments.splice(index, 1);
 }
 </script>
 
@@ -208,7 +208,7 @@ function handleSpaceDelete(index: number) {
                         o Contrato Inter-administrativo? (Si marca Si, favor
                         anexar copia del convenio o contrato)
                     </Label>
-                    <RadioGroup v-model="form.agreementContract">
+                    <RadioGroup v-model="form.agreement_contract">
                         <div class="flex gap-2 items-center">
                             <RadioGroupItem
                                 id="agreementContractYes"
@@ -238,7 +238,7 @@ function handleSpaceDelete(index: number) {
                 </FormItem>
                 <SelectedSpaceCard
                     deletable
-                    v-for="(space, index) in form.spaces"
+                    v-for="(space, index) in form.appointments"
                     :space-name="space.name"
                     @delete="handleSpaceDelete(index)"
                     :date="{
@@ -327,7 +327,7 @@ function handleSpaceDelete(index: number) {
                             encuentra afiliado
                         </Label>
                         <Input
-                            v-model="form.requester.companyName"
+                            v-model="form.requester.company_name"
                             id="requester.companyName"
                             name="requester.companyName"
                             type="text"
@@ -338,7 +338,7 @@ function handleSpaceDelete(index: number) {
                             Cargo en la empresa
                         </Label>
                         <Input
-                            v-model="form.requester.companyRole"
+                            v-model="form.requester.company_role"
                             id="requester.companyRole"
                             name="requester.companyRole"
                             type="text"
@@ -350,7 +350,7 @@ function handleSpaceDelete(index: number) {
                             que pertenece
                         </Label>
                         <Input
-                            v-model="form.requester.academicUnit"
+                            v-model="form.requester.academic_unit"
                             id="requester.academicUnit"
                             name="requester.academicUnit"
                             type="text"

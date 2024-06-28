@@ -12,6 +12,14 @@ class Booking extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'details',
+        'assistance',
+        'minors',
+        'status',
+
+    ];
+
     public function requester(): HasOne
     {
         return $this->hasOne(Requester::class);
