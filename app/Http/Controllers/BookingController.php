@@ -9,6 +9,7 @@ use App\Models\SpaceResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -44,7 +45,7 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request): RedirectResponse
     {
-        $booking = Booking::create($request->validated());
+        $booking = Booking::create($request->safe()->except(['agreement_contract_file']));
 
         $booking->audience()->attach($request->audience);
 
@@ -57,6 +58,10 @@ class BookingController extends Controller
                 ];
             })->toArray()
         );
+
+        $booking->agreementContracts()->create([
+            'path' => Storage::url($request->file('agreement_contract_file')->store())
+        ]);
 
         return redirect()->route('bookings.index');
     }

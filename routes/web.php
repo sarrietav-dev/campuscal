@@ -24,8 +24,11 @@ Route::resource('campuses.spaces', SpaceController::class)
     ->middleware('auth');
 
 Route::resource('bookings', BookingController::class)
-    ->only(['index', 'show', 'store'])
+    ->only(['index', 'show'])
     ->middleware('auth');
+
+Route::resource('bookings', BookingController::class)
+    ->only(['store']);
 
 Route::get('/', [BookingController::class, 'create'])
     ->name('bookings.create');

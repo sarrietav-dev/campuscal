@@ -12,6 +12,8 @@ import GuestLayout from "@/Layouts/GuestLayout.vue";
 import SelectedSpaceCard from "@/Components/SelectedSpaceCard.vue";
 import Text from "@/Components/ui/Text.vue";
 import FormItem from "@/Components/FormItem.vue";
+import { produce } from "immer";
+import { format } from "date-fns";
 
 const props = defineProps<{
     audience: {
@@ -67,6 +69,7 @@ const form = useForm<Form>({
     external: "",
     minors: "",
     agreement_contract: "",
+    agreement_contract_file: undefined,
     assistance: 0,
     appointments: [],
     requester: {
@@ -79,6 +82,19 @@ const form = useForm<Form>({
         company_role: "",
         academic_unit: "",
     },
+}).transform((form) => {
+    return produce(form, (draft) => {
+        draft.appointments.forEach((appointment) => {
+            appointment.date.start = format(
+                appointment.date.start,
+                "yyyy-MM-dd HH:mm:ss",
+            ) as any;
+            appointment.date.end = format(
+                appointment.date.end,
+                "yyyy-MM-dd HH:mm:ss",
+            ) as any;
+        });
+    });
 });
 
 const hasExternal = computed(() =>

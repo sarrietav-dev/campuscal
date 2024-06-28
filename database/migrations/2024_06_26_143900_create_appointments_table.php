@@ -15,8 +15,8 @@ return new class extends Migration {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->dateTime("start");
-            $table->dateTime("end");
+            $table->dateTime("date_start");
+            $table->dateTime("date_end");
             $table->foreignIdFor(Space::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Booking::class)->constrained()->cascadeOnDelete();
         });

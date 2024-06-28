@@ -10,6 +10,13 @@ class Appointment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'date_start',
+        'date_end',
+        'space_id',
+        'booking_id',
+    ];
+
     public function booking(): BelongsTo
     {
         return $this->belongsTo(Booking::class);
