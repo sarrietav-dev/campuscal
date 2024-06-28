@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { useForm } from "@inertiajs/vue3";
 import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
@@ -14,56 +14,27 @@ import Text from "@/Components/ui/Text.vue";
 import FormItem from "@/Components/FormItem.vue";
 import { produce } from "immer";
 import { format } from "date-fns";
+import ErrorMessage from "@/Components/ErrorMessage.vue";
 
-const props = defineProps<{
+const props = defineProps({
     audience: {
-        id: number;
-        name: string;
-    }[];
-}>();
+        type: Object,
+    },
+});
 
-const step = ref<"request" | "requester">("request");
+const step = ref("request");
 
-function handleStepChange(stepValue: "request" | "requester") {
+function handleStepChange(stepValue) {
     step.value = stepValue;
 }
 
 const modalOpen = ref(false);
 
-function handleModalOpen(open: boolean) {
+function handleModalOpen(open) {
     modalOpen.value = open;
 }
 
-interface Form {
-    details: string;
-    audience: number[];
-    external: string;
-    minors: "1" | "0" | "";
-    agreement_contract: "1" | "0" | "";
-    agreement_contract_file?: File;
-    assistance: number;
-    appointments: {
-        id: number;
-        name: string;
-        imageUrl: string;
-        date: {
-            start: Date;
-            end: Date;
-        };
-    }[];
-    requester: {
-        name: string;
-        surname: string;
-        identification: string;
-        phone: string;
-        email: string;
-        company_name: string;
-        company_role: string;
-        academic_unit: string;
-    };
-}
-
-const form = useForm<Form>({
+const form = useForm({
     details: "",
     audience: [],
     external: "",
@@ -88,11 +59,11 @@ const form = useForm<Form>({
             appointment.date.start = format(
                 appointment.date.start,
                 "yyyy-MM-dd HH:mm:ss",
-            ) as any;
+            );
             appointment.date.end = format(
                 appointment.date.end,
                 "yyyy-MM-dd HH:mm:ss",
-            ) as any;
+            );
         });
     });
 });
@@ -105,7 +76,7 @@ const hasExternal = computed(() =>
 );
 const hasAgreementContract = computed(() => form.agreement_contract === "1");
 
-function handleCheckboxChange(value: number, checked: boolean) {
+function handleCheckboxChange(value, checked) {
     if (checked) {
         form.audience.push(value);
     } else {
@@ -113,16 +84,16 @@ function handleCheckboxChange(value: number, checked: boolean) {
     }
 }
 
-function handleFileChange(event: Event) {
-    const target = event.target as HTMLInputElement;
+function handleFileChange(event) {
+    const target = event.target;
     form.agreement_contract_file = target.files?.[0];
 }
 
-function handleSpacesChange(spaces: Form["appointments"][0]) {
+function handleSpacesChange(spaces) {
     form.appointments = [...form.appointments, spaces];
 }
 
-function handleSpaceDelete(index: number) {
+function handleSpaceDelete(index) {
     form.appointments.splice(index, 1);
 }
 
@@ -151,6 +122,9 @@ function handleSubmit() {
                         cols="50"
                         placeholder="Anote detalladamente la actividad que desea realizar"
                     ></Textarea>
+                    <ErrorMessage v-show="form.errors.details">
+                        {{ form.errors.details }}
+                    </ErrorMessage>
                 </FormItem>
                 <div class="grid grid-cols-2">
                     <FormItem>
@@ -181,6 +155,9 @@ function handleSubmit() {
                                 </Label>
                             </div>
                         </div>
+                        <ErrorMessage v-show="form.errors.audience">
+                            {{ form.errors.audience }}
+                        </ErrorMessage>
                     </FormItem>
                     <div class="space-y-3" v-show="hasExternal">
                         <Label for="external"
@@ -194,6 +171,9 @@ function handleSubmit() {
                             cols="50"
                             placeholder="Indique el grupo poblacional"
                         ></Textarea>
+                        <ErrorMessage v-show="form.errors.external">
+                            {{ form.errors.external }}
+                        </ErrorMessage>
                     </div>
                 </div>
                 <FormItem>
@@ -212,6 +192,9 @@ function handleSubmit() {
                             <Label for="MinorsNo">No</Label>
                         </div>
                     </RadioGroup>
+                    <ErrorMessage v-show="form.errors.minors">
+                        {{ form.errors.minors }}
+                    </ErrorMessage>
                 </FormItem>
                 <FormItem>
                     <Label>
@@ -236,6 +219,9 @@ function handleSubmit() {
                             <Label for="agreementContractNo">No</Label>
                         </div>
                     </RadioGroup>
+                    <ErrorMessage v-show="form.errors.agreement_contract">
+                        {{ form.errors.agreement_contract }}
+                    </ErrorMessage>
                 </FormItem>
                 <FormItem v-show="hasAgreementContract">
                     <Label for="agreementContract">
@@ -247,23 +233,37 @@ function handleSubmit() {
                         id="agreementContract"
                         name="agreementContract"
                     />
+                    <ErrorMessage v-show="form.errors.agreement_contract_file">
+                        {{ form.errors.agreement_contract_file }}
+                    </ErrorMessage>
                 </FormItem>
-                <SelectedSpaceCard
-                    deletable
-                    v-for="(space, index) in form.appointments"
-                    :space-name="space.name"
-                    @delete="handleSpaceDelete(index)"
-                    :date="{
-                        to: space.date.end.toLocaleDateString(),
-                        from: space.date.start.toLocaleDateString(),
-                    }"
-                    :image-url="space.imageUrl"
-                />
-                <SpaceDialog
-                    :open="modalOpen"
-                    @update:open="handleModalOpen($event)"
-                    @create="handleSpacesChange($event)"
-                />
+                <FormItem>
+                    <template v-for="(space, index) in form.appointments">
+                        <SelectedSpaceCard
+                            deletable
+                            :space-name="space.name"
+                            @delete="handleSpaceDelete(index)"
+                            :date="{
+                                to: space.date.end.toLocaleDateString(),
+                                from: space.date.start.toLocaleDateString(),
+                            }"
+                            :image-url="space.imageUrl"
+                        />
+                        <ErrorMessage
+                            v-show="form.errors[`appointments.${index}`]"
+                        >
+                            {{ form.errors[`appointments.${index}`] }}
+                        </ErrorMessage>
+                    </template>
+                    <SpaceDialog
+                        :open="modalOpen"
+                        @update:open="handleModalOpen($event)"
+                        @create="handleSpacesChange($event)"
+                    />
+                    <ErrorMessage v-show="form.errors.appointments">
+                        {{ form.errors.appointments }}
+                    </ErrorMessage>
+                </FormItem>
                 <FormItem>
                     <Label for="assistance">Número de asistentes</Label>
                     <Input
@@ -273,6 +273,9 @@ function handleSubmit() {
                         name="assistance"
                         min="1"
                     />
+                    <ErrorMessage v-show="form.errors.assistance">
+                        {{ form.errors.assistance }}
+                    </ErrorMessage>
                 </FormItem>
                 <div class="flex justify-end">
                     <Button
@@ -294,6 +297,9 @@ function handleSubmit() {
                             name="requester.name"
                             type="text"
                         />
+                        <ErrorMessage v-if="form.errors['requester.name']">
+                            {{ form.errors["requester.name"] }}
+                        </ErrorMessage>
                     </FormItem>
                     <FormItem>
                         <Label for="requester.surname">Apellido</Label>
@@ -303,6 +309,9 @@ function handleSubmit() {
                             name="requester.surname"
                             type="text"
                         />
+                        <ErrorMessage v-if="form.errors['requester.surname']">
+                            {{ form.errors["requester.surname"] }}
+                        </ErrorMessage>
                     </FormItem>
                     <FormItem>
                         <Label for="requester.identification">
@@ -314,6 +323,11 @@ function handleSubmit() {
                             name="requester.identification"
                             type="text"
                         />
+                        <ErrorMessage
+                            v-show="form.errors['requester.identification']"
+                        >
+                            {{ form.errors["requester.identification"] }}
+                        </ErrorMessage>
                     </FormItem>
                     <FormItem>
                         <Label for="requester.phone">Teléfono</Label>
@@ -323,6 +337,9 @@ function handleSubmit() {
                             name="requester.phone"
                             type="tel"
                         />
+                        <ErrorMessage v-show="form.errors['requester.phone']">
+                            {{ form.errors["requester.phone"] }}
+                        </ErrorMessage>
                     </FormItem>
                     <FormItem class="sm:col-span-2">
                         <Label for="requester.email">Correo electrónico</Label>
@@ -332,6 +349,9 @@ function handleSubmit() {
                             name="requester.email"
                             type="email"
                         />
+                        <ErrorMessage v-show="form.errors['requester.email']">
+                            {{ form.errors["requester.email"] }}
+                        </ErrorMessage>
                     </FormItem>
                     <FormItem>
                         <Label>
@@ -344,6 +364,11 @@ function handleSubmit() {
                             name="requester.companyName"
                             type="text"
                         />
+                        <ErrorMessage
+                            v-show="form.errors['requester.company_name']"
+                        >
+                            {{ form.errors["requester.company_name"] }}
+                        </ErrorMessage>
                     </FormItem>
                     <FormItem>
                         <Label for="requester.companyRole">
@@ -355,6 +380,11 @@ function handleSubmit() {
                             name="requester.companyRole"
                             type="text"
                         />
+                        <ErrorMessage
+                            v-show="form.errors['requester.company_role']"
+                        >
+                            {{ form.errors["requester.company_role"] }}
+                        </ErrorMessage>
                     </FormItem>
                     <FormItem>
                         <Label for="requester.academicUnit">
@@ -367,6 +397,11 @@ function handleSubmit() {
                             name="requester.academicUnit"
                             type="text"
                         />
+                        <ErrorMessage
+                            v-show="form.errors['requester.academic_unit']"
+                        >
+                            {{ form.errors["requester.academic_unit"] }}
+                        </ErrorMessage>
                     </FormItem>
                 </div>
                 <div class="flex justify-between">

@@ -23,7 +23,7 @@ class StoreBookingRequest extends FormRequest
     {
         return [
             'details' => ['required', 'string', 'max:255'],
-            'assistance' => ['required', 'numeric'],
+            'assistance' => ['required', 'numeric', 'min:1'],
             'minors' => ['required', 'boolean'],
             'audience' => ['required', 'array', 'min:1'],
             'audience.*' => ['required', 'exists:audiences,id'],
