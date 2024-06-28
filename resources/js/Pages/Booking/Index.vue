@@ -24,8 +24,8 @@ const { booking } = defineProps<{
         agreement_contract_file_path: string;
         appointments: {
             booking_id: number;
-            end: string;
-            start: string;
+            date_end: string;
+            date_start: string;
             space_id: number;
             space: { name: string; images: { path: string }[] };
         }[];
@@ -146,12 +146,16 @@ console.log(booking);
                         >
                             <SelectedSpaceCard
                                 :date="{
-                                    from: new Date(
-                                        appointment.start,
-                                    ).toLocaleDateString(),
-                                    to: new Date(
-                                        appointment.end,
-                                    ).toLocaleDateString(),
+                                    from: `${new Date(
+                                        appointment.date_start,
+                                    ).toLocaleDateString()} ${new Date(
+                                        appointment.date_start,
+                                    ).toLocaleTimeString()}`,
+                                    to: `${new Date(
+                                        appointment.date_end,
+                                    ).toLocaleDateString()} ${new Date(
+                                        appointment.date_end,
+                                    ).toLocaleTimeString()}`,
                                 }"
                                 :image-url="appointment.space.images[0].path"
                                 :space-name="appointment.space.name"
