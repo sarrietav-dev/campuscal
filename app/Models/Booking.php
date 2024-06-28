@@ -39,8 +39,8 @@ class Booking extends Model
         return $this->belongsToMany(Audience::class);
     }
 
-    public function agreementContracts(): HasOne
+    public function agreementContracts(): BelongsToMany
     {
-        return $this->hasOne(File::class);
+        return $this->belongsToMany(File::class);
     }
 }

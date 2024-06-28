@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->string('external_details')->nullable();
             $table->boolean("minors");
             $table->boolean("agreement_contract");
-            $table->foreignIdFor(\App\Models\File::class, "agreement_contract_file")->nullable()->constrained()->cascadeOnDelete();
             $table->integer("assistance");
             $table->string("observations")->nullable();
             $table->enum("status", ["pending", "approved", "rejected"]);
