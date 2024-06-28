@@ -9,10 +9,10 @@ import FileInput from "@/Components/FileInput.vue";
 
 const form = useForm<{
     name: string;
-    images: FileList | null;
+    images: File[];
 }>({
     name: "",
-    images: null,
+    images: [],
 });
 
 function handleSubmit() {

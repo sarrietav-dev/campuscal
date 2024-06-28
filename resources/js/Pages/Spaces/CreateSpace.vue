@@ -7,19 +7,15 @@ import FormItem from "@/Components/FormItem.vue";
 import { Button } from "@/Components/ui/button";
 import FileInput from "@/Components/FileInput.vue";
 import ErrorMessage from "@/Components/ErrorMessage.vue";
+import { computed } from "vue";
 
 const props = defineProps<{
     campus: string;
 }>();
 
-const form = useForm<{
-    name: string;
-    images: FileList | null;
-    capacity: number;
-    campus_id: string;
-}>({
+const form = useForm({
     name: "",
-    images: null,
+    images: [],
     campus_id: props.campus,
     capacity: 0,
 });
@@ -31,6 +27,10 @@ function handleSubmit() {
         }),
     );
 }
+
+const hasImageErrors = computed(() => {
+    return Object.keys(form.errors).some((key) => key.startsWith("images."));
+});
 </script>
 
 <template>
@@ -67,6 +67,9 @@ function handleSubmit() {
                     />
                     <ErrorMessage v-show="form.errors.images">
                         {{ form.errors.images }}
+                    </ErrorMessage>
+                    <ErrorMessage v-show="hasImageErrors">
+                        Error when uploading images
                     </ErrorMessage>
                 </FormItem>
 

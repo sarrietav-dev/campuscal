@@ -6,13 +6,21 @@ const props = defineProps<{
     maxFiles?: number;
 }>();
 
-const modelValue = defineModel<FileList | null>();
+const modelValue = defineModel<File[] | null>();
 
 const isDark = useDark();
 
 function handleFileChange(event: Event) {
     const target = event.target as HTMLInputElement;
-    modelValue.value = target.files;
+    const files = target.files;
+    if (!files) return;
+
+    if (props.maxFiles && files.length > props.maxFiles) {
+        alert(`You can only upload ${props.maxFiles} files`);
+        return;
+    }
+
+    modelValue.value = Array.from(files);
 }
 </script>
 
