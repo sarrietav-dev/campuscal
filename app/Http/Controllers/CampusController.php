@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateCampusRequest;
 use App\Models\Campus;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +26,24 @@ class CampusController extends Controller
         return Inertia::render('Spaces/Campuses', [
             'campuses' => $campuses,
         ]);
+    }
+
+    public function getAll(): JsonResponse
+    {
+        $campuses = Campus::query()->with('images', function (Builder $query) {
+            $query->latest()->limit(1);
+        })->select(['id', 'name'])->get();
+
+        return response()->json($campuses);
+    }
+
+    public function getCampus(Campus $campus): JsonResponse
+    {
+        $spaces = $campus->spaces()->with('images', function (Builder $query) {
+            $query->latest()->limit(1);
+        })->get();
+
+        return response()->json($spaces);
     }
 
     /**

@@ -30,6 +30,12 @@ Route::resource('bookings', BookingController::class)
 Route::get('/', [BookingController::class, 'create'])
     ->name('bookings.create');
 
+Route::prefix('api')->group(function () {
+    Route::get('/campuses', [CampusController::class, 'getAll']);
+    Route::get('/campuses/{campus}', [CampusController::class, 'getCampus']);
+    Route::get('/spaces/{space}', [SpaceController::class, 'getSpace']);
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

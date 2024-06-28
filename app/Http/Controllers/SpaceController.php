@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateSpaceRequest;
 use App\Models\Space;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -20,6 +21,11 @@ class SpaceController extends Controller
         return Inertia::render('Spaces/CreateSpace', [
             'campus' => $campus,
         ]);
+    }
+
+    public function getSpace(Space $space): JsonResponse
+    {
+        return response()->json($space->load('resources', 'images'));
     }
 
     /**
