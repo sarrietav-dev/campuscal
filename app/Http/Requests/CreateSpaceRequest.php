@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
 
 class CreateSpaceRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class CreateSpaceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,11 +25,11 @@ class CreateSpaceRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'capacity' => ['required', 'numeric'],
-            'resources' => ['required', 'array'],
-            'resources.*' => ['required', 'exists:space_resources,id'],
+            'capacity' => ['required', 'numeric', 'min:1'],
+//            'resources' => ['required', 'array'],
+//            'resources.*' => ['required', 'exists:space_resources,id'],
             'images' => ['required', 'array'],
-            'images.*' => ['required', 'image'],
+            'images.*' => ['required', File::image()->max('2mb')],
             'campus_id' => ['required', 'exists:campuses,id'],
         ];
     }

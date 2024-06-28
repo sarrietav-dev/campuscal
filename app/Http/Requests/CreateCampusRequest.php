@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
 
 class CreateCampusRequest extends FormRequest
 {
@@ -23,9 +24,9 @@ class CreateCampusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'images' => 'required|array',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,|max:2048',
+            'name' => ['required', 'string', 'max:255'],
+            'images' => ['required', 'array'],
+            'images.*' => ['required', File::image()->max('2mb')],
         ];
     }
 }
