@@ -1,15 +1,15 @@
-<?php /** @noinspection ALL */
+<?php
 
+/** @noinspection ALL */
+
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CampusController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\SpaceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\CampusController;
-use App\Http\Controllers\SpaceController;
-use App\Http\Controllers\BookingController;
-use App\Models\Booking;
 
-Route::middleware(["auth", "verified"])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function (\App\Services\BookingService $bookingService, \App\Services\SpaceService $spaceService) {
         return Inertia::render('Dashboard', [
             'total_bookings_current_month' => $bookingService->getTotalBookingsForCurrentMonth(),
@@ -52,4 +52,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

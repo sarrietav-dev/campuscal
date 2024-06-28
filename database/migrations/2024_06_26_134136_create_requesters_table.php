@@ -5,7 +5,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -14,14 +15,14 @@ return new class extends Migration {
         Schema::create('requesters', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("name");
-            $table->string("surname");
-            $table->string("email");
-            $table->string("phone");
-            $table->string("identification");
-            $table->string("company_name");
-            $table->string("company_role");
-            $table->string("academic_unit");
+            $table->string('name');
+            $table->string('surname');
+            $table->string('email');
+            $table->string('phone');
+            $table->string('identification');
+            $table->string('company_name');
+            $table->string('company_role');
+            $table->string('academic_unit');
             $table->foreignIdFor(Booking::class)->constrained()->cascadeOnDelete();
         });
     }

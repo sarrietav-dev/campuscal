@@ -19,10 +19,10 @@ class AppointmentFactory extends Factory
     public function definition(): array
     {
         return [
-            "date_start" => $this->faker->dateTime(),
-            "date_end" => $this->faker->dateTime(),
-            "space_id" => Space::factory(),
-            "booking_id" => Booking::factory(),
+            'date_start' => $this->faker->dateTime(),
+            'date_end' => $this->faker->dateTime(),
+            'space_id' => Space::factory(),
+            'booking_id' => Booking::factory(),
         ];
     }
 }

@@ -16,10 +16,10 @@ class FileFactory extends Factory
      */
     public function definition(): array
     {
-        $url = "https://picsum.photos/500/500?random=";
+        $url = 'https://picsum.photos/500/500?random=';
 
         return [
-            "path" => $url . $this->faker->numberBetween(1, 100),
+            'path' => $url.$this->faker->numberBetween(1, 100),
         ];
     }
 }

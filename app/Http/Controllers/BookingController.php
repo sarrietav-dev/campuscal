@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBookingRequest;
 use App\Models\Audience;
 use App\Models\Booking;
-use App\Models\SpaceResource;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -36,7 +34,7 @@ class BookingController extends Controller
     {
 
         return Inertia::render('Booking/CreateBooking', [
-            'audience' => Audience::get()
+            'audience' => Audience::get(),
         ]);
     }
 
@@ -60,7 +58,7 @@ class BookingController extends Controller
         );
 
         $booking->agreementContracts()->create([
-            'path' => Storage::url($request->file('agreement_contract_file')->store())
+            'path' => Storage::url($request->file('agreement_contract_file')->store()),
         ]);
 
         $booking->requester()->create([

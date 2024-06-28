@@ -11,7 +11,6 @@ use App\Models\Requester;
 use App\Models\Space;
 use App\Models\SpaceResource;
 use App\Models\User;
-
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
