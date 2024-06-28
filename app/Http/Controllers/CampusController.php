@@ -18,7 +18,9 @@ class CampusController extends Controller
      */
     public function index(): Response
     {
-        $campuses = Campus::with('images')->get();
+        $campuses = Campus::query()->with('images', function (Builder $query) {
+            $query->latest()->limit(1);
+        })->select(['id', 'name'])->get();
 
         return Inertia::render('Spaces/Campuses', [
             'campuses' => $campuses,
