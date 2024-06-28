@@ -12,6 +12,12 @@ class Space extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'capacity',
+        'campus_id'
+    ];
+
     public function campus(): BelongsTo
     {
         return $this->belongsTo(Campus::class);
