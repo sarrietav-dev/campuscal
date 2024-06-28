@@ -7,10 +7,17 @@ use Inertia\Inertia;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\SpaceController;
 use App\Http\Controllers\BookingController;
+use App\Models\Booking;
 
 Route::middleware(["auth", "verified"])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+    Route::get('/dashboard', function (\App\Services\BookingService $bookingService, \App\Services\SpaceService $spaceService) {
+        return Inertia::render('Dashboard', [
+            'total_bookings_current_month' => $bookingService->getTotalBookingsForCurrentMonth(),
+            'pending_bookings' => $bookingService->getTotalPendingBookings(),
+            'approved_bookings' => $bookingService->getTotalApprovedBookings(),
+            'rejected_bookings' => $bookingService->getTotalRejectedBookings(),
+            'most_requested_spaces' => $spaceService->getMostRequestedSpaces(),
+        ]);
     })->name('dashboard');
 });
 
