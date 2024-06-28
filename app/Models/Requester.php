@@ -10,6 +10,17 @@ class Requester extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'surname',
+        'email',
+        'phone',
+        'identification',
+        'company_name',
+        'company_role',
+        'academic_unit',
+    ];
+
     public function booking(): BelongsTo
     {
         return $this->belongsTo(Booking::class);

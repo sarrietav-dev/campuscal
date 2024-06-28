@@ -63,6 +63,17 @@ class BookingController extends Controller
             'path' => Storage::url($request->file('agreement_contract_file')->store())
         ]);
 
+        $booking->requester()->create([
+            'name' => $request->requester['name'],
+            'surname' => $request->requester['surname'],
+            'email' => $request->requester['email'],
+            'phone' => $request->requester['phone'],
+            'identification' => $request->requester['identification'],
+            'company_name' => $request->requester['company_name'],
+            'company_role' => $request->requester['company_role'],
+            'academic_unit' => $request->requester['academic_unit'],
+        ]);
+
         return redirect()->route('bookings.index');
     }
 
