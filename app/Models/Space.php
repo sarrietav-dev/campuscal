@@ -15,7 +15,7 @@ class Space extends Model
     protected $fillable = [
         'name',
         'capacity',
-        'campus_id'
+        'campus_id',
     ];
 
     public function campus(): BelongsTo
@@ -35,6 +35,6 @@ class Space extends Model
 
     public function images(): BelongsToMany
     {
-        return $this->belongsToMany(File::class, "space_file");
+        return $this->belongsToMany(File::class, 'space_file');
     }
 }

@@ -18,9 +18,9 @@ class SpaceFactory extends Factory
     public function definition(): array
     {
         return [
-            "name" => $this->faker->city(),
-            "campus_id" => Campus::factory(),
-            "capacity" => $this->faker->numberBetween(1, 100),
+            'name' => $this->faker->city(),
+            'campus_id' => Campus::factory(),
+            'capacity' => $this->faker->numberBetween(1, 100),
         ];
     }
 }

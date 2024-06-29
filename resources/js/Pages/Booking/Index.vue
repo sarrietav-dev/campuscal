@@ -21,11 +21,13 @@ import ObservationForm from "@/Components/ObservationForm.vue";
 const { booking } = defineProps<{
     booking: {
         agreement_contract: boolean;
-        agreement_contract_file_path: string;
+        agreement_contracts: {
+            path: string;
+        }[];
         appointments: {
             booking_id: number;
-            end: string;
-            start: string;
+            date_end: string;
+            date_start: string;
             space_id: number;
             space: { name: string; images: { path: string }[] };
         }[];
@@ -49,8 +51,6 @@ const { booking } = defineProps<{
         };
     };
 }>();
-
-console.log(booking);
 </script>
 
 <template>
@@ -115,7 +115,7 @@ console.log(booking);
                                 se llevará acabo dentro del marco de un convenio
                                 o contrato interadministrativo:
                                 <a
-                                    :href="booking.agreement_contract_file_path"
+                                    :href="booking.agreement_contracts[0].path"
                                     target="_blank"
                                 >
                                     <strong class="font-semibold">
@@ -146,12 +146,16 @@ console.log(booking);
                         >
                             <SelectedSpaceCard
                                 :date="{
-                                    from: new Date(
-                                        appointment.start,
-                                    ).toLocaleDateString(),
-                                    to: new Date(
-                                        appointment.end,
-                                    ).toLocaleDateString(),
+                                    from: `${new Date(
+                                        appointment.date_start,
+                                    ).toLocaleDateString()} ${new Date(
+                                        appointment.date_start,
+                                    ).toLocaleTimeString()}`,
+                                    to: `${new Date(
+                                        appointment.date_end,
+                                    ).toLocaleDateString()} ${new Date(
+                                        appointment.date_end,
+                                    ).toLocaleTimeString()}`,
                                 }"
                                 :image-url="appointment.space.images[0].path"
                                 :space-name="appointment.space.name"

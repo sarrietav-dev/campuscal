@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateSpaceRequest;
 use App\Models\Space;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,6 +23,11 @@ class SpaceController extends Controller
         ]);
     }
 
+    public function getSpace(Space $space): JsonResponse
+    {
+        return response()->json($space->load('resources', 'images'));
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -30,11 +36,11 @@ class SpaceController extends Controller
         $space = Space::create($request->validated());
 
         $space->resources()->createMany(
-            collect($request->resources)->map(fn($resource) => ['resource_id' => $resource])->toArray()
+            collect($request->resources)->map(fn ($resource) => ['resource_id' => $resource])->toArray()
         );
 
         $space->images()->createMany(
-            collect($request->images)->map(fn($image) => ['path' => Storage::url($image->store())])->toArray()
+            collect($request->images)->map(fn ($image) => ['path' => Storage::url($image->store())])->toArray()
         );
 
         return redirect()->route('campuses.show', $space->campus_id);

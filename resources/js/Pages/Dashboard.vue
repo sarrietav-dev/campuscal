@@ -3,6 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { ref } from "vue";
 import LineChart from "@/Components/LineChart.vue";
+import { Link } from "@inertiajs/vue3";
 
 interface Stat {
     title: string;
@@ -11,66 +12,47 @@ interface Stat {
     color: string;
 }
 
+const props = defineProps<{
+    total_bookings_current_month: number;
+    pending_bookings: number;
+    approved_bookings: number;
+    rejected_bookings: number;
+    most_requested_spaces: MostRequestedSpace[];
+}>();
+
 const stats = ref<Stat[]>([
     {
         title: "Total de solicitudes",
-        value: 0,
+        value: props.total_bookings_current_month,
         icon: "list",
         color: "bg-blue-500",
     },
     {
         title: "Solicitudes pendientes",
-        value: 0,
+        value: props.pending_bookings,
         icon: "clock",
         color: "bg-yellow-500",
     },
     {
         title: "Solicitudes aceptadas",
-        value: 0,
+        value: props.approved_bookings,
         icon: "check",
         color: "bg-green-500",
     },
     {
         title: "Solicitudes rechazadas",
-        value: 0,
+        value: props.rejected_bookings,
         icon: "times",
         color: "bg-red-500",
     },
 ]);
 
 interface MostRequestedSpace {
+    id: number;
     name: string;
-    requests: number;
-    image: string;
+    appointments_count: number;
+    images: { path: string }[];
 }
-
-const mostRequestedSpaces = ref<MostRequestedSpace[]>([
-    {
-        name: "Sala de juntas",
-        requests: 0,
-        image: "https://picsum.photos/200/300",
-    },
-    {
-        name: "Sala de capacitación",
-        requests: 0,
-        image: "https://picsum.photos/200/300",
-    },
-    {
-        name: "Sala de conferencias",
-        requests: 0,
-        image: "https://picsum.photos/200/300",
-    },
-    {
-        name: "Sala de juntas",
-        requests: 0,
-        image: "https://picsum.photos/200/300",
-    },
-    {
-        name: "Sala de juntas",
-        requests: 0,
-        image: "https://picsum.photos/200/300",
-    },
-]);
 </script>
 
 <template>
@@ -109,27 +91,37 @@ const mostRequestedSpaces = ref<MostRequestedSpace[]>([
                             Espacios más solicitados
                         </div>
                         <div class="grid grid-cols-1 gap-4 mt-4">
-                            <template v-for="space in mostRequestedSpaces">
-                                <div
-                                    class="flex items center justify-between bg-accent rounded-lg p-4"
-                                >
-                                    <div class="flex items center">
-                                        <img
-                                            class="w-12 h-12 rounded-lg"
-                                            :src="space.image"
-                                            alt="space.name"
-                                        />
-                                        <div class="ml-4">
-                                            <div class="text-sm font-semibold">
-                                                {{ space.name }}
-                                            </div>
-                                            <div class="text-sm font-semibold">
-                                                Solicitudes:
-                                                {{ space.requests }}
+                            <template
+                                v-for="space in props.most_requested_spaces"
+                            >
+                                <Link :href="`/spaces/${space.id}`">
+                                    <div
+                                        class="flex items center justify-between bg-accent rounded-lg p-4"
+                                    >
+                                        <div class="flex items center">
+                                            <img
+                                                class="w-12 h-12 rounded-lg"
+                                                :src="space.images[0].path"
+                                                alt="space.name"
+                                            />
+                                            <div class="ml-4">
+                                                <div
+                                                    class="text-sm font-semibold"
+                                                >
+                                                    {{ space.name }}
+                                                </div>
+                                                <div
+                                                    class="text-sm font-semibold"
+                                                >
+                                                    Solicitudes:
+                                                    {{
+                                                        space.appointments_count
+                                                    }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             </template>
                         </div>
                     </div>
