@@ -37,11 +37,19 @@ class CampusController extends Controller
         return response()->json($campuses);
     }
 
-    public function getCampus(Campus $campus): JsonResponse
+    public function getCampus(Request $request, Campus $campus): JsonResponse
     {
-        $spaces = $campus->spaces()->with('images', function (Builder $query) {
-            $query->latest()->limit(1);
-        })->get();
+        $images = $request->query('images', 'all');
+
+        $spaces = \Cache::remember('campus_' . $campus->id . '_spaces', 60 * 30, function () use ($campus, $images) {
+            return $campus->spaces()->with('images', function (Builder $query) use ($images) {
+                if ($images === 'all') {
+                    $query->latest();
+                } else {
+                    $query->latest()->limit(1);
+                }
+            })->get();
+        });
 
         return response()->json($spaces);
     }

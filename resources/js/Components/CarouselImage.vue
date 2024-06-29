@@ -18,7 +18,7 @@ const props = defineProps<{
                 >
                     <template #loading>
                         <span
-                            class="animate-pulse bg-gray-200 absolute size-full"
+                            class="animate-pulse bg-gray-200 absolute size-full rounded-lg"
                         ></span>
                     </template>
                     <template #error>

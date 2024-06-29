@@ -83,7 +83,7 @@ function handleModalOpen(open: boolean) {
         endTime.value = undefined;
         spaces.value = [];
         isSpacesLoading.value = false;
-    }, 200);
+    }, 100);
     emit("update:open", open);
 }
 
@@ -125,7 +125,7 @@ function handleCreate() {
             </Button>
         </template>
         <template #title v-if="!isCampusSelected">Campuses</template>
-        <template #title v-else-if="!isSpaceSelected"> Spaces</template>
+        <template #title v-else-if="!isSpaceSelected">Spaces</template>
         <div class="overflow-y-auto">
             <div
                 class="sm:grid sm:grid-cols-4 gap-5"
@@ -135,13 +135,33 @@ function handleCreate() {
                     v-for="campus in campuses"
                     :image-src="campus.images[0].path"
                     :title="campus.name"
-                    alt="Campus Image"
                     :key="campus.id"
+                    :height="100"
+                    :width="100"
+                    alt="Campus Image"
                     @click="campusId = campus.id"
                 />
             </div>
         </div>
-        <div v-show="isSpacesLoading">loading</div>
+        <div
+            class="sm:flex gap-5"
+            v-show="
+                campusId !== undefined &&
+                spaceId === undefined &&
+                isSpacesLoading
+            "
+        >
+            <template v-for="_ in 3">
+                <div class="inline">
+                    <div
+                        class="animate-pulse bg-gray-200 aspect-square w-[100px] h-[100px] rounded-lg"
+                    ></div>
+                    <div
+                        class="w-[100px] mt-2 h-4 animate-pulse bg-gray-200 rounded-md"
+                    ></div>
+                </div>
+            </template>
+        </div>
         <div
             class="sm:grid grid-cols-4 gap-5 overflow-y-auto"
             v-show="
@@ -159,6 +179,8 @@ function handleCreate() {
                     :image-src="space.images[0].path"
                     :title="space.name"
                     alt="Space Image"
+                    :height="100"
+                    :width="100"
                     @click="spaceId = space.id"
                 />
             </div>

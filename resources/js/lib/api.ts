@@ -18,8 +18,13 @@ export type Space = {
     resources: string[];
 };
 
-export async function getSpaces(campusId: number): Promise<Space[]> {
-    const response = await axios.get<Space[]>(`${url}/campuses/${campusId}`);
+export async function getSpaces(
+    campusId: number,
+    images: "all" | "one" = "all",
+): Promise<Space[]> {
+    const response = await axios.get<Space[]>(`${url}/campuses/${campusId}`, {
+        params: { images },
+    });
     return response.data;
 }
 
