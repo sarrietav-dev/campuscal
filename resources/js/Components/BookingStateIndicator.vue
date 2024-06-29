@@ -10,8 +10,8 @@ const props = defineProps<{
 
 <template>
     <Alert>
-        <CircleCheck v-if="props.status === 'approved'" className="h-4 w-4" />
-        <CircleX v-else className="h-4 w-4" />
+        <CircleCheck v-if="props.status === 'approved'" class="size-5 mr-4" />
+        <CircleX v-else class="size-5 mr-4" />
 
         <AlertTitle>
             {{
