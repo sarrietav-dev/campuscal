@@ -38,6 +38,24 @@ class BookingController extends Controller
         ]);
     }
 
+    public function approveBooking(Request $request, Booking $booking): void
+    {
+        $validated = $request->validate([
+            'observations' => ['string', 'max:255'],
+        ]);
+
+        $booking->approve($validated['observations']);
+    }
+
+    public function rejectBooking(Request $request, Booking $booking): void
+    {
+        $validated = $request->validate([
+            'observations' => ['string', 'max:255'],
+        ]);
+
+        $booking->reject($validated['observations']);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

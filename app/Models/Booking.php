@@ -43,4 +43,18 @@ class Booking extends Model
     {
         return $this->belongsToMany(File::class);
     }
+
+    public function approve(?string $observations): void
+    {
+        $this->status = 'approved';
+        $this->observations = $observations;
+        $this->save();
+    }
+
+    public function reject(?string $observations): void
+    {
+        $this->status = 'rejected';
+        $this->observations = $observations;
+        $this->save();
+    }
 }

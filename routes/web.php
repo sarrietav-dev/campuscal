@@ -34,6 +34,14 @@ Route::resource('bookings', BookingController::class)
     ->only(['index', 'show'])
     ->middleware('auth');
 
+Route::patch('bookings/{booking}/approve', [BookingController::class, 'approveBooking'])
+    ->name('bookings.approve')
+    ->middleware('auth');
+
+Route::patch('bookings/{booking}/reject', [BookingController::class, 'rejectBooking'])
+    ->name('bookings.reject')
+    ->middleware('auth');
+
 Route::resource('bookings', BookingController::class)
     ->only(['store']);
 
