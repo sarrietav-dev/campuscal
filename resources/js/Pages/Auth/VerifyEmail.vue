@@ -3,6 +3,7 @@ import { computed } from "vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import { Button } from "@/Components/ui/button";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Card } from "@/Components/ui/card";
 
 const props = defineProps<{
     status?: string;
@@ -26,7 +27,7 @@ const verificationLinkSent = computed(
         <div
             class="flex flex-col items-center justify-center bg-background p-6 sm:p-10"
         >
-            <div
+            <card
                 class="mx-auto w-full max-w-md space-y-4 rounded-lg bg-card p-6 shadow-lg sm:p-8"
             >
                 <div class="space-y-2 text-center">
@@ -39,11 +40,7 @@ const verificationLinkSent = computed(
                     </p>
                 </div>
                 <form @submit.prevent="submit()">
-                    <Button
-                        variant="outline"
-                        class="w-full"
-                        :disabled="form.processing"
-                    >
+                    <Button class="w-full" :disabled="form.processing">
                         Resend verification email
                     </Button>
                 </form>
@@ -65,7 +62,7 @@ const verificationLinkSent = computed(
                         Logout
                     </Link>
                 </div>
-            </div>
+            </card>
         </div>
     </GuestLayout>
 </template>
