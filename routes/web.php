@@ -26,7 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('bookings/{booking}/reject', [BookingController::class, 'rejectBooking'])
         ->name('bookings.reject');
 
-    Route::get('/dashboard', function (\App\Services\BookingService $bookingService, \App\Services\SpaceService $spaceService) {
+    Route::get('/dashboard', function (\App\Services\BookingStatisticsService $bookingService, \App\Services\SpaceStatisticsService $spaceService) {
         return Inertia::render('Dashboard', [
             'total_bookings_current_month' => $bookingService->getTotalBookingsForCurrentMonth(),
             'pending_bookings' => $bookingService->getTotalPendingBookings(),

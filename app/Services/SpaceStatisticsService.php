@@ -6,7 +6,7 @@ use App\Models\Space;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 
-class SpaceService
+class SpaceStatisticsService
 {
     public function getMostRequestedSpaces()
     {

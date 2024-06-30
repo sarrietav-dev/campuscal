@@ -6,7 +6,7 @@ use App\Models\Booking;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 
-class BookingService
+class BookingStatisticsService
 {
     public function getBookingsForCurrentMonth(): Booking|Builder
     {
