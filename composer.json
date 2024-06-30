@@ -11,6 +11,7 @@
         "laravel/octane": "^2.5",
         "laravel/pulse": "^1.2",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.15",
         "laravel/telescope": "^5.1",
         "laravel/tinker": "^2.9",
         "league/flysystem-aws-s3-v3": "3.0",

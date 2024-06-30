@@ -104,8 +104,15 @@ const submit = () => {
                     >
                         Create an account
                     </Button>
-                    <Button type="button" variant="outline" class="w-full">
-                        Sign up with Google
+                    <Button
+                        as-child
+                        variant="outline"
+                        class="w-full"
+                        type="button"
+                    >
+                        <Link :href="route('auth.callback')">
+                            Login with Google
+                        </Link>
                     </Button>
                 </form>
                 <div class="mt-4 text-center text-sm">

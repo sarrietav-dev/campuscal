@@ -110,8 +110,15 @@ const submit = () => {
                             Login
                         </Button>
                     </div>
-                    <Button variant="outline" class="w-full">
-                        Login with Google
+                    <Button
+                        as-child
+                        variant="outline"
+                        class="w-full"
+                        type="button"
+                    >
+                        <Link :href="route('auth.callback')">
+                            Login with Google
+                        </Link>
                     </Button>
                 </form>
                 <div class="mt-4 text-center text-sm">
