@@ -10,6 +10,22 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('campuses', CampusController::class)
+        ->only(['index', 'create', 'show', 'store']);
+
+    Route::resource('campuses.spaces', SpaceController::class)
+        ->shallow()
+        ->only(['create', 'store', 'show']);
+
+    Route::resource('bookings', BookingController::class)
+        ->only(['index', 'show']);
+
+    Route::patch('bookings/{booking}/approve', [BookingController::class, 'approveBooking'])
+        ->name('bookings.approve');
+
+    Route::patch('bookings/{booking}/reject', [BookingController::class, 'rejectBooking'])
+        ->name('bookings.reject');
+
     Route::get('/dashboard', function (\App\Services\BookingService $bookingService, \App\Services\SpaceService $spaceService) {
         return Inertia::render('Dashboard', [
             'total_bookings_current_month' => $bookingService->getTotalBookingsForCurrentMonth(),
@@ -20,27 +36,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     })->name('dashboard');
 });
-
-Route::resource('campuses', CampusController::class)
-    ->only(['index', 'create', 'show', 'store'])
-    ->middleware('auth');
-
-Route::resource('campuses.spaces', SpaceController::class)
-    ->shallow()
-    ->only(['create', 'store', 'show'])
-    ->middleware('auth');
-
-Route::resource('bookings', BookingController::class)
-    ->only(['index', 'show'])
-    ->middleware('auth');
-
-Route::patch('bookings/{booking}/approve', [BookingController::class, 'approveBooking'])
-    ->name('bookings.approve')
-    ->middleware('auth');
-
-Route::patch('bookings/{booking}/reject', [BookingController::class, 'rejectBooking'])
-    ->name('bookings.reject')
-    ->middleware('auth');
 
 Route::resource('bookings', BookingController::class)
     ->only(['store']);
