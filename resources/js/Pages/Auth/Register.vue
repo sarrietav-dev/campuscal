@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import GuestLayout from "@/Layouts/GuestLayout.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Button } from "@/Components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/Components/ui/card";
+import ErrorMessage from "@/Components/ErrorMessage.vue";
 
 const form = useForm({
     name: "",
@@ -26,90 +33,88 @@ const submit = () => {
     <GuestLayout>
         <Head title="Register" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-
-                <Input
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <Input
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <Input
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <Input
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    :href="route('login')"
-                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
+        <Card class="w-full mx-auto max-w-md">
+            <CardHeader>
+                <CardTitle class="text-xl">Sign Up</CardTitle>
+                <CardDescription>
+                    Enter your information to create an account
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form @submit.prevent="submit()" class="grid gap-4">
+                    <div class="grid gap-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            id="name"
+                            placeholder="Max"
+                            required
+                            v-model="form.name"
+                        />
+                        <ErrorMessage v-show="form.errors.name" class="mt-2">
+                            {{ form.errors.name }}
+                        </ErrorMessage>
+                    </div>
+                    <div class="grid gap-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            placeholder="m@example.com"
+                            required
+                            v-model="form.email"
+                        />
+                        <ErrorMessage v-show="form.errors.email" class="mt-2">
+                            {{ form.errors.email }}
+                        </ErrorMessage>
+                    </div>
+                    <div class="grid gap-2">
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            v-model="form.password"
+                        />
+                        <ErrorMessage
+                            v-show="form.errors.password"
+                            class="mt-2"
+                        >
+                            {{ form.errors.password }}
+                        </ErrorMessage>
+                    </div>
+                    <div class="grid gap-2">
+                        <Label htmlFor="password_confirmation"
+                            >Confirm Password</Label
+                        >
+                        <Input
+                            id="password_confirmation"
+                            type="password"
+                            v-model="form.password_confirmation"
+                        />
+                        <ErrorMessage
+                            v-show="form.errors.password_confirmation"
+                            class="mt-2"
+                        >
+                            {{ form.errors.password_confirmation }}
+                        </ErrorMessage>
+                    </div>
+                    <Button
+                        type="submit"
+                        :disabled="form.processing"
+                        class="w-full"
+                    >
+                        Create an account
+                    </Button>
+                    <Button type="button" variant="outline" class="w-full">
+                        Sign up with Google
+                    </Button>
+                </form>
+                <div class="mt-4 text-center text-sm">
+                    Already have an account?
+                    <Link :href="route('login')" class="underline">
+                        Sign in
+                    </Link>
+                </div>
+            </CardContent>
+        </Card>
     </GuestLayout>
 </template>

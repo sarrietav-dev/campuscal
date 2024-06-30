@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import GuestLayout from "@/Layouts/GuestLayout.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { Input } from "@/Components/ui/input";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/Components/ui/card";
+import { Button } from "@/Components/ui/button";
+import { Label } from "@/Components/ui/label";
+import ErrorMessage from "@/Components/ErrorMessage.vue";
 
 const form = useForm({
     password: "",
@@ -23,35 +30,41 @@ const submit = () => {
     <GuestLayout>
         <Head title="Confirm Password" />
 
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            This is a secure area of the application. Please confirm your
-            password before continuing.
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="password" value="Password" />
-                <Input
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                    autofocus
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="flex justify-end mt-4">
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Confirm
-                </PrimaryButton>
-            </div>
-        </form>
+        <Card class="mx-auto max-w-sm">
+            <CardHeader>
+                <CardTitle>Confirm Password</CardTitle>
+                <CardDescription>
+                    This is a secure area of the application. Please confirm
+                    your password before continuing.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form @submit.prevent="submit()" class="space-y-4">
+                    <div class="space-y-2">
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            required
+                            v-model="form.password"
+                        />
+                        <ErrorMessage
+                            v-show="form.errors.password"
+                            class="mt-2"
+                        >
+                            {form.errors.password}
+                        </ErrorMessage>
+                    </div>
+                    <Button
+                        type="submit"
+                        :disabled="form.processing"
+                        class="w-full"
+                    >
+                        Confirm</Button
+                    >
+                </form>
+            </CardContent>
+        </Card>
     </GuestLayout>
 </template>
