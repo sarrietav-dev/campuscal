@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -34,6 +35,30 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
+
+    Route::get('/auth/redirect', function () {
+        return Socialite::driver('google')->redirect();
+    });
+
+    Route::get('/auth/callback', function () {
+        $googleUser = Socialite::driver('google')->user();
+
+        $user = User::updateOrCreate([
+            'email' => $googleUser->email,
+        ], [
+            'name' => $googleUser->name,
+            'email' => $googleUser->email,
+            'google_id' => $googleUser->id,
+            'google_token' => $googleUser->token,
+            'google_refresh_token' => $googleUser->refreshToken,
+        ]);
+
+        $user->markEmailAsVerified();
+
+        auth()->login($user);
+
+        return redirect()->route('dashboard');
+    });
 });
 
 Route::middleware('auth')->group(function () {
@@ -58,12 +83,3 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
-
-Route::get('/auth/redirect', function () {
-    return Socialite::driver('google')->redirect();
-})->name('auth.redirect');
-
-Route::get('/auth/callback', function () {
-    $user = Socialite::driver('google')->stateless()->user();
-    dd($user);
-})->name('auth.callback');
