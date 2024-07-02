@@ -20,7 +20,7 @@ class CampusController extends Controller
     public function index(): Response
     {
         $campuses = Campus::query()->with('images', function (Builder $query) {
-            $query->latest()->limit(1);
+            $query->select(['path'])->limit(1);
         })->select(['id', 'name'])->get();
 
         return Inertia::render('Spaces/Campuses', [
@@ -44,9 +44,9 @@ class CampusController extends Controller
         $spaces = \Cache::remember('campus_'.$campus->id.'_spaces', 60 * 30, function () use ($campus, $images) {
             return $campus->spaces()->with('images', function (Builder $query) use ($images) {
                 if ($images === 'all') {
-                    $query->latest();
+                    $query->select(['path']);
                 } else {
-                    $query->latest()->limit(1);
+                    $query->select(['path'])->limit(1);
                 }
             })->get();
         });
@@ -96,7 +96,7 @@ class CampusController extends Controller
     public function show(Campus $campus): Response
     {
         $spaces = $campus->spaces()->with('images', function (Builder $query) {
-            $query->latest()->limit(1);
+            $query->select(['path'])->limit(1);
         })->get();
 
         return Inertia::render('Spaces/Campus', [
