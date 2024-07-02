@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { BookMarked } from "lucide-vue-next";
 import ThemeToggle from "@/Components/ThemeToggle.vue";
+import { Button } from "@/Components/ui/button";
+import { LogInIcon } from "lucide-vue-next";
+import { Link } from "@inertiajs/vue3";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/Components/ui/tooltip";
 </script>
 
 <template>
@@ -20,6 +29,22 @@ import ThemeToggle from "@/Components/ThemeToggle.vue";
                     </div>
                     <div className="ml-auto flex items-center gap-5">
                         <ThemeToggle />
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger as-child>
+                                    <Button
+                                        as-child
+                                        variant="outline"
+                                        size="icon"
+                                    >
+                                        <Link :href="route('login')">
+                                            <LogInIcon class="h-6 w-6" />
+                                        </Link>
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent> Iniciar sesión</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     </div>
                 </header>
                 <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8">
