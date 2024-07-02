@@ -23,6 +23,7 @@ return new class extends Migration
 
         Schema::create('space_file', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
             $table->foreignIdFor(Space::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(File::class)->constrained()->cascadeOnDelete();
         });

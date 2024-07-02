@@ -31,7 +31,7 @@ class CampusController extends Controller
     public function getAll(): JsonResponse
     {
         $campuses = Campus::query()->with('images', function (Builder $query) {
-            $query->latest()->limit(1);
+            $query->select(['path'])->limit(1);
         })->select(['id', 'name'])->get();
 
         return response()->json($campuses);
@@ -41,7 +41,7 @@ class CampusController extends Controller
     {
         $images = $request->query('images', 'all');
 
-        $spaces = \Cache::remember('campus_' . $campus->id . '_spaces', 60 * 30, function () use ($campus, $images) {
+        $spaces = \Cache::remember('campus_'.$campus->id.'_spaces', 60 * 30, function () use ($campus, $images) {
             return $campus->spaces()->with('images', function (Builder $query) use ($images) {
                 if ($images === 'all') {
                     $query->latest();
