@@ -41,10 +41,10 @@ const submit = () => {
 
         <Card class="w-full max-w-md mx-auto">
             <CardHeader>
-                <CardTitle>Reset Password</CardTitle>
-                <CardDescription
-                    >Enter your email and a new password to reset your account
-                    password.
+                <CardTitle>Cambiar contraseña</CardTitle>
+                <CardDescription>
+                    Ingresa tu correo electrónico y una nueva contraseña para
+                    restablecer la contraseña de tu cuenta.
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -63,11 +63,11 @@ const submit = () => {
                         </ErrorMessage>
                     </div>
                     <div class="space-y-2">
-                        <Label htmlFor="newPassword">New Password</Label>
+                        <Label htmlFor="newPassword">Nueva contraseña</Label>
                         <Input
                             id="newPassword"
                             type="password"
-                            placeholder="Enter a new password"
+                            placeholder="Ingresa tu nueva contraseña"
                             v-model="form.password"
                             required
                         />
@@ -79,13 +79,13 @@ const submit = () => {
                         </ErrorMessage>
                     </div>
                     <div class="space-y-2">
-                        <Label htmlFor="confirmPassword"
-                            >Confirm New Password</Label
-                        >
+                        <Label htmlFor="confirmPassword">
+                            Confirmar contraseña
+                        </Label>
                         <Input
                             id="confirmPassword"
                             type="password"
-                            placeholder="Confirm your new password"
+                            placeholder="Confirma tu nueva contraseña"
                             v-model="form.password_confirmation"
                             required
                         />
@@ -104,7 +104,7 @@ const submit = () => {
                     :disabled="form.processing"
                     class="w-full"
                 >
-                    Reset Password
+                    Cambiar contraseña
                 </Button>
             </CardFooter>
         </Card>

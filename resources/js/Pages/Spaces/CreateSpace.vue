@@ -69,7 +69,7 @@ const hasImageErrors = computed(() => {
                         {{ form.errors.images }}
                     </ErrorMessage>
                     <ErrorMessage v-show="hasImageErrors">
-                        Error when uploading images
+                        Al menos una imagen es requerida.
                     </ErrorMessage>
                 </FormItem>
 

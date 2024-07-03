@@ -31,25 +31,27 @@ const verificationLinkSent = computed(
                 class="mx-auto w-full max-w-md space-y-4 rounded-lg bg-card p-6 shadow-lg sm:p-8"
             >
                 <div class="space-y-2 text-center">
-                    <h1 class="text-2xl font-bold">Thanks for signing up!</h1>
+                    <h1 class="text-2xl font-bold">Gracias por registrarte!</h1>
                     <p class="text-muted-foreground">
-                        Before getting started, could you verify your email
-                        address by clicking on the link we just emailed to you?
-                        If you didn't receive the email, we will gladly send you
-                        another.
+                        Antes de comenzar, ¿podrías verificar tu dirección de
+                        correo electrónico haciendo clic en el enlace que
+                        acabamos de enviarte por correo electrónico? Si no
+                        recibiste el correo electrónico, con gusto te enviaremos
+                        otro.
                     </p>
                 </div>
                 <form @submit.prevent="submit()">
                     <Button class="w-full" :disabled="form.processing">
-                        Resend verification email
+                        Reenviar correo de verificación
                     </Button>
                 </form>
                 <div
                     v-if="verificationLinkSent"
                     class="text-center text-sm text-muted-foreground"
                 >
-                    A new verification link has been sent to the email address
-                    you provided during registration.
+                    Se ha enviado un nuevo enlace de verificación a la dirección
+                    de correo electrónico que proporcionaste durante el
+                    registro.
                 </div>
                 <div class="text-center text-sm text-muted-foreground">
                     <Link
@@ -59,7 +61,7 @@ const verificationLinkSent = computed(
                         class="underline hover:text-primary"
                         prefetch="{false}"
                     >
-                        Logout
+                        Cerrar sesión
                     </Link>
                 </div>
             </card>

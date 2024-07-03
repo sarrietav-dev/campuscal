@@ -32,20 +32,20 @@ const submit = () => {
 
         <Card class="mx-auto max-w-sm">
             <CardHeader>
-                <CardTitle>Confirm Password</CardTitle>
+                <CardTitle>Confirma tu contraseña</CardTitle>
                 <CardDescription>
-                    This is a secure area of the application. Please confirm
-                    your password before continuing.
+                    Esta es un área segura de la aplicación. Por favor confirma
+                    tu contraseña antes de continuar.
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <form @submit.prevent="submit()" class="space-y-4">
                     <div class="space-y-2">
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">Contraseña</Label>
                         <Input
                             id="password"
                             type="password"
-                            placeholder="Enter your password"
+                            placeholder="Ingresa tu contraseña"
                             required
                             v-model="form.password"
                         />
@@ -53,7 +53,7 @@ const submit = () => {
                             v-show="form.errors.password"
                             class="mt-2"
                         >
-                            {form.errors.password}
+                            {{ form.errors.password }}
                         </ErrorMessage>
                     </div>
                     <Button
@@ -61,8 +61,8 @@ const submit = () => {
                         :disabled="form.processing"
                         class="w-full"
                     >
-                        Confirm</Button
-                    >
+                        Confirmar
+                    </Button>
                 </form>
             </CardContent>
         </Card>

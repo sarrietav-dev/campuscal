@@ -35,15 +35,17 @@ const submit = () => {
 
         <Card class="w-full mx-auto max-w-md">
             <CardHeader>
-                <CardTitle class="text-xl">Sign Up</CardTitle>
+                <CardTitle class="text-xl">
+                    Regístrate en nuestra plataforma
+                </CardTitle>
                 <CardDescription>
-                    Enter your information to create an account
+                    Ingresa tus datos para crear una cuenta
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <form @submit.prevent="submit()" class="grid gap-4">
                     <div class="grid gap-2">
-                        <Label htmlFor="name">Name</Label>
+                        <Label htmlFor="name">Nombre</Label>
                         <Input
                             id="name"
                             placeholder="Max"
@@ -68,7 +70,7 @@ const submit = () => {
                         </ErrorMessage>
                     </div>
                     <div class="grid gap-2">
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">Contraseña</Label>
                         <Input
                             id="password"
                             type="password"
@@ -82,9 +84,9 @@ const submit = () => {
                         </ErrorMessage>
                     </div>
                     <div class="grid gap-2">
-                        <Label htmlFor="password_confirmation"
-                            >Confirm Password</Label
-                        >
+                        <Label htmlFor="password_confirmation">
+                            Confirma tu contraseña
+                        </Label>
                         <Input
                             id="password_confirmation"
                             type="password"
@@ -102,7 +104,7 @@ const submit = () => {
                         :disabled="form.processing"
                         class="w-full"
                     >
-                        Create an account
+                        Regístrate
                     </Button>
                     <Button
                         as-child
@@ -110,13 +112,13 @@ const submit = () => {
                         class="w-full"
                         type="button"
                     >
-                        <a href="/auth/redirect"> Login with Google </a>
+                        <a href="/auth/redirect">Entrar con Google</a>
                     </Button>
                 </form>
                 <div class="mt-4 text-center text-sm">
-                    Already have an account?
+                    ¿Ya tienes una cuenta?
                     <Link :href="route('login')" class="underline">
-                        Sign in
+                        Iniciar sesión
                     </Link>
                 </div>
             </CardContent>

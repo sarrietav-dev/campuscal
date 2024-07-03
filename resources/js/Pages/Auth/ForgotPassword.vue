@@ -32,10 +32,10 @@ const submit = () => {
 
         <Card class="w-full max-w-md mx-auto justify-self-center">
             <CardHeader>
-                <CardTitle>Forgot your password?</CardTitle>
+                <CardTitle>¿Olvidate tu contraseña?</CardTitle>
                 <CardDescription>
-                    Enter your email address below and we'll send you a link to
-                    reset your password.
+                    Ingresa tu dirección de correo electrónico a continuación y
+                    te enviaremos un enlace para restablecer tu contraseña.
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -58,7 +58,7 @@ const submit = () => {
                         :disabled="form.processing"
                         class="w-full"
                     >
-                        Reset Password
+                        Cambiar contraseña
                     </Button>
                 </form>
             </CardContent>

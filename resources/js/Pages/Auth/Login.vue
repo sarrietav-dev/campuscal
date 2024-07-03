@@ -40,9 +40,10 @@ const submit = () => {
     <GuestLayout>
         <Card class="mx-auto w-full max-w-md">
             <CardHeader>
-                <CardTitle class="text-2xl">Login</CardTitle>
+                <CardTitle class="text-2xl"> Bienvenido de vuelta</CardTitle>
                 <CardDescription>
-                    Enter your email below to login to your account
+                    Ingrese su correo electrónico a continuación para iniciar
+                    sesión en su cuenta
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -68,13 +69,13 @@ const submit = () => {
                     </div>
                     <div class="grid gap-2">
                         <div class="flex items-center">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">Contraseña</Label>
                             <Link
                                 v-if="canResetPassword"
                                 :href="route('password.request')"
                                 class="ml-auto inline-block text-sm underline"
                             >
-                                Forgot your password?
+                                ¿Olvidó su contraseña?
                             </Link>
                         </div>
                         <Input
@@ -100,7 +101,7 @@ const submit = () => {
                                 htmlFor="remember-me"
                                 class="text-sm font-medium"
                             >
-                                Remember me
+                                Recuérdame
                             </Label>
                         </div>
                         <Button
@@ -108,7 +109,7 @@ const submit = () => {
                             :disabled="form.processing"
                             class="w-auto grow"
                         >
-                            Login
+                            Iniciar sesión
                         </Button>
                     </div>
                     <Button
@@ -117,13 +118,13 @@ const submit = () => {
                         class="w-full"
                         type="button"
                     >
-                        <a href="/auth/redirect"> Login with Google </a>
+                        <a href="/auth/redirect">Entrar con Google</a>
                     </Button>
                 </form>
                 <div class="mt-4 text-center text-sm">
-                    Don&apos;t have an account?
+                    ¿No tienes una cuenta?
                     <Link :href="route('register')" class="underline">
-                        Sign up
+                        Regístrate
                     </Link>
                 </div>
             </CardContent>
