@@ -56,7 +56,11 @@ Route::middleware('guest')->group(function () {
 
         auth()->login($user);
 
-        return redirect()->route('dashboard');
+        if (auth()->user()->isAdmin()) {
+            return redirect()->route('dashboard');
+        }
+
+        return redirect()->route('bookings.create');
     });
 });
 
