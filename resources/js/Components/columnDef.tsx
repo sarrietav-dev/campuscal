@@ -7,7 +7,7 @@ import {
 } from "./ui/tooltip";
 import { Button } from "./ui/button";
 import { Link } from "@inertiajs/vue3";
-import { ArrowRight } from "lucide-vue-next";
+import { ArrowRight, ArrowUpDown } from "lucide-vue-next";
 import { BookingProps } from "@/Pages/Booking/Bookings.vue";
 
 export type Request = {
@@ -24,7 +24,7 @@ export type Request = {
     };
 };
 
-const statusES: { [k: string]: string } = {
+export const statusES: { [k: string]: string } = {
     pending: "Pendiente",
     approved: "Aprobado",
     rejected: "Rechazado",
@@ -41,11 +41,47 @@ export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
             </div>
         ),
     },
-    { accessorKey: "assistance", header: "Asistencias" },
     {
-        accessorFn: ({ created_at }) =>
-            new Date(created_at).toLocaleDateString(),
-        header: "Creado",
+        accessorKey: "assistance",
+        header: ({ column }) => (
+            <div
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                <Button variant={"ghost"}>
+                    Asistentes
+                    <ArrowUpDown class="ml-2 h-4 w-4" />
+                </Button>
+            </div>
+        ),
+        cell: ({ cell }) => {
+            const count = cell.getValue() as number;
+            return count === 1 ? `${count} asistente` : `${count} asistentes`;
+        },
+    },
+    {
+        accessorKey: "created_at",
+        header: ({ column }) => (
+            <div
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                <Button variant={"ghost"}>
+                    Creado
+                    <ArrowUpDown class="ml-2 h-4 w-4" />
+                </Button>
+            </div>
+        ),
+        cell: ({ cell }) => {
+            const date = new Date(cell.getValue() as string);
+            return date.toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            });
+        },
     },
     {
         accessorFn: ({ requester }) => `${requester.name} ${requester.surname}`,
@@ -54,6 +90,9 @@ export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
     {
         accessorKey: "status",
         header: "Estado",
+        filterFn: (row, columnId, filterValue: string[]) => {
+            return filterValue.includes(row.getValue(columnId));
+        },
         cell: ({ cell }) => {
             const status = cell.getValue() as string;
             return (

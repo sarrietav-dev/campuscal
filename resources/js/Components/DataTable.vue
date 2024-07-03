@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type {
+import {
     ColumnFiltersState,
+    getFacetedRowModel,
+    getFacetedUniqueValues,
     SortingState,
     VisibilityState,
 } from "@tanstack/vue-table";
@@ -32,8 +34,9 @@ import {
     TableRow,
 } from "./ui/table";
 import { valueUpdater } from "@/lib/utils";
-import { columns, Request } from "@/Components/columnDef";
+import { columns, Request, statusES } from "@/Components/columnDef";
 import { BookingProps } from "@/Pages/Booking/Bookings.vue";
+import DataTableFacetedFilter from "@/Components/DataTableFacetedFilter.vue";
 
 const { bookings: data } = defineProps<BookingProps>();
 
@@ -45,17 +48,6 @@ const rowSelection = ref({});
 const table = useVueTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
-    onColumnFiltersChange: (updaterOrValue) =>
-        valueUpdater(updaterOrValue, columnFilters),
-    onColumnVisibilityChange: (updaterOrValue) =>
-        valueUpdater(updaterOrValue, columnVisibility),
-    onRowSelectionChange: (updaterOrValue) =>
-        valueUpdater(updaterOrValue, rowSelection),
     state: {
         get sorting() {
             return sorting.value;
@@ -70,7 +62,25 @@ const table = useVueTable({
             return rowSelection.value;
         },
     },
+    onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
+    onColumnFiltersChange: (updaterOrValue) =>
+        valueUpdater(updaterOrValue, columnFilters),
+    onColumnVisibilityChange: (updaterOrValue) =>
+        valueUpdater(updaterOrValue, columnVisibility),
+    onRowSelectionChange: (updaterOrValue) =>
+        valueUpdater(updaterOrValue, rowSelection),
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
 });
+
+const statuses = Object.keys(statusES).map((key) => ({
+    value: key,
+    label: statusES[key],
+}));
 </script>
 
 <template>
@@ -85,6 +95,12 @@ const table = useVueTable({
                 @update:model-value="
                     table.getColumn('email')?.setFilterValue($event)
                 "
+            />
+            <DataTableFacetedFilter
+                v-if="table.getColumn('status')"
+                :column="table.getColumn('status') as any"
+                title="Estado"
+                :options="statuses"
             />
             <DropdownMenu>
                 <DropdownMenuTrigger as-child>
