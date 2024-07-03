@@ -10,6 +10,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/Components/ui/tooltip";
+import LogoutButton from "@/Components/LogoutButton.vue";
 </script>
 
 <template>
@@ -37,12 +38,21 @@ import {
                                         variant="outline"
                                         size="icon"
                                     >
-                                        <Link :href="route('login')">
+                                        <logout-button
+                                            v-if="$page.props.auth.user"
+                                        />
+                                        <Link v-else :href="route('login')">
                                             <LogInIcon class="h-6 w-6" />
                                         </Link>
                                     </Button>
                                 </TooltipTrigger>
-                                <TooltipContent> Iniciar sesión</TooltipContent>
+                                <TooltipContent>
+                                    {{
+                                        $page.props.auth.user
+                                            ? "Cerrar sesión"
+                                            : "Iniciar sesión"
+                                    }}
+                                </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
                     </div>
