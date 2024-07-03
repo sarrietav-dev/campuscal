@@ -50,7 +50,6 @@ Route::middleware('guest')->group(function () {
             'email' => $googleUser->email,
             'google_id' => $googleUser->id,
             'google_token' => $googleUser->token,
-            'google_refresh_token' => $googleUser->refreshToken,
         ]);
 
         $user->markEmailAsVerified();

@@ -16,7 +16,7 @@ class SpaceStatisticsService
                 ->orderBy('appointments_count', 'desc')
                 ->limit(5)
                 ->with('images', function (Builder $query) {
-                    $query->latest()->limit(1)->select('path');
+                    $query->select(['path'])->limit(1);
                 })
                 ->get();
         });
