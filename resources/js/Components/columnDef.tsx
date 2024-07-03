@@ -35,6 +35,7 @@ export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
     {
         accessorKey: "details",
         header: "Detalles",
+        id: "Detalles",
         cell: ({ cell }) => (
             <div class="max-w-[300px] line-clamp-3">
                 {cell.getValue() as string}
@@ -43,6 +44,7 @@ export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
     },
     {
         accessorKey: "assistance",
+        id: "Asistentes",
         header: ({ column }) => (
             <div
                 onClick={() =>
@@ -74,6 +76,7 @@ export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
                 </Button>
             </div>
         ),
+        id: "Creado",
         cell: ({ cell }) => {
             const date = new Date(cell.getValue() as string);
             return date.toLocaleDateString("es-ES", {
@@ -85,11 +88,13 @@ export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
     },
     {
         accessorFn: ({ requester }) => `${requester.name} ${requester.surname}`,
+        id: "Nombre del solicitante",
         header: "Nombre del solicitante",
     },
     {
         accessorKey: "status",
         header: "Estado",
+        id: "Estado",
         filterFn: (row, columnId, filterValue: string[]) => {
             return filterValue.includes(row.getValue(columnId));
         },
@@ -114,6 +119,7 @@ export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
     {
         accessorFn: ({ requester }) => requester.email,
         accessorKey: "email",
+        id: "Email",
         header: "Email",
         cell: ({ cell }) => (
             <a href={`mailto:${cell.getValue() as string}`}>
@@ -122,7 +128,8 @@ export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
         ),
     },
     {
-        id: "actions",
+        id: "Acciones",
+        enableHiding: false,
         cell: ({ row }) => {
             return (
                 <TooltipProvider>

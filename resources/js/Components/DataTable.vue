@@ -90,15 +90,15 @@ const statuses = Object.keys(statusES).map((key) => ({
                 class="max-w-sm"
                 placeholder="Buscar por email"
                 :model-value="
-                    table.getColumn('email')?.getFilterValue() as string
+                    table.getColumn('Email')?.getFilterValue() as string
                 "
                 @update:model-value="
-                    table.getColumn('email')?.setFilterValue($event)
+                    table.getColumn('Email')?.setFilterValue($event)
                 "
             />
             <DataTableFacetedFilter
-                v-if="table.getColumn('status')"
-                :column="table.getColumn('status') as any"
+                v-if="table.getColumn('Estado')"
+                :column="table.getColumn('Estado') as any"
                 title="Estado"
                 :options="statuses"
             />
@@ -179,11 +179,6 @@ const statuses = Object.keys(statusES).map((key) => ({
         </div>
 
         <div class="flex items-center justify-end space-x-2 py-4">
-            <div class="flex-1 text-sm text-muted-foreground">
-                {{ table.getFilteredSelectedRowModel().rows.length }} de
-                {{ table.getFilteredRowModel().rows.length }} dato(s)
-                seleccionados.
-            </div>
             <div class="space-x-2">
                 <Button
                     variant="outline"
