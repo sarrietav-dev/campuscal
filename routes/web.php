@@ -9,7 +9,7 @@ use App\Http\Controllers\SpaceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::resource('campuses', CampusController::class)
         ->only(['index', 'create', 'show', 'store']);
 

@@ -18,8 +18,8 @@ namespace App\Models{
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $start
- * @property string $end
+ * @property string $date_start
+ * @property string $date_end
  * @property int $space_id
  * @property int $booking_id
  * @property-read \App\Models\Booking $booking
@@ -30,10 +30,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Appointment query()
  * @method static \Illuminate\Database\Eloquent\Builder|Appointment whereBookingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Appointment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Appointment whereEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Appointment whereDateEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Appointment whereDateStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Appointment whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Appointment whereSpaceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Appointment whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Appointment whereUpdatedAt($value)
  */
 	class Appointment extends \Eloquent {}
@@ -72,7 +72,6 @@ namespace App\Models{
  * @property string|null $external_details
  * @property int $minors
  * @property int $agreement_contract
- * @property string|null $agreement_contract_file
  * @property int $assistance
  * @property string|null $observations
  * @property string $status
@@ -88,7 +87,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Booking newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Booking query()
  * @method static \Illuminate\Database\Eloquent\Builder|Booking whereAgreementContract($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Booking whereAgreementContractFile($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Booking whereAssistance($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Booking whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Booking whereDetails($value)
@@ -133,9 +131,7 @@ namespace App\Models{
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $name
  * @property string $path
- * @property string $type
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Booking> $booking
  * @property-read int|null $booking_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Campus> $campus
@@ -148,12 +144,24 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|File query()
  * @method static \Illuminate\Database\Eloquent\Builder|File whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|File whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|File whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|File wherePath($value)
- * @method static \Illuminate\Database\Eloquent\Builder|File whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|File whereUpdatedAt($value)
  */
 	class File extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Role> $roles
+ * @property-read int|null $roles_count
+ * @method static \Database\Factories\PermissionFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission query()
+ */
+	class Permission extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -170,7 +178,6 @@ namespace App\Models{
  * @property string $identification
  * @property string $company_name
  * @property string $company_role
- * @property string $company_address
  * @property string $academic_unit
  * @property int $booking_id
  * @property-read \App\Models\Booking $booking
@@ -180,7 +187,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Requester query()
  * @method static \Illuminate\Database\Eloquent\Builder|Requester whereAcademicUnit($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Requester whereBookingId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Requester whereCompanyAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Requester whereCompanyName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Requester whereCompanyRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Requester whereCreatedAt($value)
@@ -193,6 +199,22 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Requester whereUpdatedAt($value)
  */
 	class Requester extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Permission> $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read int|null $users_count
+ * @method static \Database\Factories\RoleFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Role newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Role query()
+ */
+	class Role extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -256,12 +278,16 @@ namespace App\Models{
  * @property string $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property mixed $password
+ * @property mixed|null $password
+ * @property string|null $google_id
+ * @property string|null $google_token
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Role> $roles
+ * @property-read int|null $roles_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -269,12 +295,14 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGoogleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGoogleToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
-	class User extends \Eloquent {}
+	class User extends \Eloquent implements \Illuminate\Contracts\Auth\MustVerifyEmail {}
 }
 
