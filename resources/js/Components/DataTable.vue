@@ -78,7 +78,7 @@ const table = useVueTable({
         <div class="flex gap-2 items-center py-4">
             <Input
                 class="max-w-sm"
-                placeholder="Filter emails..."
+                placeholder="Buscar por email"
                 :model-value="
                     table.getColumn('email')?.getFilterValue() as string
                 "
@@ -89,7 +89,7 @@ const table = useVueTable({
             <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                     <Button variant="outline" class="ml-auto">
-                        Columns
+                        Columnas
                         <ChevronDown class="ml-2 h-4 w-4" />
                     </Button>
                 </DropdownMenuTrigger>
@@ -155,7 +155,7 @@ const table = useVueTable({
                             :colspan="columns.length"
                             class="h-24 text-center"
                         >
-                            No results.
+                            No hay datos disponibles.
                         </TableCell>
                     </TableRow>
                 </TableBody>
@@ -164,8 +164,9 @@ const table = useVueTable({
 
         <div class="flex items-center justify-end space-x-2 py-4">
             <div class="flex-1 text-sm text-muted-foreground">
-                {{ table.getFilteredSelectedRowModel().rows.length }} of
-                {{ table.getFilteredRowModel().rows.length }} row(s) selected.
+                {{ table.getFilteredSelectedRowModel().rows.length }} de
+                {{ table.getFilteredRowModel().rows.length }} dato(s)
+                seleccionados.
             </div>
             <div class="space-x-2">
                 <Button
@@ -174,7 +175,7 @@ const table = useVueTable({
                     :disabled="!table.getCanPreviousPage()"
                     @click="table.previousPage()"
                 >
-                    Previous
+                    Anterior
                 </Button>
                 <Button
                     variant="outline"
@@ -182,7 +183,7 @@ const table = useVueTable({
                     :disabled="!table.getCanNextPage()"
                     @click="table.nextPage()"
                 >
-                    Next
+                    Siguiente
                 </Button>
             </div>
         </div>

@@ -95,9 +95,7 @@ export const columns: ColumnDef<BookingProps["bookings"][0]>[] = [
                                 </Link>
                             </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                            <p>View request</p>
-                        </TooltipContent>
+                        <TooltipContent>Ver detalles</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
             );
