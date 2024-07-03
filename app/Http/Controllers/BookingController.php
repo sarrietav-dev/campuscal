@@ -18,9 +18,11 @@ class BookingController extends Controller
      */
     public function index(): Response
     {
-        $bookings = Booking::with(
-            'requester:id,name,surname,email,booking_id',
-        )->select(['id', 'details', 'assistance', 'created_at', 'status'])->get();
+        $bookings = cache()->remember('bookings', 60, function () {
+            return Booking::with(
+                'requester:id,name,surname,email,booking_id',
+            )->select(['id', 'details', 'assistance', 'created_at', 'status'])->get();
+        });
 
         return Inertia::render('Booking/Bookings', [
             'bookings' => $bookings,
