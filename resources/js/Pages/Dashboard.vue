@@ -4,6 +4,7 @@ import { Head } from "@inertiajs/vue3";
 import { ref } from "vue";
 import LineChart from "@/Components/LineChart.vue";
 import { Link } from "@inertiajs/vue3";
+import { UseImage } from "@vueuse/components";
 
 interface Stat {
     title: string;
@@ -96,14 +97,25 @@ interface MostRequestedSpace {
                             >
                                 <Link :href="`/spaces/${space.id}`">
                                     <div
-                                        class="flex items center justify-between bg-accent rounded-lg p-4"
+                                        class="flex items center justify-between shadow-lg bg-accent rounded-xl p-4 hover:shadow-md hover:shadow-muted transition hover:-translate-y-1 active:translate-y-0"
                                     >
                                         <div class="flex items center">
-                                            <img
-                                                class="w-12 h-12 rounded-lg"
+                                            <UseImage
+                                                class="size-12 rounded-lg"
                                                 :src="space.images[0].path"
                                                 alt="space.name"
-                                            />
+                                            >
+                                                <template #loading>
+                                                    <div
+                                                        class="animate-pulse bg-gray-200 size-12 aspect-square rounded-lg"
+                                                    ></div>
+                                                </template>
+                                                <template #error>
+                                                    <span
+                                                        class="bg-red-500 absolute size-12 aspect-square"
+                                                    ></span>
+                                                </template>
+                                            </UseImage>
                                             <div class="ml-4">
                                                 <div
                                                     class="text-sm font-semibold"
