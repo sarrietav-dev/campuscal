@@ -35,6 +35,9 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
             'most_requested_spaces' => $spaceService->getMostRequestedSpaces(),
         ]);
     })->name('dashboard');
+
+    Route::get('/team', [\App\Http\Controllers\TeamsController::class, 'index'])
+        ->name('teams.index');
 });
 
 Route::resource('bookings', BookingController::class)
