@@ -38,6 +38,9 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     Route::get('/team', [\App\Http\Controllers\TeamsController::class, 'index'])
         ->name('teams.index');
+
+    Route::post('/team/invite', [\App\Http\Controllers\TeamsController::class, 'invite'])
+        ->name('teams.invite');
 });
 
 Route::resource('bookings', BookingController::class)
