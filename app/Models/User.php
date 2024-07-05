@@ -49,4 +49,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(AppRoles::SUPER_ADMIN) || $this->hasRole(AppRoles::ADMIN);
+    }
 }
