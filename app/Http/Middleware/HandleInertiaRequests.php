@@ -33,7 +33,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'can' => [
-                'viewTeam' => $request->user()->can(TeamPermissions::VIEW_TEAM->value),
+                'viewTeam' => $request->user() ? $request->user()->can(TeamPermissions::VIEW_TEAM->value) : null,
             ],
             'auth' => [
                 'user' => $request->user(),
