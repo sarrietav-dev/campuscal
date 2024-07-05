@@ -63,7 +63,7 @@ class RolePermissionSeeder extends Seeder
             DeveloperPermissions::VIEW_PULSE->value,
         ]));
 
-        Role::create(['name' => AppRoles::SUPER_ADMIN])->syncPermissions(Permission::all());
+        Role::create(['name' => AppRoles::SUPER_ADMIN]);
 
         Role::create(['name' => AppRoles::DEVELOPER]);
 

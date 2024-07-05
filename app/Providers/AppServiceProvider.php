@@ -22,22 +22,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('view-dashboard', function (User $user) {
-            return $user->hasAnyRole([
-                AppRoles::SUPER_ADMIN,
-                AppRoles::ADMIN,
-                AppRoles::DEVELOPER]);
+        Gate::before(function (User $user) {
+            return $user->hasRole(AppRoles::SUPER_ADMIN) ? true : null;
         });
 
-        Gate::define('view-pulse', function (User $user) {
-            return $user->hasRole(AppRoles::DEVELOPER);
-        });
+        Gate::define('viewPulse', function (User $user) {
+            if ($this->app->environment('production')) {
+                return $user->hasRole(AppRoles::DEVELOPER);
+            }
 
-        Gate::define('view-teams', function (User $user) {
-            return $user->hasAnyRole([
-                AppRoles::SUPER_ADMIN,
-                AppRoles::ADMIN,
-                AppRoles::DEVELOPER]);
+            return true;
         });
     }
 }
