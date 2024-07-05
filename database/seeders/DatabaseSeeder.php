@@ -7,9 +7,7 @@ use App\Models\Audience;
 use App\Models\Booking;
 use App\Models\Campus;
 use App\Models\File;
-use App\Models\Permission;
 use App\Models\Requester;
-use App\Models\Role;
 use App\Models\Space;
 use App\Models\SpaceResource;
 use App\Models\User;
@@ -22,22 +20,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        Permission::factory(10)->create();
-        $adminRole = Role::factory()->create([
-            'name' => 'admin',
-        ]);
-        $devRole = Role::factory()->create([
-            'name' => 'developer',
-        ]);
-
-        User::factory()->hasAttached($adminRole)->create([
+        User::factory()->create([
             'name' => 'Admin user',
             'email' => 'admin@campuscal.com',
         ]);
 
-        User::factory()->hasAttached($devRole)->create([
+        User::factory()->create([
             'name' => 'Developer user',
             'email' => 'dev@campuscal.com',
         ]);
