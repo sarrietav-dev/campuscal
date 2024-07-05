@@ -43,10 +43,11 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => TeamPermissions::INVITE_MEMBER->value]);
         Permission::create(['name' => TeamPermissions::UPDATE_ROLE->value]);
         Permission::create(['name' => TeamPermissions::REMOVE_MEMBER->value]);
+        Permission::create(['name' => TeamPermissions::VIEW_TEAM->value]);
 
         Permission::create(['name' => DeveloperPermissions::VIEW_PULSE->value]);
 
-        Role::create(['name' => AppRoles::REQUESTER])->givePermissionTo([
+        Role::create(['name' => AppRoles::REQUESTER])->syncPermissions([
             CampusPermissions::VIEW->value,
             SpacePermissions::VIEW->value,
             CampusPermissions::LIST->value,
@@ -54,15 +55,17 @@ class RolePermissionSeeder extends Seeder
             BookingPermissions::CREATE->value,
         ]);
 
-        Role::create(['name' => AppRoles::ADMIN])->givePermissionTo(Permission::all()->except([
+        Role::create(['name' => AppRoles::ADMIN])->syncPermissions(Permission::query()->whereNotIn('name', [
             TeamPermissions::REMOVE_MEMBER->value,
             TeamPermissions::UPDATE_ROLE->value,
             TeamPermissions::INVITE_MEMBER->value,
+            TeamPermissions::VIEW_TEAM->value,
+            DeveloperPermissions::VIEW_PULSE->value,
         ]));
 
-        Role::create(['name' => AppRoles::SUPER_ADMIN])->givePermissionTo(Permission::all()->except(DeveloperPermissions::VIEW_PULSE->value));
+        Role::create(['name' => AppRoles::SUPER_ADMIN])->syncPermissions(Permission::all());
 
-        Role::create(['name' => AppRoles::DEVELOPER])->givePermissionTo(Permission::all());
+        Role::create(['name' => AppRoles::DEVELOPER]);
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
