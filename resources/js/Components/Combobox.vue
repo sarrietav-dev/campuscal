@@ -50,14 +50,12 @@ const model = defineModel<string>();
         </PopoverTrigger>
         <PopoverContent class="w-[200px] p-0">
             <Command v-model="model">
-                <CommandInput placeholder="Buscar..." />
-                <CommandEmpty>Sin resultados</CommandEmpty>
                 <CommandList>
                     <CommandGroup>
                         <CommandItem
                             v-for="option in options"
                             :key="option.value"
-                            :value="option"
+                            :value="option.value"
                             @select="open = false"
                         >
                             <Check

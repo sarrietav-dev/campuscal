@@ -12,25 +12,16 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import ResponsiveModal from "@/Components/ResponsiveModal.vue";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/Components/ui/alert-dialog";
 import { computed, ref } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import ErrorMessage from "@/Components/ErrorMessage.vue";
 import Combobox from "@/Components/Combobox.vue";
+import { Badge } from "@/Components/ui/badge";
 
 const inviteDialogOpen = ref(false);
-const alertDialogOpen = ref(false);
+const changeRoleDialogOpen = ref(false);
 
 const props = defineProps<{
     roles: { id: number; name: string; display_name: string }[];
@@ -43,8 +34,12 @@ const roles = computed(() =>
     })),
 );
 
-const form = useForm({
+const inviteMemberForm = useForm({
     email: "",
+    role: "",
+});
+
+const changeMemberRoleForm = useForm({
     role: "",
 });
 
@@ -69,42 +64,29 @@ const users = ref([
     },
 ]);
 
-function submit() {
-    form.post(route("teams.invite"), {
+function submitInvitation() {
+    inviteMemberForm.post(route("teams.invite"), {
         preserveScroll: true,
         onSuccess: () => {
             inviteDialogOpen.value = false;
-            form.reset();
+            inviteMemberForm.reset();
         },
     });
 }
 
-function changeRole(userIndex: number, role: string) {
-    alertDialogOpen.value = true;
-    users.value[userIndex].role = role;
+function submitChangeRole(userId: number) {
+    changeMemberRoleForm.post(route("teams.change-role", { user: userId }), {
+        preserveScroll: true,
+        onSuccess: () => {
+            changeRoleDialogOpen.value = false;
+            changeMemberRoleForm.reset();
+            router.reload();
+        },
+    });
 }
 </script>
 
 <template>
-    <AlertDialog :open="alertDialogOpen">
-        <AlertDialogContent>
-            <AlertDialogHeader>
-                <AlertDialogTitle>
-                    Confirma que deseas cambiar el rol de este miembro
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                    Al cambiar el rol de este miembro, se le enviará una
-                    notificación.
-                </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <AlertDialogCancel> Cancelar</AlertDialogCancel>
-                <AlertDialogAction @click="alertDialogOpen = false">
-                    Cambiar rol
-                </AlertDialogAction>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
     <AuthenticatedLayout>
         <div class="container max-w-4xl">
             <div class="flex align-center mb-6">
@@ -112,7 +94,7 @@ function changeRole(userIndex: number, role: string) {
                     Equipo
                 </Text>
                 <ResponsiveModal
-                    :inviteDialogOpen
+                    :open="inviteDialogOpen"
                     @update:open="inviteDialogOpen = $event"
                 >
                     <template #trigger>
@@ -121,7 +103,7 @@ function changeRole(userIndex: number, role: string) {
                     <template #title>Invitar a un miembro</template>
                     <template #default>
                         <form
-                            @submit.prevent="submit()"
+                            @submit.prevent="submitInvitation()"
                             id="invite-member-form"
                             class="flex *:grow gap-5"
                         >
@@ -130,10 +112,12 @@ function changeRole(userIndex: number, role: string) {
                                 <Input
                                     type="email"
                                     id="email"
-                                    v-model="form.email"
+                                    v-model="inviteMemberForm.email"
                                 />
-                                <ErrorMessage v-show="form.errors.email">
-                                    {{ form.errors.email }}
+                                <ErrorMessage
+                                    v-show="inviteMemberForm.errors.email"
+                                >
+                                    {{ inviteMemberForm.errors.email }}
                                 </ErrorMessage>
                             </div>
                             <div class="flex flex-col gap-2">
@@ -141,10 +125,12 @@ function changeRole(userIndex: number, role: string) {
                                 <Combobox
                                     :options="roles"
                                     placeholder="Seleccionar rol"
-                                    v-model="form.role"
+                                    v-model="inviteMemberForm.role"
                                 />
-                                <ErrorMessage v-show="form.errors.role">
-                                    {{ form.errors.role }}
+                                <ErrorMessage
+                                    v-show="inviteMemberForm.errors.role"
+                                >
+                                    {{ inviteMemberForm.errors.role }}
                                 </ErrorMessage>
                             </div>
                         </form>
@@ -176,17 +162,62 @@ function changeRole(userIndex: number, role: string) {
                             </TableCell>
                             <TableCell>{{ user.email }}</TableCell>
                             <TableCell>
-                                <Combobox
-                                    :options="roles"
-                                    :model-value="user.role"
-                                    @update:model-value="
-                                        changeRole(i, $event.value)
-                                    "
-                                />
+                                <ResponsiveModal
+                                    :open="changeRoleDialogOpen"
+                                    @update:open="changeRoleDialogOpen = $event"
+                                >
+                                    <template #trigger>
+                                        <Badge class="cursor-pointer">
+                                            {{ user.role }}
+                                        </Badge>
+                                    </template>
+                                    <template #title>
+                                        Cambiar rol de {{ user.name }}
+                                    </template>
+                                    <template #default>
+                                        <form
+                                            @submit.prevent="
+                                                submitChangeRole(user.id)
+                                            "
+                                            id="change-role-form"
+                                            class="flex *:grow gap-5"
+                                        >
+                                            <div class="flex flex-col gap-2">
+                                                <Label for="role">Rol</Label>
+                                                <Combobox
+                                                    :options="roles"
+                                                    placeholder="Seleccionar rol"
+                                                    v-model="
+                                                        changeMemberRoleForm.role
+                                                    "
+                                                />
+                                                <ErrorMessage
+                                                    v-show="
+                                                        changeMemberRoleForm
+                                                            .errors.role
+                                                    "
+                                                >
+                                                    {{
+                                                        changeMemberRoleForm
+                                                            .errors.role
+                                                    }}
+                                                </ErrorMessage>
+                                            </div>
+                                        </form>
+                                    </template>
+                                    <template #footer>
+                                        <Button
+                                            form="change-role-form"
+                                            type="submit"
+                                        >
+                                            Cambiar rol
+                                        </Button>
+                                    </template>
+                                </ResponsiveModal>
                             </TableCell>
                             <TableCell>
-                                <Button variant="ghost" size="icon">
-                                    <Ellipsis />
+                                <Button variant="destructive">
+                                    Eliminar
                                 </Button>
                             </TableCell>
                         </TableRow>
