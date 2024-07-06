@@ -14,6 +14,7 @@ PHP_VERSION = '8.3'
 
 [env]
 APP_ENV = 'production'
+APP_URL = 'https://campuscal-laravel.fly.dev'
 LOG_CHANNEL = 'stderr'
 LOG_LEVEL = 'info'
 LOG_STDERR_FORMATTER = 'Monolog\Formatter\JsonFormatter'
@@ -26,10 +27,9 @@ REDIS_CACHE_DB = 0
 APP_LOCALE = 'es'
 APP_FALLBACK_LOCALE = "en"
 APP_FAKER_LOCALE = "es_ES"
-GOOGLE_CLIENT_ID="263075495129-chloehuc0nomnpl58bot10avdupi4a93.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="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"
-GOOGLE_REDIRECT_URI="/auth/callback"
-
+GOOGLE_CLIENT_ID = "263075495129-chloehuc0nomnpl58bot10avdupi4a93.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET = "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"
+GOOGLE_REDIRECT_URI = "/auth/callback"
 
 
 [http_service]
