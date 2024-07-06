@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\UserInvited;
 use App\Notifications\TeamInvite;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Notification;
 
 class SendUserInviteNotification implements ShouldQueue
 {
@@ -22,6 +22,6 @@ class SendUserInviteNotification implements ShouldQueue
      */
     public function handle(UserInvited $event): void
     {
-        $event->user->notify(new TeamInvite());
+        Notification::locale('es')->send($event->user, new TeamInvite());
     }
 }
