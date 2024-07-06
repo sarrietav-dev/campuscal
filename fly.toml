@@ -8,27 +8,38 @@ primary_region = 'bog'
 console_command = 'php /var/www/html/artisan tinker'
 
 [build]
-  [build.args]
-    NODE_VERSION = '18'
-    PHP_VERSION = '8.3'
+[build.args]
+NODE_VERSION = '18'
+PHP_VERSION = '8.3'
 
 [env]
-  APP_ENV = 'production'
-  LOG_CHANNEL = 'stderr'
-  LOG_LEVEL = 'info'
-  LOG_STDERR_FORMATTER = 'Monolog\Formatter\JsonFormatter'
-  SESSION_DRIVER = 'cookie'
-  SESSION_SECURE_COOKIE = 'true'
+APP_ENV = 'production'
+APP_URL = 'https://campuscal-laravel.fly.dev'
+LOG_CHANNEL = 'stderr'
+LOG_LEVEL = 'info'
+LOG_STDERR_FORMATTER = 'Monolog\Formatter\JsonFormatter'
+SESSION_DRIVER = 'cookie'
+SESSION_SECURE_COOKIE = 'true'
+CACHE_STORE = 'redis'
+REDIS_CACHE_DB = 0
+DB_CONNECTION = 'pgsql'
+STORAGE_DRIVER = 's3'
+MAIL_MAILER = "resend"
 
 [http_service]
-  internal_port = 8000
-  force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
-  min_machines_running = 0
-  processes = ['app']
+internal_port = 8000
+force_https = true
+auto_stop_machines = true
+auto_start_machines = true
+min_machines_running = 0
+processes = ['app']
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
+memory = '1gb'
+cpu_kind = 'shared'
+cpus = 1
+
+[processes]
+app = ""
+cron = "cron -f"
+worker = "php artisan queue:listen"
