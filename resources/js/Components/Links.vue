@@ -30,4 +30,12 @@ import { BookMarked } from "lucide-vue-next";
     >
         Solicitudes
     </Link>
+    <Link
+        v-if="$page.props.can.viewTeam"
+        :href="route('teams.index')"
+        class="text-muted-foreground transition-colors hover:text-foreground [&.active]:font-bold"
+        :class="{ 'font-bold': $page.component === 'Members/Index' }"
+    >
+        Equipo
+    </Link>
 </template>

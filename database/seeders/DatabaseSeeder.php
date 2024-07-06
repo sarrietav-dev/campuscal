@@ -2,14 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Authorization\AppRoles;
 use App\Models\Appointment;
 use App\Models\Audience;
 use App\Models\Booking;
 use App\Models\Campus;
 use App\Models\File;
-use App\Models\Permission;
 use App\Models\Requester;
-use App\Models\Role;
 use App\Models\Space;
 use App\Models\SpaceResource;
 use App\Models\User;
@@ -22,30 +21,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
-        Permission::factory(10)->create();
-        $adminRole = Role::factory()->create([
-            'name' => 'admin',
-        ]);
-        $devRole = Role::factory()->create([
-            'name' => 'developer',
+        $this->call([
+            RolePermissionSeeder::class,
         ]);
 
-        User::factory()->hasAttached($adminRole)->create([
+        User::factory()->create([
+            'name' => 'Super Admin user',
+            'email' => 'super@campuscal.com',
+        ])->assignRole(AppRoles::SUPER_ADMIN);
+
+        User::factory()->create([
             'name' => 'Admin user',
             'email' => 'admin@campuscal.com',
-        ]);
+        ])->assignRole(AppRoles::ADMIN);
 
-        User::factory()->hasAttached($devRole)->create([
+        User::factory()->create([
             'name' => 'Developer user',
             'email' => 'dev@campuscal.com',
-        ]);
+        ])->assignRole(AppRoles::DEVELOPER);
 
         User::factory()->create([
             'name' => 'User',
             'email' => 'user@campuscal.com',
-        ]);
+        ])->assignRole(AppRoles::REQUESTER);
 
         $campuses = Campus::factory(5)
             ->has(File::factory()->count(3), 'images')

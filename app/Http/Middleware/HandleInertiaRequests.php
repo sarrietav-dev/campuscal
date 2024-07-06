@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Authorization\TeamPermissions;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -31,6 +32,9 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'can' => [
+                'viewTeam' => $request->user() ? $request->user()->can(TeamPermissions::VIEW_TEAM->value) : null,
+            ],
             'auth' => [
                 'user' => $request->user(),
             ],

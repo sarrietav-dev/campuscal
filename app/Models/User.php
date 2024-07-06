@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use App\Authorization\AppRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -49,33 +50,8 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
-    public function hasRole(string $role): bool
-    {
-        return $this->roles()->where('name', $role)->exists();
-    }
-
-    public function assignRole(string $role): void
-    {
-        $this->roles()->attach(Role::where('name', $role)->first());
-    }
-
-    public function revokeRole(string $role): void
-    {
-        $this->roles()->detach(Role::where('name', $role)->first());
-    }
-
     public function isAdmin(): bool
     {
-        return $this->hasRole('admin');
-    }
-
-    public function isDeveloper(): bool
-    {
-        return $this->hasRole('developer');
+        return $this->hasRole(AppRoles::SUPER_ADMIN) || $this->hasRole(AppRoles::ADMIN);
     }
 }

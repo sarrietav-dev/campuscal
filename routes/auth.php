@@ -1,5 +1,6 @@
 <?php
 
+use App\Authorization\AppRoles;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -52,7 +53,13 @@ Route::middleware('guest')->group(function () {
             'google_token' => $googleUser->token,
         ]);
 
-        $user->markEmailAsVerified();
+        if (! $user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
+
+        if (! $user->hasAnyRole([AppRoles::ADMIN, AppRoles::SUPER_ADMIN])) {
+            $user->assignRole(AppRoles::REQUESTER);
+        }
 
         auth()->login($user);
 

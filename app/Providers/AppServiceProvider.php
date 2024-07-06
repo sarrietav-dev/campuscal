@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Authorization\AppRoles;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +22,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::before(function (User $user) {
+            return $user->hasRole(AppRoles::SUPER_ADMIN) ? true : null;
+        });
+
+        Gate::define('view-dashboard', function (User $user) {
+            return $user->hasAnyRole([AppRoles::SUPER_ADMIN, AppRoles::ADMIN]);
+        });
+
+        Gate::define('viewPulse', function (User $user) {
+            if ($this->app->environment('production')) {
+                return $user->hasRole(AppRoles::DEVELOPER);
+            }
+
+            return true;
+        });
     }
 }

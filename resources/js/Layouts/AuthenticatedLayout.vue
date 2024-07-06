@@ -6,9 +6,11 @@ import ThemeToggle from "@/Components/ThemeToggle.vue";
 import { Button } from "@/Components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/Components/ui/sheet";
 import { Menu } from "lucide-vue-next";
+import { Toaster } from "@/Components/ui/sonner";
 </script>
 
 <template>
+    <Toaster />
     <div class="font-sans text-foreground bg-background">
         <div
             className="flex min-h-screen items-center justify-center font-sans"

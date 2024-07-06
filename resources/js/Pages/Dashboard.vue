@@ -112,7 +112,7 @@ interface MostRequestedSpace {
                                                 </template>
                                                 <template #error>
                                                     <span
-                                                        class="bg-red-500 absolute size-12 aspect-square"
+                                                        class="bg-red-500 size-12 aspect-square rounded-lg"
                                                     ></span>
                                                 </template>
                                             </UseImage>

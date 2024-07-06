@@ -6,6 +6,7 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import { VueQueryPlugin } from "@tanstack/vue-query";
+import { i18nVue } from "laravel-vue-i18n";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -19,6 +20,12 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(i18nVue, {
+                resolve: async (lang: string) => {
+                    const langs = import.meta.glob("../../lang/*.json");
+                    return await langs[`../../lang/${lang}.json`]();
+                },
+            })
             .use(VueQueryPlugin)
             .use(ZiggyVue)
             .mount(el);
