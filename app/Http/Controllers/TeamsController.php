@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Authorization\AppRoles;
 use App\Authorization\TeamPermissions;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 
@@ -21,6 +21,7 @@ class TeamsController extends Controller
 
         return Inertia::render('Team/Index', [
             'roles' => $roles,
+            'users' => User::withoutRole(AppRoles::REQUESTER)->with('roles:name')->select(['id', 'name', 'email'])->get(),
         ]);
     }
 

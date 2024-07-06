@@ -24,13 +24,26 @@ const inviteDialogOpen = ref(false);
 const changeRoleDialogOpen = ref(false);
 
 const props = defineProps<{
-    roles: { id: number; name: string; display_name: string }[];
+    roles: { name: string }[];
+    users: {
+        id: number;
+        name: string;
+        email: string;
+        roles: { name: string }[];
+    }[];
 }>();
+
+const display_names: { [k: string]: string } = {
+    admin: "Administrador",
+    super_admin: "Super Administrador",
+    developer: "Desarrollador",
+    requester: "Solicitante",
+};
 
 const roles = computed(() =>
     props.roles.map((role) => ({
         value: role.name,
-        label: role.display_name,
+        label: display_names[role.name],
     })),
 );
 
@@ -42,27 +55,6 @@ const inviteMemberForm = useForm({
 const changeMemberRoleForm = useForm({
     role: "",
 });
-
-const users = ref([
-    {
-        id: 1,
-        name: "John Doe",
-        email: "john@doe.com",
-        role: "admin",
-    },
-    {
-        id: 2,
-        name: "Jane Doe",
-        email: "jsakdljs@aklsdj.com",
-        role: "admin",
-    },
-    {
-        id: 3,
-        name: "John Smith",
-        email: "kasld@asjd",
-        role: "developer",
-    },
-]);
 
 function submitInvitation() {
     inviteMemberForm.post(route("teams.invite"), {
@@ -168,7 +160,11 @@ function submitChangeRole(userId: number) {
                                 >
                                     <template #trigger>
                                         <Badge class="cursor-pointer">
-                                            {{ user.role }}
+                                            {{
+                                                display_names[
+                                                    user.roles[0].name
+                                                ]
+                                            }}
                                         </Badge>
                                     </template>
                                     <template #title>
