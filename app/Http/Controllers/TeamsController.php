@@ -17,11 +17,11 @@ class TeamsController extends Controller
             return redirect()->route('dashboard');
         }
 
-        $roles = Role::query()->select(['name'])->get();
+        $roles = Role::where('name', '!=', AppRoles::DEVELOPER)->get(['name']);
 
         return Inertia::render('Team/Index', [
             'roles' => $roles,
-            'users' => User::withoutRole(AppRoles::REQUESTER)->with('roles:name')->select(['id', 'name', 'email'])->get(),
+            'users' => User::withoutRole([AppRoles::REQUESTER, AppRoles::DEVELOPER])->with('roles:name')->select(['id', 'name', 'email'])->get(),
         ]);
     }
 
