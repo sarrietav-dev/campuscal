@@ -42,7 +42,7 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
     Route::post('/team/invite', [\App\Http\Controllers\TeamsController::class, 'invite'])
         ->name('teams.invite')->middleware('permission:invite-member');
 
-    Route::delete('/team/{user}/remove', [\App\Http\Controllers\TeamsController::class, 'remove'])
+    Route::delete('/team/{user}/remove', [\App\Http\Controllers\TeamsController::class, 'removeFromTeam'])
         ->name('teams.remove')->middleware('permission:remove-member');
 });
 

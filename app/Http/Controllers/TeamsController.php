@@ -49,7 +49,7 @@ class TeamsController extends Controller
         ]);
     }
 
-    public function remove(Request $request)
+    public function removeFromTeam(User $user)
     {
         if (auth()->user()->cannot(TeamPermissions::REMOVE_MEMBER->value)) {
             return \response()->json([
@@ -57,13 +57,13 @@ class TeamsController extends Controller
             ], 403);
         }
 
-        $validated = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
-        ]);
+        if ($user->hasRole(AppRoles::DEVELOPER)) {
+            return \response()->json([
+                'message' => 'You cannot remove a developer',
+            ], 403);
+        }
 
-        $user = User::find($validated['user_id']);
-
-        $user->delete();
+        $user->syncRoles([AppRoles::REQUESTER]);
 
         return \response()->json([
             'message' => 'User removed successfully',

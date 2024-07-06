@@ -19,6 +19,18 @@ import { Input } from "@/Components/ui/input";
 import ErrorMessage from "@/Components/ErrorMessage.vue";
 import Combobox from "@/Components/Combobox.vue";
 import { Badge } from "@/Components/ui/badge";
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogTrigger,
+    AlertDialogDescription,
+    AlertDialogTitle,
+    AlertDialogAction,
+    AlertDialogFooter,
+    AlertDialogCancel,
+    AlertDialogHeader,
+} from "@/Components/ui/alert-dialog";
+import axios from "axios";
 
 const inviteDialogOpen = ref(false);
 const changeRoleDialogOpen = ref(false);
@@ -75,6 +87,11 @@ function submitChangeRole(userId: number) {
             router.reload();
         },
     });
+}
+
+async function handleDelete(userId: number) {
+    await axios.delete(route("teams.remove", { user: userId }));
+    router.reload();
 }
 </script>
 
@@ -227,16 +244,41 @@ function submitChangeRole(userId: number) {
                                 </ResponsiveModal>
                             </TableCell>
                             <TableCell>
-                                <Button
-                                    :disabled="
-                                        $page.props.auth.user.email ===
-                                        user.email
-                                    "
-                                    variant="destructive"
-                                    class="select-none"
-                                >
-                                    Eliminar
-                                </Button>
+                                <AlertDialog>
+                                    <AlertDialogTrigger>
+                                        <Button
+                                            :disabled="
+                                                $page.props.auth.user.email ===
+                                                user.email
+                                            "
+                                            variant="destructive"
+                                            class="select-none"
+                                        >
+                                            Eliminar
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>
+                                                Eliminar miembro
+                                            </AlertDialogTitle>
+                                        </AlertDialogHeader>
+                                        <AlertDialogDescription>
+                                            ¿Estás seguro de que deseas eliminar
+                                            a {{ user.name }}?
+                                        </AlertDialogDescription>
+                                        <AlertDialogFooter>
+                                            <AlertDialogAction
+                                                @click="handleDelete(user.id)"
+                                            >
+                                                Sí
+                                            </AlertDialogAction>
+                                            <AlertDialogCancel
+                                                >No
+                                            </AlertDialogCancel>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </TableCell>
                         </TableRow>
                     </TableBody>
