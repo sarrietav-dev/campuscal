@@ -31,6 +31,7 @@ import {
     AlertDialogHeader,
 } from "@/Components/ui/alert-dialog";
 import { toast } from "vue-sonner";
+import { trans } from "laravel-vue-i18n";
 
 const inviteDialogOpen = ref(false);
 const changeRoleDialogOpen = ref(false);
@@ -45,17 +46,10 @@ const props = defineProps<{
     }[];
 }>();
 
-const display_names: { [k: string]: string } = {
-    admin: "Administrador",
-    super_admin: "Super Administrador",
-    developer: "Desarrollador",
-    requester: "Solicitante",
-};
-
 const roles = computed(() =>
     props.roles.map((role) => ({
         value: role.name,
-        label: display_names[role.name],
+        label: trans(role.name),
     })),
 );
 
@@ -75,7 +69,7 @@ function submitInvitation() {
             inviteDialogOpen.value = false;
             inviteMemberForm.reset();
             router.reload();
-            toast.success("Invitación enviada exitosamente");
+            toast.success(trans("Invite sent successfully"));
         },
     });
 }
@@ -87,7 +81,7 @@ function submitChangeRole(userId: number) {
             changeRoleDialogOpen.value = false;
             changeMemberRoleForm.reset();
             router.reload();
-            toast.success("Rol cambiado exitosamente");
+            toast.success(trans("User role updated successfully"));
         },
     });
 }
@@ -97,7 +91,7 @@ async function handleDelete(userId: number) {
         preserveScroll: true,
         onSuccess: () => {
             router.reload();
-            toast.success("Miembro eliminado exitosamente");
+            toast.success(trans("User removed from the team successfully"));
         },
         onError: () => {
             toast.error("No se pudo eliminar al miembro");
@@ -111,16 +105,18 @@ async function handleDelete(userId: number) {
         <div class="container max-w-4xl">
             <div class="flex align-center mb-6">
                 <Text variant="heading4" class="text-center mr-auto">
-                    Equipo
+                    {{ $t("Team") }}
                 </Text>
                 <ResponsiveModal
                     :open="inviteDialogOpen"
                     @update:open="inviteDialogOpen = $event"
                 >
                     <template #trigger>
-                        <Button>Invitar miembro</Button>
+                        <Button>{{ $t("Invite member") }}</Button>
                     </template>
-                    <template #title>Invitar a un miembro</template>
+                    <template #title
+                        >{{ $t("Invite a member to join the team") }}
+                    </template>
                     <template #default>
                         <form
                             @submit.prevent="submitInvitation()"
@@ -128,7 +124,7 @@ async function handleDelete(userId: number) {
                             class="flex *:grow gap-5"
                         >
                             <div class="flex flex-col gap-2">
-                                <Label for="email">Email</Label>
+                                <Label for="email">{{ $t("Email") }}</Label>
                                 <Input
                                     type="email"
                                     id="email"
@@ -141,10 +137,10 @@ async function handleDelete(userId: number) {
                                 </ErrorMessage>
                             </div>
                             <div class="flex flex-col gap-2">
-                                <Label for="role">Rol</Label>
+                                <Label for="role">{{ $t("Role") }}</Label>
                                 <Combobox
                                     :options="roles"
-                                    placeholder="Seleccionar rol"
+                                    :placeholder="trans('Select a role')"
                                     v-model="inviteMemberForm.role"
                                 />
                                 <ErrorMessage
@@ -157,7 +153,7 @@ async function handleDelete(userId: number) {
                     </template>
                     <template #footer>
                         <Button form="invite-member-form" type="submit">
-                            Enviar invitación
+                            {{ $t("Send invite") }}
                         </Button>
                     </template>
                 </ResponsiveModal>
@@ -166,10 +162,10 @@ async function handleDelete(userId: number) {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Nombre</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Rol</TableHead>
-                            <TableHead>Acciones</TableHead>
+                            <TableHead>{{ $t("Name") }}</TableHead>
+                            <TableHead>{{ $t("Email") }}</TableHead>
+                            <TableHead>{{ $t("Role") }}</TableHead>
+                            <TableHead>{{ $t("Actions") }}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -192,7 +188,7 @@ async function handleDelete(userId: number) {
                                     class="cursor-default select-none"
                                     variant="outline"
                                 >
-                                    {{ display_names[user.roles[0].name] }}
+                                    {{ $t(user.roles[0].name) }}
                                 </Badge>
                                 <ResponsiveModal
                                     v-else
@@ -204,15 +200,15 @@ async function handleDelete(userId: number) {
                                             variant="secondary"
                                             class="cursor-pointer select-none"
                                         >
-                                            {{
-                                                display_names[
-                                                    user.roles[0].name
-                                                ]
-                                            }}
+                                            {{ $t(user.roles[0].name) }}
                                         </Badge>
                                     </template>
                                     <template #title>
-                                        Cambiar rol de {{ user.name }}
+                                        {{
+                                            $t("Change role of the :user", {
+                                                user: user.name,
+                                            })
+                                        }}
                                     </template>
                                     <template #default>
                                         <form
@@ -223,10 +219,14 @@ async function handleDelete(userId: number) {
                                             class="flex *:grow gap-5"
                                         >
                                             <div class="flex flex-col gap-2">
-                                                <Label for="role">Rol</Label>
+                                                <Label for="role">
+                                                    {{ $t("Role") }}
+                                                </Label>
                                                 <Combobox
                                                     :options="roles"
-                                                    placeholder="Seleccionar rol"
+                                                    :placeholder="
+                                                        trans('Select a role')
+                                                    "
                                                     v-model="
                                                         changeMemberRoleForm.role
                                                     "
@@ -250,7 +250,7 @@ async function handleDelete(userId: number) {
                                             form="change-role-form"
                                             type="submit"
                                         >
-                                            Cambiar rol
+                                            {{ $t("Change role") }}
                                         </Button>
                                     </template>
                                 </ResponsiveModal>
@@ -266,27 +266,31 @@ async function handleDelete(userId: number) {
                                             variant="destructive"
                                             class="select-none"
                                         >
-                                            Eliminar
+                                            {{ $t("Remove") }}
                                         </Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
                                         <AlertDialogHeader>
                                             <AlertDialogTitle>
-                                                Eliminar miembro
+                                                {{ $t("Remove member") }}
                                             </AlertDialogTitle>
                                         </AlertDialogHeader>
                                         <AlertDialogDescription>
-                                            ¿Estás seguro de que deseas eliminar
-                                            a {{ user.name }}?
+                                            {{
+                                                $t(
+                                                    "Are you sure you want to remove :user from the team?",
+                                                    { user: user.name },
+                                                )
+                                            }}
                                         </AlertDialogDescription>
                                         <AlertDialogFooter>
                                             <AlertDialogAction
                                                 @click="handleDelete(user.id)"
                                             >
-                                                Sí
+                                                {{ $t("Yes") }}
                                             </AlertDialogAction>
-                                            <AlertDialogCancel
-                                                >No
+                                            <AlertDialogCancel>
+                                                {{ $t("No") }}
                                             </AlertDialogCancel>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
