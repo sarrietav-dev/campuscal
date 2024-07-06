@@ -85,7 +85,7 @@ interface MostRequestedSpace {
                     </div>
                 </template>
             </div>
-            <div class="col-span-12 grid grid-cols-subgrid">
+            <div class="col-span-12 flex flex-col md:grid grid-cols-subgrid">
                 <div class="col-span-3">
                     <div class="py-6 text-accent-foreground">
                         <div class="text-sm font-semibold">
