@@ -154,12 +154,27 @@ function submitChangeRole(userId: number) {
                             </TableCell>
                             <TableCell>{{ user.email }}</TableCell>
                             <TableCell>
+                                <Badge
+                                    v-if="
+                                        $page.props.auth.user.email ===
+                                        user.email
+                                    "
+                                    class="cursor-default select-none"
+                                    variant="outline"
+                                >
+                                    {{ display_names[user.roles[0].name] }}
+                                </Badge>
                                 <ResponsiveModal
+                                    v-else
                                     :open="changeRoleDialogOpen"
                                     @update:open="changeRoleDialogOpen = $event"
+                                    disabled
                                 >
                                     <template #trigger>
-                                        <Badge class="cursor-pointer">
+                                        <Badge
+                                            variant="secondary"
+                                            class="cursor-pointer select-none"
+                                        >
                                             {{
                                                 display_names[
                                                     user.roles[0].name
@@ -212,7 +227,14 @@ function submitChangeRole(userId: number) {
                                 </ResponsiveModal>
                             </TableCell>
                             <TableCell>
-                                <Button variant="destructive">
+                                <Button
+                                    :disabled="
+                                        $page.props.auth.user.email ===
+                                        user.email
+                                    "
+                                    variant="destructive"
+                                    class="select-none"
+                                >
                                     Eliminar
                                 </Button>
                             </TableCell>
