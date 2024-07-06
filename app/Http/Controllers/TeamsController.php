@@ -22,7 +22,11 @@ class TeamsController extends Controller
 
         return Inertia::render('Team/Index', [
             'roles' => $roles,
-            'users' => User::withoutRole([AppRoles::REQUESTER, AppRoles::DEVELOPER])->with('roles:name')->select(['id', 'name', 'email'])->get(),
+            'users' => User::withoutRole([AppRoles::REQUESTER, AppRoles::DEVELOPER])
+                ->whereNotNull('email_verified_at')
+                ->with('roles:name')
+                ->select(['id', 'name', 'email'])
+                ->get(),
         ]);
     }
 
@@ -40,7 +44,7 @@ class TeamsController extends Controller
         ]);
 
         $tempUser = User::create([
-            'name' => "",
+            'name' => '',
             'email' => $validated['email'],
         ]);
 
