@@ -52,9 +52,7 @@ class TeamsController extends Controller
 
         UserInvited::dispatch($tempUser);
 
-        return \response()->json([
-            'message' => __('User invited successfully'),
-        ]);
+        return redirect()->back()->with('message', __('User invited successfully'));
     }
 
     public function removeFromTeam(User $user)
