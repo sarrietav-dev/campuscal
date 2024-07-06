@@ -26,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasRole(AppRoles::SUPER_ADMIN) ? true : null;
         });
 
+        Gate::define('view-dashboard', function (User $user) {
+            return $user->hasAnyRole([AppRoles::SUPER_ADMIN, AppRoles::ADMIN]);
+        });
+
         Gate::define('viewPulse', function (User $user) {
             if ($this->app->environment('production')) {
                 return $user->hasRole(AppRoles::DEVELOPER);
