@@ -55,7 +55,9 @@ const open = ref(false);
                             v-for="role in props.roles"
                             :value="role.name"
                             class="space-y-1 flex flex-col items-start px-4 py-2"
-                            @select="() => $emit('update:model', role.name)"
+                            @select="
+                                () => $emit('update:modelValue', role.name)
+                            "
                         >
                             <p>{{ role.display_name }}</p>
                             <p

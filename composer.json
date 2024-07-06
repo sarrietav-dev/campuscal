@@ -25,6 +25,7 @@
         "barryvdh/laravel-debugbar": "^3.13",
         "barryvdh/laravel-ide-helper": "^3.0",
         "fakerphp/faker": "^1.23",
+        "fly-apps/dockerfile-laravel": "^1.0",
         "laravel/breeze": "^2.1",
         "laravel/pint": "^1.16",
         "laravel/sail": "^1.26",
