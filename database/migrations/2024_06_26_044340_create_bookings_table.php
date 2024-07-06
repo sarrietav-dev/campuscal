@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('agreement_contract');
             $table->integer('assistance');
             $table->string('observations')->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected']);
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
         });
     }
 
