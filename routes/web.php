@@ -44,6 +44,9 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
 
     Route::delete('/team/{user}/remove', [\App\Http\Controllers\TeamsController::class, 'removeFromTeam'])
         ->name('teams.remove')->middleware('permission:remove-member');
+
+    Route::patch('/team/{user}/role', [\App\Http\Controllers\TeamsController::class, 'updateRole'])
+        ->name('teams.role')->middleware('permission:update-role');
 });
 
 Route::resource('bookings', BookingController::class)

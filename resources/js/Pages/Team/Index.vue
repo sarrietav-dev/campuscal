@@ -30,7 +30,7 @@ import {
     AlertDialogCancel,
     AlertDialogHeader,
 } from "@/Components/ui/alert-dialog";
-import axios from "axios";
+import { toast } from "vue-sonner";
 
 const inviteDialogOpen = ref(false);
 const changeRoleDialogOpen = ref(false);
@@ -74,24 +74,35 @@ function submitInvitation() {
         onSuccess: () => {
             inviteDialogOpen.value = false;
             inviteMemberForm.reset();
+            router.reload();
+            toast.success("Invitación enviada exitosamente");
         },
     });
 }
 
 function submitChangeRole(userId: number) {
-    changeMemberRoleForm.post(route("teams.change-role", { user: userId }), {
+    changeMemberRoleForm.patch(route("teams.role", { user: userId }), {
         preserveScroll: true,
         onSuccess: () => {
             changeRoleDialogOpen.value = false;
             changeMemberRoleForm.reset();
             router.reload();
+            toast.success("Rol cambiado exitosamente");
         },
     });
 }
 
 async function handleDelete(userId: number) {
-    await axios.delete(route("teams.remove", { user: userId }));
-    router.reload();
+    router.delete(route("teams.remove", { user: userId }), {
+        preserveScroll: true,
+        onSuccess: () => {
+            router.reload();
+            toast.success("Miembro eliminado exitosamente");
+        },
+        onError: () => {
+            toast.error("No se pudo eliminar al miembro");
+        },
+    });
 }
 </script>
 
@@ -165,8 +176,10 @@ async function handleDelete(userId: number) {
                         <TableRow v-for="(user, i) in users" :key="user.email">
                             <TableCell>
                                 <div class="flex items-center gap-2">
-                                    <CircleUserRound />
-                                    {{ user.name }}
+                                    <CircleUserRound class="size-6" />
+                                    <span class="truncate">
+                                        {{ user.name }}
+                                    </span>
                                 </div>
                             </TableCell>
                             <TableCell>{{ user.email }}</TableCell>
@@ -185,7 +198,6 @@ async function handleDelete(userId: number) {
                                     v-else
                                     :open="changeRoleDialogOpen"
                                     @update:open="changeRoleDialogOpen = $event"
-                                    disabled
                                 >
                                     <template #trigger>
                                         <Badge

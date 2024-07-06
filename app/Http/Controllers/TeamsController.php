@@ -28,8 +28,8 @@ class TeamsController extends Controller
     public function invite(Request $request)
     {
         if (auth()->user()->cannot(TeamPermissions::INVITE_MEMBER->value)) {
-            return \response()->json([
-                'message' => 'You are not authorized to invite members',
+            return \redirect()->back()->withErrors([
+                'message' => __('You are not authorized to invite members'),
             ], 403);
         }
 
@@ -45,28 +45,43 @@ class TeamsController extends Controller
         $tempUser->syncRoles([$validated['role']]);
 
         return \response()->json([
-            'message' => 'User invited successfully',
+            'message' => __('User invited successfully'),
         ]);
     }
 
     public function removeFromTeam(User $user)
     {
         if (auth()->user()->cannot(TeamPermissions::REMOVE_MEMBER->value)) {
-            return \response()->json([
-                'message' => 'You are not authorized to remove members',
+            return redirect()->back()->withErrors([
+                'message' => __('You are not authorized to remove members'),
             ], 403);
         }
 
         if ($user->hasRole(AppRoles::DEVELOPER)) {
-            return \response()->json([
-                'message' => 'You cannot remove a developer',
+            return redirect()->back()->withErrors([
+                'message' => __('You cannot remove developers from the team'),
             ], 403);
         }
 
         $user->syncRoles([AppRoles::REQUESTER]);
 
-        return \response()->json([
-            'message' => 'User removed successfully',
+        return redirect()->back()->with('message', __('User removed from the team successfully'));
+    }
+
+    public function updateRole(Request $request, User $user)
+    {
+        if (auth()->user()->cannot(TeamPermissions::UPDATE_ROLE->value)) {
+            return redirect()->back()->withErrors([
+                'message' => __('You are not authorized to update user roles'),
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'role' => ['required', 'exists:Spatie\Permission\Models\Role,name'],
         ]);
+
+        $user->syncRoles([$validated['role']]);
+
+        return redirect()->back()->with('message', __('User role updated successfully'));
     }
 }
