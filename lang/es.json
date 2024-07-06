@@ -25,5 +25,9 @@
     "admin": "Administrador",
     "super_admin": "Super Administrador",
     "developer": "Desarrollador",
-    "requester": "Solicitante"
+    "requester": "Solicitante",
+    "mail.invite_subject": "Has sido invitado a unirte a un equipo en CampusCal",
+    "mail.invite_hello": "Hola!",
+    "mail.accept_invite": "Aceptar invitación",
+    "mail.invite_disclaimer": "Si no deseas unirte al equipo, simplemente ignora este mensaje."
 }

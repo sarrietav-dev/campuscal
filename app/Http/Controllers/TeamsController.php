@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Authorization\AppRoles;
 use App\Authorization\TeamPermissions;
+use App\Events\UserInvited;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -39,10 +40,13 @@ class TeamsController extends Controller
         ]);
 
         $tempUser = User::create([
+            'name' => "",
             'email' => $validated['email'],
         ]);
 
         $tempUser->syncRoles([$validated['role']]);
+
+        UserInvited::dispatch($tempUser);
 
         return \response()->json([
             'message' => __('User invited successfully'),
