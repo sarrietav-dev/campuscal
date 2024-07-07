@@ -7,7 +7,6 @@ use App\Http\Controllers\CampusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpaceController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function () {
     Route::resource('campuses', CampusController::class)
@@ -26,15 +25,8 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
     Route::patch('bookings/{booking}/reject', [BookingController::class, 'rejectBooking'])
         ->name('bookings.reject');
 
-    Route::get('/dashboard', function (\App\Services\BookingStatisticsService $bookingService, \App\Services\SpaceStatisticsService $spaceService) {
-        return Inertia::render('Dashboard', [
-            'total_bookings_current_month' => $bookingService->getTotalBookingsForCurrentMonth(),
-            'pending_bookings' => $bookingService->getTotalPendingBookings(),
-            'approved_bookings' => $bookingService->getTotalApprovedBookings(),
-            'rejected_bookings' => $bookingService->getTotalRejectedBookings(),
-            'most_requested_spaces' => $spaceService->getMostRequestedSpaces(),
-        ]);
-    })->name('dashboard');
+    Route::get('/dashboard',
+        \App\Http\Controllers\DashboardController::class)->name('dashboard');
 
     Route::get('/team', [\App\Http\Controllers\TeamsController::class, 'index'])
         ->name('teams.index')->middleware('permission:view-team');
