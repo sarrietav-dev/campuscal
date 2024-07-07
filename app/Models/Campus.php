@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Campus extends Model
 {
@@ -20,8 +20,8 @@ class Campus extends Model
         return $this->hasMany(Space::class);
     }
 
-    public function images(): BelongsToMany
+    public function images(): MorphMany
     {
-        return $this->belongsToMany(File::class);
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

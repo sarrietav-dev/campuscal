@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCampusRequest;
 use App\Models\Campus;
+use Cache;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -19,9 +20,9 @@ class CampusController extends Controller
      */
     public function index(): Response
     {
-        $campuses = Campus::query()->with('images', function (Builder $query) {
-            $query->select(['path'])->limit(1);
-        })->select(['id', 'name'])->get();
+        $campuses = Campus::query()->with(['images' => function (Builder $query) {
+            $query->select(['url', 'imageable_id'])->limit(1);
+        }])->select(['id', 'name'])->get();
 
         return Inertia::render('Spaces/Campuses', [
             'campuses' => $campuses,
@@ -31,7 +32,7 @@ class CampusController extends Controller
     public function getAll(): JsonResponse
     {
         $campuses = Campus::query()->with('images', function (Builder $query) {
-            $query->select(['path'])->limit(1);
+            $query->select(['url'])->limit(1);
         })->select(['id', 'name'])->get();
 
         return response()->json($campuses);
@@ -41,17 +42,45 @@ class CampusController extends Controller
     {
         $images = $request->query('images', 'all');
 
-        $spaces = \Cache::remember('campus_'.$campus->id.'_spaces', 60 * 30, function () use ($campus, $images) {
+        $spaces = Cache::remember('campus_'.$campus->id.'_spaces', 60 * 30, function () use ($campus, $images) {
             return $campus->spaces()->with('images', function (Builder $query) use ($images) {
                 if ($images === 'all') {
-                    $query->select(['path']);
+                    $query->select(['url']);
                 } else {
-                    $query->select(['path'])->limit(1);
+                    $query->select(['url'])->limit(1);
                 }
             })->get();
         });
 
         return response()->json($spaces);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(CreateCampusRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $files = $request->file('images');
+        $urls = [];
+
+        if ($request->hasFile('images')) {
+            foreach ($files as $file) {
+                $url = $file->store();
+                $urls[] = $url;
+            }
+        }
+
+        $campus = Campus::create([
+            'name' => $validated['name'],
+        ]);
+
+        $campus->images()->createMany(array_map(function ($url) {
+            return ['url' => Storage::url($url)];
+        }, $urls));
+
+        return redirect(route('campuses.index'));
     }
 
     /**
@@ -63,41 +92,13 @@ class CampusController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(CreateCampusRequest $request): RedirectResponse
-    {
-        $validated = $request->validated();
-
-        $files = $request->file('images');
-        $paths = [];
-
-        if ($request->hasFile('images')) {
-            foreach ($files as $file) {
-                $path = $file->store();
-                $paths[] = $path;
-            }
-        }
-
-        $campus = Campus::create([
-            'name' => $validated['name'],
-        ]);
-
-        $campus->images()->createMany(array_map(function ($path) {
-            return ['path' => Storage::url($path)];
-        }, $paths));
-
-        return redirect(route('campuses.index'));
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(Campus $campus): Response
     {
-        $spaces = $campus->spaces()->with('images', function (Builder $query) {
-            $query->select(['path'])->limit(1);
-        })->get();
+        $spaces = $campus->spaces()->with(['images' => function (Builder $query) {
+            $query->select(['url', 'imageable_id'])->limit(1);
+        }])->get();
 
         return Inertia::render('Spaces/Campus', [
             'spaces' => $spaces,

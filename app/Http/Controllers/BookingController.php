@@ -67,7 +67,7 @@ class BookingController extends Controller
         );
 
         $booking->agreementContracts()->create([
-            'path' => Storage::url($request->file('agreement_contract_file')->store()),
+            'url' => Storage::url($request->file('agreement_contract_file')->store()),
         ]);
 
         $booking->requester()->create([
@@ -102,7 +102,7 @@ class BookingController extends Controller
     {
         return Inertia::render('Booking/Show', [
             'booking' => $booking->load(['requester', 'audience', 'appointments:id,date_start,date_end,space_id,booking_id', 'appointments.space:name,id', 'appointments.space.images' => function ($query) {
-                $query->select(['path'])->limit(1);
+                $query->select(['url', 'imageable_id'])->limit(1);
             }, 'agreementContracts']),
         ]);
     }

@@ -40,7 +40,7 @@ class SpaceController extends Controller
         );
 
         $space->images()->createMany(
-            collect($request->images)->map(fn ($image) => ['path' => Storage::url($image->store())])->toArray()
+            collect($request->images)->map(fn ($image) => ['url' => Storage::url($image->store())])->toArray()
         );
 
         return redirect()->route('campuses.show', $space->campus_id);

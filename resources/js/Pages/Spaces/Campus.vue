@@ -8,7 +8,7 @@ const spaces = defineProps<{
     spaces: {
         id: number;
         name: string;
-        images: { path: string }[];
+        images: { url: string }[];
     }[];
 }>();
 </script>
@@ -26,7 +26,7 @@ const spaces = defineProps<{
                     <SpaceCard
                         :title="space.name"
                         :key="space.id"
-                        :image-src="space.images[0].path"
+                        :image-src="space.images[0].url"
                     />
                 </Link>
             </div>

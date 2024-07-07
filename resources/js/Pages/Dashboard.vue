@@ -52,7 +52,7 @@ interface MostRequestedSpace {
     id: number;
     name: string;
     appointments_count: number;
-    images: { path: string }[];
+    images: { url: string }[];
 }
 </script>
 
@@ -102,7 +102,7 @@ interface MostRequestedSpace {
                                         <div class="flex items center">
                                             <UseImage
                                                 class="size-12 rounded-lg"
-                                                :src="space.images[0].path"
+                                                :src="space.images[0].url"
                                                 alt="space.name"
                                             >
                                                 <template #loading>

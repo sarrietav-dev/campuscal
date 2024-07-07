@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
         ])->assignRole(AppRoles::REQUESTER);
 
         $campuses = Campus::factory(5)
-            ->has(File::factory()->count(3), 'images')
+            ->hasImages(3)
             ->create();
 
         $space_resources = SpaceResource::factory(10)->create();
@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
         $spaces = Space::factory(10)
             ->recycle($campuses)
             ->recycle($space_resources)
-            ->has(File::factory()->count(3), 'images')
+            ->hasImages(5)
             ->create();
 
         $audiences = Audience::factory(5)->sequence(

@@ -11,20 +11,10 @@ class File extends Model
     use HasFactory;
 
     protected $fillable = [
-        'path',
+        'url',
         'type',
         'size',
     ];
-
-    public function space(): BelongsToMany
-    {
-        return $this->belongsToMany(Space::class);
-    }
-
-    public function campus(): BelongsToMany
-    {
-        return $this->belongsToMany(Campus::class);
-    }
 
     public function booking(): BelongsToMany
     {

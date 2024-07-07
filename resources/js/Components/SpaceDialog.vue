@@ -110,7 +110,7 @@ function handleCreate() {
             ).toDate(getLocalTimeZone()),
         },
         id: spaceId.value,
-        imageUrl: space.value?.images[0].path ?? "",
+        imageUrl: space.value?.images[0].url ?? "",
         name: space.value?.name ?? "",
     });
     emit("update:open", false);
@@ -133,7 +133,7 @@ function handleCreate() {
             >
                 <SpaceCard
                     v-for="campus in campuses"
-                    :image-src="campus.images[0].path"
+                    :image-src="campus.images[0].url"
                     :title="campus.name"
                     :key="campus.id"
                     :height="100"
@@ -176,7 +176,7 @@ function handleCreate() {
                 :key="space.id"
             >
                 <SpaceCard
-                    :image-src="space.images[0].path"
+                    :image-src="space.images[0].url"
                     :title="space.name"
                     alt="Space Image"
                     :height="100"
@@ -199,9 +199,9 @@ function handleCreate() {
                             <template v-if="space.images.length > 0">
                                 <CarouselItem
                                     v-for="image in space.images"
-                                    :key="image.path"
+                                    :key="image.url"
                                 >
-                                    <CarouselImage :image="image.path" />
+                                    <CarouselImage :image="image.url" />
                                 </CarouselItem>
                             </template>
                             <CarouselItem v-else>

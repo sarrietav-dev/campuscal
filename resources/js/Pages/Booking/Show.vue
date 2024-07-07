@@ -22,14 +22,14 @@ const { booking } = defineProps<{
     booking: {
         agreement_contract: boolean;
         agreement_contracts: {
-            path: string;
+            url: string;
         }[];
         appointments: {
             booking_id: number;
             date_end: string;
             date_start: string;
             space_id: number;
-            space: { name: string; images: { path: string }[] };
+            space: { name: string; images: { url: string }[] };
         }[];
         assistance: number;
         audience: { name: string }[];
@@ -115,7 +115,7 @@ const { booking } = defineProps<{
                                 se llevará acabo dentro del marco de un convenio
                                 o contrato interadministrativo:
                                 <a
-                                    :href="booking.agreement_contracts[0].path"
+                                    :href="booking.agreement_contracts[0].url"
                                     target="_blank"
                                 >
                                     <strong class="font-semibold">
@@ -157,7 +157,7 @@ const { booking } = defineProps<{
                                         appointment.date_end,
                                     ).toLocaleTimeString()}`,
                                 }"
-                                :image-url="appointment.space.images[0].path"
+                                :image-url="appointment.space.images[0].url"
                                 :space-name="appointment.space.name"
                             />
                         </li>

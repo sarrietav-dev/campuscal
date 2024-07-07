@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Space extends Model
 {
@@ -33,8 +34,8 @@ class Space extends Model
         return $this->hasMany(Appointment::class);
     }
 
-    public function images(): BelongsToMany
+    public function images(): MorphMany
     {
-        return $this->belongsToMany(File::class, 'space_file');
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

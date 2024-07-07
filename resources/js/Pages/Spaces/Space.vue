@@ -14,7 +14,7 @@ const props = defineProps<{
     space: {
         id: number;
         name: string;
-        images: { path: string }[];
+        images: { url: string }[];
         resources: { name: string }[];
         campus_id: number;
         capacity: string;
@@ -31,9 +31,9 @@ const props = defineProps<{
                         <template v-if="props.space.images.length > 0">
                             <CarouselItem
                                 v-for="image in props.space.images"
-                                :key="image.path"
+                                :key="image.url"
                             >
-                                <CarouselImage :image="image.path" />
+                                <CarouselImage :image="image.url" />
                             </CarouselItem>
                         </template>
                         <CarouselItem v-else>
