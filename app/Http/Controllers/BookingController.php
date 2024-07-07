@@ -29,17 +29,6 @@ class BookingController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): Response
-    {
-
-        return Inertia::render('Booking/CreateBooking', [
-            'audience' => Audience::get(),
-        ]);
-    }
-
     public function approveBooking(Request $request, Booking $booking): void
     {
         $validated = $request->validate([
@@ -96,12 +85,25 @@ class BookingController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     */
+    public function create(): Response
+    {
+
+        return Inertia::render('Booking/CreateBooking', [
+            'audience' => Audience::get(),
+        ]);
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(Booking $booking): Response
     {
-        return Inertia::render('Booking/Index', [
-            'booking' => $booking->load('requester', 'audience', 'appointments', 'appointments.space', 'appointments.space.images', 'agreementContracts'),
+        return Inertia::render('Booking/Show', [
+            'booking' => $booking->load(['requester', 'audience', 'appointments:id,date_start,date_end,space_id,booking_id', 'appointments.space:name,id', 'appointments.space.images' => function ($query) {
+                $query->select(['path'])->limit(1);
+            }, 'agreementContracts']),
         ]);
     }
 
