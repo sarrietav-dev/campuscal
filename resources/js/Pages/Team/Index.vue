@@ -1,8 +1,8 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Text from "@/Components/ui/Text.vue";
 import { Button } from "@/Components/ui/button";
-import { CircleUserRound, Ellipsis } from "lucide-vue-next";
+import { CircleUserRound } from "lucide-vue-next";
 import {
     Table,
     TableBody,
@@ -21,14 +21,14 @@ import Combobox from "@/Components/Combobox.vue";
 import { Badge } from "@/Components/ui/badge";
 import {
     AlertDialog,
-    AlertDialogContent,
-    AlertDialogTrigger,
-    AlertDialogDescription,
-    AlertDialogTitle,
     AlertDialogAction,
-    AlertDialogFooter,
     AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
     AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
 import { toast } from "vue-sonner";
 import { trans } from "laravel-vue-i18n";
@@ -104,7 +104,7 @@ async function handleDelete(userId: number) {
     <AuthenticatedLayout>
         <div class="container max-w-4xl">
             <div class="flex align-center mb-6">
-                <Text variant="heading4" class="text-center mr-auto">
+                <Text class="text-center mr-auto" variant="heading4">
                     {{ $t("Team") }}
                 </Text>
                 <ResponsiveModal
@@ -119,16 +119,16 @@ async function handleDelete(userId: number) {
                     </template>
                     <template #default>
                         <form
-                            @submit.prevent="submitInvitation()"
                             id="invite-member-form"
                             class="flex *:grow gap-5"
+                            @submit.prevent="submitInvitation()"
                         >
                             <div class="flex flex-col gap-2">
                                 <Label for="email">{{ $t("Email") }}</Label>
                                 <Input
-                                    type="email"
                                     id="email"
                                     v-model="inviteMemberForm.email"
+                                    type="email"
                                 />
                                 <ErrorMessage
                                     v-show="inviteMemberForm.errors.email"
@@ -139,9 +139,9 @@ async function handleDelete(userId: number) {
                             <div class="flex flex-col gap-2">
                                 <Label for="role">{{ $t("Role") }}</Label>
                                 <Combobox
+                                    v-model="inviteMemberForm.role"
                                     :options="roles"
                                     :placeholder="trans('Select a role')"
-                                    v-model="inviteMemberForm.role"
                                 />
                                 <ErrorMessage
                                     v-show="inviteMemberForm.errors.role"
@@ -197,8 +197,8 @@ async function handleDelete(userId: number) {
                                 >
                                     <template #trigger>
                                         <Badge
-                                            variant="secondary"
                                             class="cursor-pointer select-none"
+                                            variant="secondary"
                                         >
                                             {{ $t(user.roles[0].name) }}
                                         </Badge>
@@ -212,23 +212,23 @@ async function handleDelete(userId: number) {
                                     </template>
                                     <template #default>
                                         <form
+                                            id="change-role-form"
+                                            class="flex *:grow gap-5"
                                             @submit.prevent="
                                                 submitChangeRole(user.id)
                                             "
-                                            id="change-role-form"
-                                            class="flex *:grow gap-5"
                                         >
                                             <div class="flex flex-col gap-2">
                                                 <Label for="role">
                                                     {{ $t("Role") }}
                                                 </Label>
                                                 <Combobox
+                                                    v-model="
+                                                        changeMemberRoleForm.role
+                                                    "
                                                     :options="roles"
                                                     :placeholder="
                                                         trans('Select a role')
-                                                    "
-                                                    v-model="
-                                                        changeMemberRoleForm.role
                                                     "
                                                 />
                                                 <ErrorMessage
@@ -257,14 +257,14 @@ async function handleDelete(userId: number) {
                             </TableCell>
                             <TableCell>
                                 <AlertDialog>
-                                    <AlertDialogTrigger>
+                                    <AlertDialogTrigger as-child>
                                         <Button
                                             :disabled="
                                                 $page.props.auth.user.email ===
                                                 user.email
                                             "
-                                            variant="destructive"
                                             class="select-none"
+                                            variant="destructive"
                                         >
                                             {{ $t("Remove") }}
                                         </Button>
