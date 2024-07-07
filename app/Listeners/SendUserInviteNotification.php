@@ -22,6 +22,6 @@ class SendUserInviteNotification implements ShouldQueue
      */
     public function handle(UserInvited $event): void
     {
-        Notification::locale('es')->send($event->user, new TeamInvite());
+        Notification::route('mail', $event->email)->notify((new TeamInvite($event->email, $event->role))->locale('es'));
     }
 }

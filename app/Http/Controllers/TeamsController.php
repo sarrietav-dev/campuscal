@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 
+use function redirect;
+
 class TeamsController extends Controller
 {
     public function index()
@@ -33,7 +35,7 @@ class TeamsController extends Controller
     public function invite(Request $request)
     {
         if (auth()->user()->cannot(TeamPermissions::INVITE_MEMBER->value)) {
-            return \redirect()->back()->withErrors([
+            return redirect()->back()->withErrors([
                 'message' => __('You are not authorized to invite members'),
             ], 403);
         }
@@ -43,14 +45,7 @@ class TeamsController extends Controller
             'role' => ['required', 'exists:Spatie\Permission\Models\Role,name'],
         ]);
 
-        $tempUser = User::create([
-            'name' => '',
-            'email' => $validated['email'],
-        ]);
-
-        $tempUser->syncRoles([$validated['role']]);
-
-        UserInvited::dispatch($tempUser);
+        UserInvited::dispatch($validated['email'], $validated['role']);
 
         return redirect()->back()->with('message', __('User invited successfully'));
     }

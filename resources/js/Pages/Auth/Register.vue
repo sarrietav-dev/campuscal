@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import { Input } from "@/Components/ui/input";
@@ -15,8 +15,9 @@ import ErrorMessage from "@/Components/ErrorMessage.vue";
 
 const form = useForm({
     name: "",
-    email: "",
+    email: route().params.email ?? "",
     password: "",
+    role: route().params.role ?? undefined,
     password_confirmation: "",
 });
 
@@ -43,27 +44,27 @@ const submit = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form @submit.prevent="submit()" class="grid gap-4">
+                <form class="grid gap-4" @submit.prevent="submit()">
                     <div class="grid gap-2">
                         <Label htmlFor="name">Nombre</Label>
                         <Input
                             id="name"
+                            v-model="form.name"
                             placeholder="Max"
                             required
-                            v-model="form.name"
                         />
                         <ErrorMessage v-show="form.errors.name" class="mt-2">
                             {{ form.errors.name }}
                         </ErrorMessage>
                     </div>
-                    <div class="grid gap-2">
+                    <div v-if="!route().params.email" class="grid gap-2">
                         <Label htmlFor="email">Email</Label>
                         <Input
                             id="email"
-                            type="email"
+                            v-model="form.email"
                             placeholder="m@example.com"
                             required
-                            v-model="form.email"
+                            type="email"
                         />
                         <ErrorMessage v-show="form.errors.email" class="mt-2">
                             {{ form.errors.email }}
@@ -73,8 +74,8 @@ const submit = () => {
                         <Label htmlFor="password">Contraseña</Label>
                         <Input
                             id="password"
-                            type="password"
                             v-model="form.password"
+                            type="password"
                         />
                         <ErrorMessage
                             v-show="form.errors.password"
@@ -89,8 +90,8 @@ const submit = () => {
                         </Label>
                         <Input
                             id="password_confirmation"
-                            type="password"
                             v-model="form.password_confirmation"
+                            type="password"
                         />
                         <ErrorMessage
                             v-show="form.errors.password_confirmation"
@@ -100,17 +101,17 @@ const submit = () => {
                         </ErrorMessage>
                     </div>
                     <Button
-                        type="submit"
                         :disabled="form.processing"
                         class="w-full"
+                        type="submit"
                     >
                         Regístrate
                     </Button>
                     <Button
                         as-child
-                        variant="outline"
                         class="w-full"
                         type="button"
+                        variant="outline"
                     >
                         <a href="/auth/redirect">Entrar con Google</a>
                     </Button>

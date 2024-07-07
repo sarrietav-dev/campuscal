@@ -13,7 +13,7 @@ class TeamInvite extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(public string $email, public string $role)
     {
         //
     }
@@ -33,12 +33,22 @@ class TeamInvite extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $url = $this->generateInvitationUrl($this->email, $this->role);
+
         return (new MailMessage)
             ->subject(__('mail.invite_subject'))
             ->greeting(__('mail.invite_hello'))
             ->line(__('mail.invite_subject'))
-            ->action(__('mail.accept_invite'), url('/'))
+            ->action(__('mail.accept_invite'), url($url))
             ->line(__('mail.invite_disclaimer'));
+    }
+
+    private function generateInvitationUrl(string $email, string $role): string
+    {
+        return url()->temporarySignedRoute('register', now()->addDay(), [
+            'email' => $email,
+            'role' => $role,
+        ]);
     }
 
     /**

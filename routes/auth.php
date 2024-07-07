@@ -16,7 +16,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
+        ->name('register')->middleware('signed');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 

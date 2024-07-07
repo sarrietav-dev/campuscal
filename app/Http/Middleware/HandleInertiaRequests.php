@@ -32,6 +32,9 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'flash' => [
+                'message' => fn () => $request->session()->get('message'),
+            ],
             'can' => [
                 'viewTeam' => $request->user() ? $request->user()->can(TeamPermissions::VIEW_TEAM->value) : null,
             ],
