@@ -44,11 +44,10 @@ class CampusController extends Controller
 
         $spaces = Cache::remember('campus_'.$campus->id.'_spaces', 60 * 30, function () use ($campus, $images) {
             return $campus->spaces()->with('images', function (Builder $query) use ($images) {
-                if ($images === 'all') {
-                    $query->select(['url']);
-                } else {
-                    $query->select(['url'])->limit(1);
-                }
+                $query->when($images === 'all',
+                    fn (Builder $query) => $query->select(['url']),
+                    fn (Builder $query) => $query->select(['url'])->limit(1)
+                );
             })->get();
         });
 
@@ -62,23 +61,13 @@ class CampusController extends Controller
     {
         $validated = $request->validated();
 
-        $files = $request->file('images');
-        $urls = [];
-
-        if ($request->hasFile('images')) {
-            foreach ($files as $file) {
-                $url = $file->store();
-                $urls[] = $url;
-            }
-        }
-
         $campus = Campus::create([
             'name' => $validated['name'],
         ]);
 
-        $campus->images()->createMany(array_map(function ($url) {
-            return ['url' => Storage::url($url)];
-        }, $urls));
+        $campus->images()->createMany(
+            collect($request->images)->map(fn ($image) => ['url' => Storage::url($image->store())])
+        );
 
         return redirect(route('campuses.index'));
     }
