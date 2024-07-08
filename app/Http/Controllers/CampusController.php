@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCampusRequest;
+use App\Http\Resources\CampusResource;
 use App\Models\Campus;
 use Cache;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -20,12 +21,10 @@ class CampusController extends Controller
      */
     public function index(): Response
     {
-        $campuses = Campus::query()->with(['images' => function (Builder $query) {
-            $query->select(['url', 'imageable_id'])->limit(1);
-        }])->select(['id', 'name'])->get();
+        $campuses = Campus::query()->with('oldestImage:url,images.imageable_id')->select(['id', 'name'])->get();
 
         return Inertia::render('Spaces/Campuses', [
-            'campuses' => $campuses,
+            'campuses' => CampusResource::collection($campuses)->collection,
         ]);
     }
 
@@ -85,9 +84,7 @@ class CampusController extends Controller
      */
     public function show(Campus $campus): Response
     {
-        $spaces = $campus->spaces()->with(['images' => function (Builder $query) {
-            $query->select(['url', 'imageable_id'])->limit(1);
-        }])->get();
+        $spaces = $campus->spaces()->with('oldestImage:id,images.imageable_id')->get();
 
         return Inertia::render('Spaces/Campus', [
             'spaces' => $spaces,
