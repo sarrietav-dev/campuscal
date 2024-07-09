@@ -1,6 +1,5 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 import SpaceCard from "@/Components/SpaceCard.vue";
 
@@ -8,7 +7,7 @@ const spaces = defineProps<{
     spaces: {
         id: number;
         name: string;
-        images: { url: string }[];
+        image: string;
     }[];
 }>();
 </script>
@@ -24,9 +23,9 @@ const spaces = defineProps<{
                     :href="`/spaces/${space.id}`"
                 >
                     <SpaceCard
-                        :title="space.name"
                         :key="space.id"
-                        :image-src="space.images[0].url"
+                        :image-src="space.image"
+                        :title="space.name"
                     />
                 </Link>
             </div>

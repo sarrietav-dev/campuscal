@@ -84,10 +84,10 @@ class CampusController extends Controller
      */
     public function show(Campus $campus): Response
     {
-        $spaces = $campus->spaces()->with('oldestImage:id,images.imageable_id')->get();
+        $spaces = $campus->spaces()->with('oldestImage:url,images.imageable_id')->get();
 
         return Inertia::render('Spaces/Campus', [
-            'spaces' => $spaces,
+            'spaces' => CampusResource::collection($spaces)->collection,
         ]);
     }
 
