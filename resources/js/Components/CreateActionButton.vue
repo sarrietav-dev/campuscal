@@ -1,15 +1,15 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Button } from "./ui/button";
 import { Link } from "@inertiajs/vue3";
 </script>
 
 <template>
-    <Button v-if="$page.component === 'Spaces/Campuses'">
+    <Button v-if="$page.component === 'Campus/Index'">
         <Link :href="route('campuses.create')" as="button">
             Crear un campus
         </Link>
     </Button>
-    <Button as-child v-if="$page.component === 'Spaces/Campus'">
+    <Button v-if="$page.component === 'Campus/Show'" as-child>
         <Link
             :href="
                 route('campuses.spaces.create', {

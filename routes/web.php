@@ -16,6 +16,8 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
         ->shallow()
         ->only(['create', 'store', 'show']);
 
+    Route::post('/bookings/export', [\App\Http\Controllers\ExportBookingController::class])->name('bookings.export');
+
     Route::resource('bookings', BookingController::class)
         ->only(['index', 'show']);
 
@@ -39,6 +41,7 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
 
     Route::patch('/team/{user}/role', [\App\Http\Controllers\TeamsController::class, 'updateRole'])
         ->name('teams.role')->middleware('permission:update-role');
+
 });
 
 Route::resource('bookings', BookingController::class)

@@ -29,5 +29,6 @@
     "mail.invite_subject": "Has sido invitado a unirte a un equipo en CampusCal",
     "mail.invite_hello": "Hola!",
     "mail.accept_invite": "Aceptar invitación",
-    "mail.invite_disclaimer": "Si no deseas unirte al equipo, simplemente ignora este mensaje."
+    "mail.invite_disclaimer": "Si no deseas unirte al equipo, simplemente ignora este mensaje.",
+    "Your export is ready!": "¡Tu exportación está lista!"
 }

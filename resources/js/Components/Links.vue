@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Link } from "@inertiajs/vue3";
 import { BookMarked } from "lucide-vue-next";
 </script>
@@ -12,29 +12,29 @@ import { BookMarked } from "lucide-vue-next";
         <span class="sr-only">CampusCal</span>
     </Link>
     <Link
-        :href="route('campuses.index')"
-        class="text-muted-foreground transition-colors hover:text-foreground"
         :class="{
             'font-bold':
-                $page.component === 'Spaces/Campuses' ||
-                $page.component === 'Spaces/Campus' ||
-                $page.component === 'Spaces/Space',
+                $page.component === 'Campus/Index' ||
+                $page.component === 'Campus/Show' ||
+                $page.component === 'Spaces/Show',
         }"
+        :href="route('campuses.index')"
+        class="text-muted-foreground transition-colors hover:text-foreground"
     >
         Espacios
     </Link>
     <Link
+        :class="{ 'font-bold': $page.component === 'Booking/Index' }"
         :href="route('bookings.index')"
         class="text-muted-foreground transition-colors hover:text-foreground [&.active]:font-bold"
-        :class="{ 'font-bold': $page.component === 'Booking/Bookings' }"
     >
         Solicitudes
     </Link>
     <Link
         v-if="$page.props.can.viewTeam"
+        :class="{ 'font-bold': $page.component === 'Team/Index' }"
         :href="route('teams.index')"
         class="text-muted-foreground transition-colors hover:text-foreground [&.active]:font-bold"
-        :class="{ 'font-bold': $page.component === 'Members/Index' }"
     >
         Equipo
     </Link>

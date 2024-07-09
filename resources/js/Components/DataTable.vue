@@ -35,6 +35,15 @@ import { valueUpdater } from "@/lib/utils";
 import { columns, statusES } from "@/Components/columnDef";
 import { BookingProps } from "@/Pages/Booking/Index.vue";
 import DataTableFacetedFilter from "@/Components/DataTableFacetedFilter.vue";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/Components/ui/alert-dialog";
 
 const { bookings: data } = defineProps<BookingProps>();
 
@@ -100,31 +109,52 @@ const statuses = Object.keys(statusES).map((key) => ({
                 :options="statuses"
                 title="Estado"
             />
-            <DropdownMenu>
-                <DropdownMenuTrigger as-child>
-                    <Button class="ml-auto" variant="outline">
-                        Columnas
-                        <ChevronDown class="ml-2 h-4 w-4" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuCheckboxItem
-                        v-for="column in table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())"
-                        :key="column.id"
-                        :checked="column.getIsVisible()"
-                        class="capitalize"
-                        @update:checked="
-                            (value) => {
-                                column.toggleVisibility(!!value);
-                            }
-                        "
-                    >
-                        {{ column.id }}
-                    </DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+            <div class="ml-auto flex gap-3">
+                <!-- Export button -->
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <Button variant="outline">Exportar</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogTitle> Exportar datos</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            El archivo Excel se enviará a tu correo electrónico.
+                        </AlertDialogDescription>
+                        <AlertDialogCancel>
+                            <Button>Cancelar</Button>
+                        </AlertDialogCancel>
+                        <AlertDialogAction>
+                            <Button>Exportar</Button>
+                        </AlertDialogAction>
+                    </AlertDialogContent>
+                </AlertDialog>
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger as-child>
+                        <Button variant="outline">
+                            Columnas
+                            <ChevronDown class="ml-2 h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuCheckboxItem
+                            v-for="column in table
+                                .getAllColumns()
+                                .filter((column) => column.getCanHide())"
+                            :key="column.id"
+                            :checked="column.getIsVisible()"
+                            class="capitalize"
+                            @update:checked="
+                                (value) => {
+                                    column.toggleVisibility(!!value);
+                                }
+                            "
+                        >
+                            {{ column.id }}
+                        </DropdownMenuCheckboxItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
         </div>
         <div class="rounded-md border">
             <Table>
