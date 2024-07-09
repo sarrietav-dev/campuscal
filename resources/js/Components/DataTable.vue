@@ -1,18 +1,16 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {
     ColumnFiltersState,
-    getFacetedRowModel,
-    getFacetedUniqueValues,
-    SortingState,
-    VisibilityState,
-} from "@tanstack/vue-table";
-import {
     FlexRender,
     getCoreRowModel,
+    getFacetedRowModel,
+    getFacetedUniqueValues,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
+    SortingState,
     useVueTable,
+    VisibilityState,
 } from "@tanstack/vue-table";
 import { ChevronDown } from "lucide-vue-next";
 
@@ -34,8 +32,8 @@ import {
     TableRow,
 } from "./ui/table";
 import { valueUpdater } from "@/lib/utils";
-import { columns, Request, statusES } from "@/Components/columnDef";
-import { BookingProps } from "@/Pages/Booking/Bookings.vue";
+import { columns, statusES } from "@/Components/columnDef";
+import { BookingProps } from "@/Pages/Booking/Index.vue";
 import DataTableFacetedFilter from "@/Components/DataTableFacetedFilter.vue";
 
 const { bookings: data } = defineProps<BookingProps>();
@@ -87,11 +85,11 @@ const statuses = Object.keys(statusES).map((key) => ({
     <div class="w-full">
         <div class="flex gap-2 items-center py-4">
             <Input
-                class="max-w-sm"
-                placeholder="Buscar por email"
                 :model-value="
                     table.getColumn('Email')?.getFilterValue() as string
                 "
+                class="max-w-sm"
+                placeholder="Buscar por email"
                 @update:model-value="
                     table.getColumn('Email')?.setFilterValue($event)
                 "
@@ -99,12 +97,12 @@ const statuses = Object.keys(statusES).map((key) => ({
             <DataTableFacetedFilter
                 v-if="table.getColumn('Estado')"
                 :column="table.getColumn('Estado') as any"
-                title="Estado"
                 :options="statuses"
+                title="Estado"
             />
             <DropdownMenu>
                 <DropdownMenuTrigger as-child>
-                    <Button variant="outline" class="ml-auto">
+                    <Button class="ml-auto" variant="outline">
                         Columnas
                         <ChevronDown class="ml-2 h-4 w-4" />
                     </Button>
@@ -115,8 +113,8 @@ const statuses = Object.keys(statusES).map((key) => ({
                             .getAllColumns()
                             .filter((column) => column.getCanHide())"
                         :key="column.id"
-                        class="capitalize"
                         :checked="column.getIsVisible()"
+                        class="capitalize"
                         @update:checked="
                             (value) => {
                                 column.toggleVisibility(!!value);
@@ -141,8 +139,8 @@ const statuses = Object.keys(statusES).map((key) => ({
                         >
                             <FlexRender
                                 v-if="!header.isPlaceholder"
-                                :render="header.column.columnDef.header"
                                 :props="header.getContext()"
+                                :render="header.column.columnDef.header"
                             />
                         </TableHead>
                     </TableRow>
@@ -159,8 +157,8 @@ const statuses = Object.keys(statusES).map((key) => ({
                                 :key="cell.id"
                             >
                                 <FlexRender
-                                    :render="cell.column.columnDef.cell"
                                     :props="cell.getContext()"
+                                    :render="cell.column.columnDef.cell"
                                 />
                             </TableCell>
                         </TableRow>
@@ -181,17 +179,17 @@ const statuses = Object.keys(statusES).map((key) => ({
         <div class="flex items-center justify-end space-x-2 py-4">
             <div class="space-x-2">
                 <Button
-                    variant="outline"
-                    size="sm"
                     :disabled="!table.getCanPreviousPage()"
+                    size="sm"
+                    variant="outline"
                     @click="table.previousPage()"
                 >
                     Anterior
                 </Button>
                 <Button
-                    variant="outline"
-                    size="sm"
                     :disabled="!table.getCanNextPage()"
+                    size="sm"
+                    variant="outline"
                     @click="table.nextPage()"
                 >
                     Siguiente

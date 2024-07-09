@@ -8,7 +8,7 @@ import {
 import { Button } from "./ui/button";
 import { Link } from "@inertiajs/vue3";
 import { ArrowRight, ArrowUpDown } from "lucide-vue-next";
-import { BookingProps } from "@/Pages/Booking/Bookings.vue";
+import { BookingProps } from "@/Pages/Booking/Index.vue";
 
 export type Request = {
     id: string;

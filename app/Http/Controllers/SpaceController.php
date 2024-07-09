@@ -18,7 +18,7 @@ class SpaceController extends Controller
      */
     public function create(string $campus): Response
     {
-        return Inertia::render('Spaces/CreateSpace', [
+        return Inertia::render('Space/Create', [
             'campus' => $campus,
         ]);
     }
@@ -51,7 +51,7 @@ class SpaceController extends Controller
      */
     public function show(Space $space): Response
     {
-        return Inertia::render('Spaces/Space', [
+        return Inertia::render('Space/Show', [
             'space' => $space->load('resources', 'images'),
         ]);
     }

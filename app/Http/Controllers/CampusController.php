@@ -23,7 +23,7 @@ class CampusController extends Controller
     {
         $campuses = Campus::query()->with('oldestImage:url,images.imageable_id')->select(['id', 'name'])->get();
 
-        return Inertia::render('Spaces/Campuses', [
+        return Inertia::render('Campus/Index', [
             'campuses' => CampusResource::collection($campuses)->collection,
         ]);
     }
@@ -76,7 +76,7 @@ class CampusController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Spaces/CreateCampus');
+        return Inertia::render('Campus/Create');
     }
 
     /**
@@ -86,7 +86,7 @@ class CampusController extends Controller
     {
         $spaces = $campus->spaces()->with('oldestImage:url,images.imageable_id')->get();
 
-        return Inertia::render('Spaces/Campus', [
+        return Inertia::render('Campus/Show', [
             'spaces' => CampusResource::collection($spaces)->collection,
         ]);
     }

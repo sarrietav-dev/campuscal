@@ -24,7 +24,7 @@ class BookingController extends Controller
             )->select(['id', 'details', 'assistance', 'created_at', 'status'])->get();
         });
 
-        return Inertia::render('Booking/Bookings', [
+        return Inertia::render('Booking/Index', [
             'bookings' => $bookings,
         ]);
     }
@@ -90,7 +90,7 @@ class BookingController extends Controller
     public function create(): Response
     {
 
-        return Inertia::render('Booking/CreateBooking', [
+        return Inertia::render('Booking/Create', [
             'audience' => Audience::get(),
         ]);
     }
