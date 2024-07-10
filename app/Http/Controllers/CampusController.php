@@ -6,7 +6,6 @@ use App\Http\Requests\CreateCampusRequest;
 use App\Http\Resources\CampusResource;
 use App\Models\Campus;
 use Cache;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,25 +29,16 @@ class CampusController extends Controller
 
     public function getAll(): JsonResponse
     {
-        $campuses = Campus::query()->with('images', function (Builder $query) {
-            $query->select(['url'])->limit(1);
-        })->select(['id', 'name'])->get();
+        $campuses = Campus::query()->with('oldestImage:url,images.imageable_id')->select(['id', 'name'])->get();
 
-        return response()->json($campuses);
+        return response()->json(CampusResource::collection($campuses)->collection);
     }
 
     public function getCampus(Request $request, Campus $campus): JsonResponse
     {
         $images = $request->query('images', 'all');
 
-        $spaces = Cache::remember('campus_'.$campus->id.'_spaces', 60 * 30, function () use ($campus, $images) {
-            return $campus->spaces()->with('images', function (Builder $query) use ($images) {
-                $query->when($images === 'all',
-                    fn (Builder $query) => $query->select(['url']),
-                    fn (Builder $query) => $query->select(['url'])->limit(1)
-                );
-            })->get();
-        });
+        $spaces = $campus->spaces()->with('images:url,images.imageable_id')->get();
 
         return response()->json($spaces);
     }

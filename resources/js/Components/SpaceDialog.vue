@@ -133,7 +133,7 @@ function handleCreate() {
             >
                 <SpaceCard
                     v-for="campus in campuses"
-                    :image-src="campus.images[0].url"
+                    :image-src="campus.image"
                     :title="campus.name"
                     :key="campus.id"
                     :height="100"

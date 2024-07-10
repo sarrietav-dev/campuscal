@@ -2,7 +2,7 @@ import axios from "axios";
 
 const url = "/api";
 
-export type Campus = { id: number; name: string; images: { url: string }[] };
+export type Campus = { id: number; name: string; image: string };
 
 export async function getCampuses(): Promise<Campus[]> {
     const response = await axios.get<Campus[]>(`${url}/campuses`);
