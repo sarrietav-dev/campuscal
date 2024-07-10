@@ -25,6 +25,9 @@ REDIS_CACHE_DB = 0
 DB_CONNECTION = 'pgsql'
 FILESYSTEM_DISK = 's3'
 MAIL_MAILER = "resend"
+APP_LOCALE = "es"
+APP_FALLBACK_LOCALE = "en"
+APP_FAKER_LOCALE = "es_ES"
 
 [http_service]
 internal_port = 8080
