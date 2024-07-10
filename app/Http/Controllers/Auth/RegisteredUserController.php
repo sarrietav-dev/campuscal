@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        if ($validated['role']) {
+        if ($validated['role'] ?? false) {
             $user->assignRole(AppRoles::from($validated['role']));
             $user->markEmailAsVerified();
         } else {
