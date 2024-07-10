@@ -23,7 +23,7 @@ SESSION_SECURE_COOKIE = 'true'
 CACHE_STORE = 'redis'
 REDIS_CACHE_DB = 0
 DB_CONNECTION = 'pgsql'
-STORAGE_DRIVER = 's3'
+FILESYSTEM_DISK = 's3'
 MAIL_MAILER = "resend"
 
 [http_service]
