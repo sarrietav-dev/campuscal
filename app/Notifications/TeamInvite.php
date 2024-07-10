@@ -45,7 +45,7 @@ class TeamInvite extends Notification
 
     private function generateInvitationUrl(string $email, string $role): string
     {
-        return url()->temporarySignedRoute('register', now()->addDay(), [
+        return url()->temporarySignedRoute('register.invite', now()->addDay(), [
             'email' => $email,
             'role' => $role,
         ]);
