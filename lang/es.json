@@ -30,5 +30,6 @@
     "mail.invite_hello": "Hola!",
     "mail.accept_invite": "Aceptar invitación",
     "mail.invite_disclaimer": "Si no deseas unirte al equipo, simplemente ignora este mensaje.",
-    "Your export is ready!": "¡Tu exportación está lista!"
+    "Your export is ready!": "¡Tu exportación está lista!",
+    "Exporting the data. You will be notified once it is ready.": "Exportando los datos. Se te notificará una vez que esté listo."
 }

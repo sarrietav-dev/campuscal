@@ -16,7 +16,7 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
         ->shallow()
         ->only(['create', 'store', 'show']);
 
-    Route::post('/bookings/export', [\App\Http\Controllers\ExportBookingController::class])->name('bookings.export');
+    Route::post('/bookings/export', \App\Http\Controllers\ExportBookingController::class)->name('bookings.export');
 
     Route::resource('bookings', BookingController::class)
         ->only(['index', 'show']);

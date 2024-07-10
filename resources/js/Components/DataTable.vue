@@ -41,9 +41,13 @@ import {
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
+import { router, usePage } from "@inertiajs/vue3";
+import { toast } from "vue-sonner";
 
 const { bookings: data } = defineProps<BookingProps>();
 
@@ -88,6 +92,22 @@ const statuses = Object.keys(statusES).map((key) => ({
     value: key,
     label: statusES[key],
 }));
+
+const page = usePage();
+
+function handleExport() {
+    router.post(
+        route("bookings.export"),
+        {},
+        {
+            onSuccess: () => {
+                toast.success("Éxito!", {
+                    description: page.props.flash.message,
+                });
+            },
+        },
+    );
+}
 </script>
 
 <template>
@@ -116,16 +136,19 @@ const statuses = Object.keys(statusES).map((key) => ({
                         <Button variant="outline">Exportar</Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
-                        <AlertDialogTitle> Exportar datos</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            El archivo Excel se enviará a tu correo electrónico.
-                        </AlertDialogDescription>
-                        <AlertDialogCancel>
-                            <Button>Cancelar</Button>
-                        </AlertDialogCancel>
-                        <AlertDialogAction>
-                            <Button>Exportar</Button>
-                        </AlertDialogAction>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle> Exportar datos</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                El archivo Excel se enviará a tu correo
+                                electrónico.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel> Cancelar</AlertDialogCancel>
+                            <AlertDialogAction @click="handleExport()">
+                                Exportar
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
 

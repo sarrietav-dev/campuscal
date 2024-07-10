@@ -15,8 +15,10 @@ class ExportBookingController extends Controller
     public function __invoke(Request $request)
     {
         $exportName = Str::uuid().'.xlsx';
-        (new BookingExport)->queue($exportName)->chain([
+        (new BookingExport)->queue($exportName, "s3")->chain([
             new NotifyUserOfCompletedExport($request->user(), $exportName),
         ]);
+
+        return back()->with('message', __('Exporting the data. You will be notified once it is ready.'));
     }
 }

@@ -21,7 +21,6 @@ class Booking extends Model
         'agreement_contract',
         'agreement_contract_file',
         'observations',
-        'status',
     ];
 
     public function requester(): HasOne

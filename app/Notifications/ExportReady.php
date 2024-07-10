@@ -5,7 +5,7 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Storage;
+use Storage;
 
 class ExportReady extends Notification
 {
@@ -34,11 +34,9 @@ class ExportReady extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        Storage::get($this->exportName);
-
         return (new MailMessage)
             ->line(__('Your export is ready!'))
-            ->attach($this->exportName);
+            ->attach(Storage::url($this->exportName));
     }
 
     /**
