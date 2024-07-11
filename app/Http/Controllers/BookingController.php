@@ -31,20 +31,28 @@ class BookingController extends Controller
 
     public function approveBooking(Request $request, Booking $booking): void
     {
+        if ($booking->status !== 'pending') {
+            abort(409, __('Booking is not pending'));
+        }
+
         $validated = $request->validate([
             'observations' => ['string', 'max:255'],
         ]);
 
-        $booking->approve($validated['observations']);
+        $booking->approve($validated['observations'] ?? null);
     }
 
     public function rejectBooking(Request $request, Booking $booking): void
     {
+        if ($booking->status !== 'pending') {
+            abort(409, __('Booking is not pending'));
+        }
+
         $validated = $request->validate([
             'observations' => ['string', 'max:255'],
         ]);
 
-        $booking->reject($validated['observations']);
+        $booking->reject($validated['observations'] ?? null);
     }
 
     /**
@@ -52,12 +60,13 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request): RedirectResponse
     {
+        $validated = $request->validated();
         $booking = Booking::create($request->safe()->except(['agreement_contract_file']));
 
-        $booking->audience()->attach($request->audience);
+        $booking->audience()->attach($validated['audience']);
 
         $booking->appointments()->createMany(
-            collect($request->appointments)->map(function ($appointment) {
+            collect($validated['appointments'])->map(function ($appointment) {
                 return [
                     'space_id' => $appointment['id'],
                     'date_start' => $appointment['date']['start'],
@@ -66,22 +75,25 @@ class BookingController extends Controller
             })->toArray()
         );
 
-        $booking->agreementContracts()->create([
-            'url' => Storage::url($request->file('agreement_contract_file')->store()),
-        ]);
+        if ($validated['agreement_contract']) {
+            $path = $request->file('agreement_contract_file')->store('agreement_contracts', 'public');
+            $booking->agreementContracts()->create([
+                'url' => Storage::path($path),
+            ]);
+        }
 
         $booking->requester()->create([
-            'name' => $request->requester['name'],
-            'surname' => $request->requester['surname'],
-            'email' => $request->requester['email'],
-            'phone' => $request->requester['phone'],
-            'identification' => $request->requester['identification'],
-            'company_name' => $request->requester['company_name'],
-            'company_role' => $request->requester['company_role'],
-            'academic_unit' => $request->requester['academic_unit'],
+            'name' => $validated['requester']['name'],
+            'surname' => $validated['requester']['surname'],
+            'email' => $validated['requester']['email'],
+            'phone' => $validated['requester']['phone'],
+            'identification' => $validated['requester']['identification'],
+            'company_name' => $validated['requester']['company_name'],
+            'company_role' => $validated['requester']['company_role'],
+            'academic_unit' => $validated['requester']['academic_unit'],
         ]);
 
-        return redirect()->route('bookings.index');
+        return redirect()->route('bookings.create');
     }
 
     /**

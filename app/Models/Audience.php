@@ -10,6 +10,8 @@ class Audience extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name'];
+
     public function bookings(): BelongsToMany
     {
         return $this->belongsToMany(Booking::class);

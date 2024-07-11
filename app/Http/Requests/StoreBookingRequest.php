@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Audience;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class StoreBookingRequest extends FormRequest
 {
@@ -17,7 +20,7 @@ class StoreBookingRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -34,13 +37,27 @@ class StoreBookingRequest extends FormRequest
             'requester.name' => ['required', 'string', 'max:255'],
             'requester.surname' => ['required', 'string', 'max:255'],
             'requester.email' => ['required', 'email'],
-            'requester.phone' => ['required', 'string', 'max:255'],
-            'requester.identification' => ['required', 'string', 'max:255'],
+            'requester.phone' => ['required', 'phone:INTERNATIONAL,CO'],
+            'requester.identification' => ['required', 'numeric', 'max:30'],
             'requester.company_name' => ['required', 'string', 'max:255'],
             'requester.company_role' => ['required', 'string', 'max:255'],
             'requester.academic_unit' => ['required', 'string', 'max:255'],
             'agreement_contract' => ['required', 'boolean'],
-            'agreement_contract_file' => ['nullable', 'file', 'mimes:pdf'],
+            'agreement_contract_file' => ['exclude_unless:agreement_contract,true', 'required', 'file', 'mimes:pdf'],
         ];
+    }
+
+    protected function withValidator(Validator $validator): void
+    {
+        $validator->sometimes('external_audience_details', 'required', function ($input) {
+            if (isset($input->audience) && is_array($input->audience)) {
+                // Check if any audience with the name 'external' exists
+                return Audience::whereIn('id', $input->audience)
+                    ->where('name', 'external')
+                    ->exists();
+            }
+
+            return false;
+        });
     }
 }
