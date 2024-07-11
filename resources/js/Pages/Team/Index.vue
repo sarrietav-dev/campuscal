@@ -63,7 +63,7 @@ const changeMemberRoleForm = useForm({
 });
 
 function submitInvitation() {
-    inviteMemberForm.post(route("teams.invite"), {
+    inviteMemberForm.post(route("team.store"), {
         preserveScroll: true,
         onSuccess: () => {
             inviteDialogOpen.value = false;
@@ -75,7 +75,7 @@ function submitInvitation() {
 }
 
 function submitChangeRole(userId: number) {
-    changeMemberRoleForm.patch(route("teams.role", { user: userId }), {
+    changeMemberRoleForm.patch(route("team.update", { user: userId }), {
         preserveScroll: true,
         onSuccess: () => {
             changeRoleDialogOpen.value = false;
@@ -87,7 +87,7 @@ function submitChangeRole(userId: number) {
 }
 
 async function handleDelete(userId: number) {
-    router.delete(route("teams.remove", { user: userId }), {
+    router.delete(route("team.destroy", { user: userId }), {
         preserveScroll: true,
         onSuccess: () => {
             router.reload();

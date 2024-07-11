@@ -30,18 +30,9 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
     Route::get('/dashboard',
         \App\Http\Controllers\DashboardController::class)->name('dashboard');
 
-    Route::get('/team', [\App\Http\Controllers\TeamsController::class, 'index'])
-        ->name('teams.index')->middleware('permission:view-team');
-
-    Route::post('/team/invite', [\App\Http\Controllers\TeamsController::class, 'invite'])
-        ->name('teams.invite')->middleware('permission:invite-member');
-
-    Route::delete('/team/{user}/remove', [\App\Http\Controllers\TeamsController::class, 'removeFromTeam'])
-        ->name('teams.remove')->middleware('permission:remove-member');
-
-    Route::patch('/team/{user}/role', [\App\Http\Controllers\TeamsController::class, 'updateRole'])
-        ->name('teams.role')->middleware('permission:update-role');
-
+    Route::resource('/team', \App\Http\Controllers\TeamMemberController::class)
+        ->parameter("team", "user")
+        ->only(['index', 'store', 'destroy', 'update']);
 });
 
 Route::resource('bookings', BookingController::class)
