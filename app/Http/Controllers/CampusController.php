@@ -34,10 +34,8 @@ class CampusController extends Controller
         return response()->json(CampusResource::collection($campuses)->collection);
     }
 
-    public function getCampus(Request $request, Campus $campus): JsonResponse
+    public function getCampus(Campus $campus): JsonResponse
     {
-        $images = $request->query('images', 'all');
-
         $spaces = $campus->spaces()->with('images:url,images.imageable_id')->get();
 
         return response()->json($spaces);

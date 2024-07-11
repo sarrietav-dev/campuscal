@@ -19,7 +19,7 @@ class CampusResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->oldestImage->url,
+            'image' => $this->oldestImage?->url,
         ];
     }
 }

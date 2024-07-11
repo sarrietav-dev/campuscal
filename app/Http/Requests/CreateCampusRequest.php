@@ -25,7 +25,7 @@ class CreateCampusRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'images' => ['required', 'array'],
+            'images' => ['required', 'array', 'max:1'],
             'images.*' => ['required', File::image()->max('2mb')],
         ];
     }
