@@ -29,32 +29,6 @@ class BookingController extends Controller
         ]);
     }
 
-    public function approveBooking(Request $request, Booking $booking): void
-    {
-        if ($booking->status !== 'pending') {
-            abort(409, __('Booking is not pending'));
-        }
-
-        $validated = $request->validate([
-            'observations' => ['string', 'max:255'],
-        ]);
-
-        $booking->approve($validated['observations'] ?? null);
-    }
-
-    public function rejectBooking(Request $request, Booking $booking): void
-    {
-        if ($booking->status !== 'pending') {
-            abort(409, __('Booking is not pending'));
-        }
-
-        $validated = $request->validate([
-            'observations' => ['string', 'max:255'],
-        ]);
-
-        $booking->reject($validated['observations'] ?? null);
-    }
-
     /**
      * Store a newly created resource in storage.
      */

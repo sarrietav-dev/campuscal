@@ -21,10 +21,10 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
     Route::resource('bookings', BookingController::class)
         ->only(['index', 'show']);
 
-    Route::patch('bookings/{booking}/approve', [BookingController::class, 'approveBooking'])
+    Route::patch('bookings/{booking}/approve', \App\Http\Controllers\ApproveBookingController::class)
         ->name('bookings.approve');
 
-    Route::patch('bookings/{booking}/reject', [BookingController::class, 'rejectBooking'])
+    Route::patch('bookings/{booking}/reject', \App\Http\Controllers\RejectBookingController::class)
         ->name('bookings.reject');
 
     Route::get('/dashboard',
