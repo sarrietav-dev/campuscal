@@ -28,7 +28,7 @@ class CreateSpaceRequest extends FormRequest
             'capacity' => ['required', 'numeric', 'min:1'],
             //            'resources' => ['required', 'array'],
             //            'resources.*' => ['required', 'exists:space_resources,id'],
-            'images' => ['required', 'array'],
+            'images' => ['required', 'array', 'max:5'],
             'images.*' => ['required', File::image()->max('2mb')],
             'campus_id' => ['required', 'exists:campuses,id'],
         ];
