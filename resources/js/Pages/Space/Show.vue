@@ -8,7 +8,13 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/Components/ui/carousel";
-import { Card, CardContent } from "@/Components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/Components/ui/card";
 import CarouselImage from "@/Components/CarouselImage.vue";
 
 const props = defineProps<{
@@ -26,7 +32,7 @@ const props = defineProps<{
 <template>
     <Head :title="space.name" />
     <AuthenticatedLayout>
-        <div class="lg:grid lg:grid-cols-2 lg:gap-5">
+        <div class="lg:grid lg:grid-cols-2 flex flex-col gap-5">
             <div class="px-12 lg:px-5">
                 <Carousel class="mx-auto max-w-full lg:max-w-lg">
                     <CarouselContent>
@@ -58,8 +64,33 @@ const props = defineProps<{
                     <CarouselNext />
                 </Carousel>
             </div>
-            <div>
-                <h2>{{ props.space.name }}</h2>
+            <div class="lg:flex lg:flex-col lg:justify-center">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            {{ props.space.name }}
+                        </CardTitle>
+                        <CardDescription>
+                            Capacidad: {{ props.space.capacity }}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div class="flex flex-col space-y-2">
+                            <div v-if="props.space.resources.length > 0">
+                                <h3 class="text-lg font-semibold">Recursos</h3>
+                                <ul class="list-disc list-inside">
+                                    <li
+                                        v-for="resource in props.space
+                                            .resources"
+                                        :key="resource.name"
+                                    >
+                                        {{ resource.name }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     </AuthenticatedLayout>
