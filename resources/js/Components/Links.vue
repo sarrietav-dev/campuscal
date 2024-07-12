@@ -33,7 +33,7 @@ import { BookMarked } from "lucide-vue-next";
     <Link
         v-if="$page.props.can.viewTeam"
         :class="{ 'font-bold': $page.component === 'Team/Index' }"
-        :href="route('teams.index')"
+        :href="route('team.index')"
         class="text-muted-foreground transition-colors hover:text-foreground [&.active]:font-bold"
     >
         Equipo
