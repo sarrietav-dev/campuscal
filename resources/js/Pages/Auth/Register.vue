@@ -32,7 +32,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head title="Regístrate" />
 
         <Card class="w-full mx-auto max-w-md">
             <CardHeader>

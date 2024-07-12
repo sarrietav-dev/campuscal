@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, Head } from "@inertiajs/vue3";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import FormItem from "@/Components/FormItem.vue";
@@ -22,6 +22,7 @@ function handleSubmit() {
 </script>
 
 <template>
+    <Head title="Crear campus" />
     <AuthenticatedLayout>
         <div class="container">
             <form @submit.prevent="handleSubmit">

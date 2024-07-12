@@ -13,7 +13,7 @@ import {
 } from "@/Components/ui/table";
 import ResponsiveModal from "@/Components/ResponsiveModal.vue";
 import { computed, ref } from "vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { router, useForm, Head } from "@inertiajs/vue3";
 import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import ErrorMessage from "@/Components/ErrorMessage.vue";
@@ -101,6 +101,7 @@ async function handleDelete(userId: number) {
 </script>
 
 <template>
+    <Head :title="$t('Team')" />
     <AuthenticatedLayout>
         <div class="container max-w-4xl">
             <div class="flex align-center mb-6">

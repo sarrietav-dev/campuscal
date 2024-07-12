@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { router, useForm, Head } from "@inertiajs/vue3";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import FormItem from "@/Components/FormItem.vue";
@@ -34,6 +34,7 @@ const hasImageErrors = computed(() => {
 </script>
 
 <template>
+    <Head title="Crear espacio" />
     <AuthenticatedLayout>
         <div class="container">
             <form @submit.prevent="handleSubmit">

@@ -35,7 +35,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Log in" />
+    <Head title="Iniciar sesión" />
 
     <GuestLayout>
         <Card class="mx-auto w-full max-w-md">

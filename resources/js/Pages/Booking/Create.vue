@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from "@inertiajs/vue3";
+import { useForm, Head } from "@inertiajs/vue3";
 import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
 import { Checkbox } from "@/Components/ui/checkbox";
@@ -104,6 +104,7 @@ function handleSubmit() {
 
 <template>
     <GuestLayout>
+        <Head title="Reservar espacio" />
         <form
             @submit.prevent="handleSubmit"
             class="container mx-auto max-w-4xl space-y-5"

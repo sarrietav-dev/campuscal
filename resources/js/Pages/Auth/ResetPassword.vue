@@ -37,7 +37,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Reset Password" />
+        <Head title="Cambiar contraseña" />
 
         <Card class="w-full max-w-md mx-auto">
             <CardHeader>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
 import {
     Carousel,
     CarouselContent,
@@ -23,6 +24,7 @@ const props = defineProps<{
 </script>
 
 <template>
+    <Head :title="space.name" />
     <AuthenticatedLayout>
         <div class="lg:grid lg:grid-cols-2 lg:gap-5">
             <div class="px-12 lg:px-5">

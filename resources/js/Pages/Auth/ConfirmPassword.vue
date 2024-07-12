@@ -28,7 +28,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Confirm Password" />
+        <Head title="Confirmar contraseña" />
 
         <Card class="mx-auto max-w-sm">
             <CardHeader>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
 import {
     Baby,
     BookUser,
@@ -54,6 +55,7 @@ const { booking } = defineProps<{
 </script>
 
 <template>
+    <Head :title="`Solicitud ${booking.id}`" />
     <AuthenticatedLayout>
         <div class="container max-w-screen-md">
             <div class="space-y-16">

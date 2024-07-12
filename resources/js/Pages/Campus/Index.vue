@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SpaceCard from "@/Components/SpaceCard.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, Head } from "@inertiajs/vue3";
 
 const spaces = defineProps<{
     campuses: {
@@ -13,6 +13,7 @@ const spaces = defineProps<{
 </script>
 
 <template>
+    <Head title="Campus" />
     <AuthenticatedLayout>
         <div
             class="space-y-5 sm:grid sm:grid-cols-2 sm:gap-5 sm:space-y-0 lg:grid-cols-3"

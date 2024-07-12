@@ -28,7 +28,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Forgot Password" />
+        <Head title="Olvidó su contraseña" />
 
         <Card class="w-full max-w-md mx-auto justify-self-center">
             <CardHeader>
