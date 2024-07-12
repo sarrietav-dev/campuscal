@@ -14,6 +14,7 @@ PHP_VERSION = '8.3'
 
 [env]
 APP_ENV = 'production'
+APP_NAME = "Espacios Universidad de Cartagena"
 APP_URL = 'https://campuscal-laravel.fly.dev'
 LOG_CHANNEL = 'stderr'
 LOG_LEVEL = 'info'
