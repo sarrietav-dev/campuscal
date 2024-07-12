@@ -108,6 +108,7 @@ const submit = () => {
                         Regístrate
                     </Button>
                     <Button
+                        v-if="!route().params.email"
                         as-child
                         class="w-full"
                         type="button"
