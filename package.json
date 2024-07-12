@@ -38,6 +38,7 @@
         "immer": "^10.1.1",
         "laravel-vue-i18n": "^2.7.7",
         "lucide-vue-next": "^0.396.0",
+        "prettier-plugin-blade": "^2.1.16",
         "radix-vue": "^1.8.4",
         "tailwind-merge": "^2.3.0",
         "tailwindcss-animate": "^1.0.7",

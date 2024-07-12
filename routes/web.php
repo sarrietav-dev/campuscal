@@ -53,4 +53,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/mail', function () {
+    if (app()->environment('production')) {
+        redirect()->route('dashboard');
+    }
+
+    return new \Illuminate\Notifications\Messages\MailMessage();
+});
+
 require __DIR__.'/auth.php';
