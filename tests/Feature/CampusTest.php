@@ -3,19 +3,12 @@
 use App\Authorization\AppRoles;
 use App\Models\Campus;
 use App\Models\User;
-use Database\Seeders\RolePermissionSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Inertia\Testing\AssertableInertia;
 
 use function Pest\Laravel\actingAs;
 
-uses(RefreshDatabase::class);
-
 beforeEach(function () {
-
-    $this->seed(RolePermissionSeeder::class);
-
     $this->user = User::factory()->create();
 });
 

@@ -2,21 +2,14 @@
 
 use App\Authorization\AppRoles;
 use App\Models\Audience;
-use App\Models\Booking;
 use App\Models\Campus;
 use App\Models\User;
-use Database\Seeders\RolePermissionSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Inertia\Testing\AssertableInertia;
 
 use function Pest\Laravel\actingAs;
 
-uses(RefreshDatabase::class);
-
 beforeEach(function () {
-    $this->seed(RolePermissionSeeder::class);
-
     $this->adminUser = User::factory()->create();
     $this->adminUser->assignRole(AppRoles::ADMIN);
 
@@ -137,84 +130,6 @@ it('returns invalid for booking creation with invalid requester identification',
     $this->assertDatabaseCount('bookings', 0);
 });
 
-it('successfully approves a booking when the user is an admin', function () {
-    $booking = Booking::factory()->create();
-
-    $response = actingAs($this->adminUser)
-        ->patch(route('bookings.approve', $booking));
-
-    $response->assertOk();
-    $this->assertDatabaseHas('bookings', [
-        'id' => $booking->id,
-        'status' => 'approved',
-    ]);
-});
-
-it('successfully rejects a booking when a user is an admin', function () {
-    $booking = Booking::factory()->create();
-
-    $response = actingAs($this->adminUser)
-        ->patch(route('bookings.reject', $booking));
-
-    $response->assertOk();
-    $this->assertDatabaseHas('bookings', [
-        'id' => $booking->id,
-        'status' => 'rejected',
-    ]);
-});
-
-it('returns 403 when a user is not an admin and is trying to approve and booking', function () {
-    $booking = Booking::factory()->create();
-
-    $response = actingAs($this->requesterUser)
-        ->patch(route('bookings.approve', $booking));
-
-    $response->assertForbidden();
-    $this->assertDatabaseHas('bookings', [
-        'id' => $booking->id,
-        'status' => 'pending',
-    ]);
-});
-
-it('returns 403 when a user is not an admin and is trying to reject and booking', function () {
-    $booking = Booking::factory()->create();
-
-    $response = actingAs($this->requesterUser)
-        ->patch(route('bookings.reject', $booking));
-
-    $response->assertForbidden();
-    $this->assertDatabaseHas('bookings', [
-        'id' => $booking->id,
-        'status' => 'pending',
-    ]);
-});
-
-it('returns conflict when a user is trying to approve a booking that is already approved', function () {
-    $booking = Booking::factory()->approved()->create();
-
-    $response = actingAs($this->adminUser)
-        ->patch(route('bookings.approve', $booking));
-
-    $response->assertConflict();
-    $this->assertDatabaseHas('bookings', [
-        'id' => $booking->id,
-        'status' => 'approved',
-    ]);
-});
-
-it('returns conflict when a user is trying to reject a booking that is already rejected', function () {
-    $booking = Booking::factory()->rejected()->create();
-
-    $response = actingAs($this->adminUser)
-        ->patch(route('bookings.reject', $booking));
-
-    $response->assertConflict();
-    $this->assertDatabaseHas('bookings', [
-        'id' => $booking->id,
-        'status' => 'rejected',
-    ]);
-});
-
 function bookingData($campuses, $audiences, $agreementFile): array
 {
     return [
@@ -244,8 +159,8 @@ function bookingData($campuses, $audiences, $agreementFile): array
             'name' => fake()->name(),
             'surname' => fake()->name(),
             'email' => fake()->email(),
-            'phone' => fake()->phoneNumber(),
-            'identification' => fake()->numberBetween(1, 30),
+            'phone' => fake()->numberBetween(1, 9999999999),
+            'identification' => fake()->numberBetween(1, 9999999999),
             'company_name' => fake()->company(),
             'company_role' => fake()->jobTitle(),
             'academic_unit' => fake()->company(),

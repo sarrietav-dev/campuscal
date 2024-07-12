@@ -3,9 +3,6 @@
 use App\Authorization\AppRoles;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
@@ -14,8 +11,6 @@ test('login screen can be rendered', function () {
 });
 
 test('requesters can authenticate using the login screen', function () {
-    $this->seed(RolePermissionSeeder::class);
-
     $user = User::factory()->create();
     $user->assignRole(AppRoles::REQUESTER);
 
@@ -29,8 +24,6 @@ test('requesters can authenticate using the login screen', function () {
 });
 
 test('admins can authenticate using the login screen', function () {
-    $this->seed(RolePermissionSeeder::class);
-
     $user = User::factory()->create();
     $user->assignRole(AppRoles::ADMIN);
 
