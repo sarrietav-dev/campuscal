@@ -1,5 +1,9 @@
 name: Fly Deploy
 on:
+  workflow_run:
+    workflows: [Run Tests]
+    types:
+      - completed
   push:
     branches:
       - main
@@ -9,6 +13,7 @@ jobs:
   deploy:
       name: Deploy app
       runs-on: ubuntu-latest
+      if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'push' }}
       steps:
         - uses: actions/checkout@v2
         - uses: superfly/flyctl-actions/setup-flyctl@master
