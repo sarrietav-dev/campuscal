@@ -35,6 +35,8 @@ class ExportReady extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
+            ->subject(__('Export Ready'))
+            ->greeting(__('Hello!'))
             ->line(__('Your export is ready!'))
             ->attach(Storage::url($this->exportName));
     }

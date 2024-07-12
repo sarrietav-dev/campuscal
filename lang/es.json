@@ -30,6 +30,8 @@
     "mail.invite_hello": "Hola!",
     "mail.accept_invite": "Aceptar invitación",
     "mail.invite_disclaimer": "Si no deseas unirte al equipo, simplemente ignora este mensaje.",
+    "Export Ready": "Exportación lista",
+    "Hello!": "¡Hola!",
     "Your export is ready!": "¡Tu exportación está lista!",
     "Exporting the data. You will be notified once it is ready.": "Exportando los datos. Se te notificará una vez que esté listo.",
     "If you're having trouble clicking the \":actionText\" button, copy and paste the URL below into your web browser:": "Si tienes problemas para hacer clic en el botón \":actionText\", copia y pega la URL a continuación en tu navegador web:",
