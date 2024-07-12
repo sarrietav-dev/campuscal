@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Link } from "@inertiajs/vue3";
 import { BookMarked } from "lucide-vue-next";
+import Logo from "@/Components/Logo.vue";
 </script>
 
 <template>
@@ -8,7 +9,7 @@ import { BookMarked } from "lucide-vue-next";
         :href="route('dashboard')"
         class="flex items-center gap-2 text-lg font-semibold md:text-base"
     >
-        <BookMarked class="h-6 w-6" />
+        <Logo />
         <span class="sr-only">CampusCal</span>
     </Link>
     <Link
