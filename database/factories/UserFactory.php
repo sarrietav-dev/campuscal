@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Authorization\AppRoles;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -40,5 +41,33 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn () => [])->afterCreating(function ($user) {
+            $user->assignRole(AppRoles::ADMIN);
+        });
+    }
+
+    public function requester(): static
+    {
+        return $this->state(fn () => [])->afterCreating(function ($user) {
+            $user->assignRole(AppRoles::REQUESTER);
+        });
+    }
+
+    public function superAdmin(): static
+    {
+        return $this->state(fn () => [])->afterCreating(function ($user) {
+            $user->assignRole(AppRoles::SUPER_ADMIN);
+        });
+    }
+
+    public function developer(): static
+    {
+        return $this->state(fn () => [])->afterCreating(function ($user) {
+            $user->assignRole(AppRoles::DEVELOPER);
+        });
     }
 }
