@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function () {
     Route::resource('campuses', CampusController::class)
-        ->only(['index', 'create', 'show', 'store']);
+        ->only(['index', 'create', 'show', 'store', 'update', 'destroy', 'edit']);
 
     Route::resource('campuses.spaces', SpaceController::class)
         ->shallow()
-        ->only(['create', 'store', 'show']);
+        ->only(['create', 'store', 'show', 'edit', 'destroy', 'update']);
 
     Route::post('/bookings/export', \App\Http\Controllers\ExportBookingController::class)->name('bookings.export');
 
