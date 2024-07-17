@@ -84,7 +84,9 @@ class CampusController extends Controller
      */
     public function edit(Campus $campus)
     {
-        //
+        return Inertia::render('Campus/Edit', [
+            'campus' => $campus,
+        ]);
     }
 
     /**
@@ -92,7 +94,13 @@ class CampusController extends Controller
      */
     public function update(Request $request, Campus $campus)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+        ]);
+
+        $campus->update($validated);
+
+        return redirect(route('campuses.index'));
     }
 
     /**
@@ -100,6 +108,8 @@ class CampusController extends Controller
      */
     public function destroy(Campus $campus)
     {
-        //
+        $campus->delete();
+
+        return redirect(route('campuses.index'));
     }
 }

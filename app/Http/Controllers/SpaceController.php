@@ -61,7 +61,9 @@ class SpaceController extends Controller
      */
     public function edit(Space $space)
     {
-        //
+        return Inertia::render('Space/Edit', [
+            'space' => $space->load('resources', 'images'),
+        ]);
     }
 
     /**
@@ -69,7 +71,14 @@ class SpaceController extends Controller
      */
     public function update(Request $request, Space $space)
     {
-        //
+        $space->update($request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'capacity' => 'required|integer',
+            'campus_id' => 'required|integer',
+        ]));
+
+        return redirect()->route('spaces.show', $space);
     }
 
     /**
@@ -77,6 +86,8 @@ class SpaceController extends Controller
      */
     public function destroy(Space $space)
     {
-        //
+        $space->delete();
+
+        return redirect()->route('campuses.show', $space->campus_id);
     }
 }
