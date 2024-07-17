@@ -36,5 +36,12 @@
     "Exporting the data. You will be notified once it is ready.": "Exportando los datos. Se te notificará una vez que esté listo.",
     "If you're having trouble clicking the \":actionText\" button, copy and paste the URL below into your web browser:": "Si tienes problemas para hacer clic en el botón \":actionText\", copia y pega la URL a continuación en tu navegador web:",
     "Regards": "Saludos",
-    "All rights reserved.": "Todos los derechos reservados."
+    "All rights reserved.": "Todos los derechos reservados.",
+    "A booking has been approved.": "Una reserva ha sido aprobada",
+    "View booking": "Ver reserva",
+    "Your booking has been approved.": "Tu reserva ha sido aprobada",
+    "Booking approved": "Reserva aprobada",
+    "Booking rejected": "Reserva rechazada",
+    "We are sorry to inform you that your booking has been rejected.": "Lamentamos informarte que tu reserva ha sido rechazada.",
+    "You can contact us for more information.": "Puedes contactarnos para obtener más información."
 }

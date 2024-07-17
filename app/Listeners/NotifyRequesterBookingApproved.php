@@ -22,6 +22,6 @@ class NotifyRequesterBookingApproved implements ShouldQueue
     public function handle(BookingApproved $event): void
     {
         \Notification::route('mail', $event->booking->requester->email)
-            ->notify(new ApprovedBookingForRequester($event->booking));
+            ->notify((new ApprovedBookingForRequester($event->booking))->locale('es'));
     }
 }

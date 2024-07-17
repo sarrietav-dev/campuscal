@@ -36,7 +36,7 @@ class ApprovedBookingForRequester extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(__('Booking Approved'))
+            ->subject(__('Booking approved'))
             ->greeting(__('Hello!'))
             ->line(__('Your booking has been approved.'));
     }

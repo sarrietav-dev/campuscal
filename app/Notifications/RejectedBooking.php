@@ -36,7 +36,7 @@ class RejectedBooking extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(__('Booking Rejected'))
+            ->subject(__('Booking rejected'))
             ->greeting(__('Hello!'))
             ->line(__('We are sorry to inform you that your booking has been rejected.'))
             ->line(__('You can contact us for more information.'));

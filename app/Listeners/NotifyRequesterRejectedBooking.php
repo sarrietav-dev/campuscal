@@ -23,6 +23,6 @@ class NotifyRequesterRejectedBooking implements ShouldQueue
     public function handle(BookingRejected $event): void
     {
         Notification::route('mail', $event->booking->requester->email)
-            ->notify(new RejectedBooking($event->booking));
+            ->notify((new RejectedBooking($event->booking))->locale('es'));
     }
 }

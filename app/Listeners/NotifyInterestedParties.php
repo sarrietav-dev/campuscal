@@ -22,6 +22,9 @@ class NotifyInterestedParties implements ShouldQueue
      */
     public function handle(BookingApproved $event): void
     {
-        InterestedParty::all()->each(fn (InterestedParty $interestedParty) => $interestedParty->notify(new ApprovedBookingForInterestedParties($event->booking)));
+        InterestedParty::all()
+            ->each(fn (InterestedParty $interestedParty) => $interestedParty
+                ->notify((new ApprovedBookingForInterestedParties($event->booking))
+                    ->locale('es')));
     }
 }
