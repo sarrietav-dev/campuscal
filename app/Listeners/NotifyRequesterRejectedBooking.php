@@ -7,7 +7,7 @@ use App\Notifications\RejectedBooking;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 
-class NotifyRequestedRejectedBooking implements ShouldQueue
+class NotifyRequesterRejectedBooking implements ShouldQueue
 {
     /**
      * Create the event listener.
