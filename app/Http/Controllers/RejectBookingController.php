@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BookingRejected;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 
@@ -17,11 +18,13 @@ class RejectBookingController extends Controller
         }
 
         $validated = $request->validate([
-            'observations' => ['string', 'max:255'],
+            'observations' => ['string', 'max:255', 'nullable'],
         ]);
 
         $booking->reject($validated['observations'] ?? null);
 
         $booking->save();
+
+        BookingRejected::dispatch($booking);
     }
 }
