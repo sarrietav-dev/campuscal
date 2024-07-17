@@ -43,5 +43,13 @@
     "Booking approved": "Reserva aprobada",
     "Booking rejected": "Reserva rechazada",
     "We are sorry to inform you that your booking has been rejected.": "Lamentamos informarte que tu reserva ha sido rechazada.",
-    "You can contact us for more information.": "Puedes contactarnos para obtener más información."
+    "You can contact us for more information.": "Puedes contactarnos para obtener más información.",
+    "space": "espacio",
+    "campus": "campus",
+    "Are you sure you want to delete this :thing?": "¿Estás seguro de que deseas eliminar este :thing?",
+    "Once a :thing is deleted, all of its resources and data will be permanently deleted.": "Una vez que se elimina un :thing, todos sus recursos y datos se eliminarán permanentemente.",
+    "Cancel": "Cancelar",
+    "Delete": "Eliminar",
+    "Failed to delete :thing": "Error al eliminar :thing.",
+    "Successfully deleted :thing": ":Thing eliminado exitosamente."
 }

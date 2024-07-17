@@ -27,11 +27,19 @@ function onSpaceCardDeleteClick(campusId: number) {
 function handleDelete(spaceId: number) {
     router.delete(route("spaces.destroy", { space: spaceId }), {
         onError: () => {
-            toast.error(trans("Failed to delete space"));
+            toast.error(
+                trans("Failed to delete :thing", {
+                    thing: trans("space"),
+                }),
+            );
             spaceToDeleteId.value = null;
         },
         onSuccess: () => {
-            toast.success(trans("Space deleted successfully"));
+            toast.success(
+                trans("Successfully deleted :thing", {
+                    thing: trans("space"),
+                }),
+            );
             spaceToDeleteId.value = null;
         },
     });
@@ -59,7 +67,7 @@ const spaces = defineProps<{
             >
                 <SpaceCard
                     v-for="space in spaces.spaces"
-                    @click="() => router.visit(`/campuses/${space.id}`)"
+                    @click="() => router.visit(`/space/${space.id}`)"
                     @delete="onSpaceCardDeleteClick(space.id)"
                     deletable
                     :key="space.id"
@@ -73,12 +81,19 @@ const spaces = defineProps<{
         <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>
-                    {{ $t("Are you sure you want to delete this space?") }}
+                    {{
+                        $t("Are you sure you want to delete this :thing?", {
+                            thing: $t("space"),
+                        })
+                    }}
                 </AlertDialogTitle>
                 <AlertDescription>
                     {{
                         $t(
-                            "Once a space is deleted, all of its resources and data will be permanently deleted.",
+                            "Once a :thing is deleted, all of its resources and data will be permanently deleted.",
+                            {
+                                thing: $t("space"),
+                            },
                         )
                     }}
                 </AlertDescription>

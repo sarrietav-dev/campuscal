@@ -27,11 +27,19 @@ function onSpaceCardDeleteClick(campusId: number) {
 function handleDelete(campusId: number) {
     router.delete(route("campuses.destroy", { campus: campusId }), {
         onError: () => {
-            toast.error(trans("Failed to delete campus"));
+            toast.error(
+                trans("Failed to delete :thing", {
+                    thing: trans("campus"),
+                }),
+            );
             campusToDeleteId.value = null;
         },
         onSuccess: () => {
-            toast.success(trans("Campus deleted successfully"));
+            toast.success(
+                trans("Successfully deleted :thing", {
+                    thing: trans("campus"),
+                }),
+            );
             campusToDeleteId.value = null;
         },
     });
@@ -71,12 +79,17 @@ const spaces = defineProps<{
         <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>
-                    {{ $t("Are you sure you want to delete this campus?") }}
+                    {{
+                        $t("Are you sure you want to delete this :thing?", {
+                            thing: $t("campus"),
+                        })
+                    }}
                 </AlertDialogTitle>
                 <AlertDescription>
                     {{
                         $t(
-                            "Once a campus is deleted, all of its resources and data will be permanently deleted.",
+                            "Once a :thing is deleted, all of its resources and data will be permanently deleted.",
+                            { thing: $t("campus") },
                         )
                     }}
                 </AlertDescription>
