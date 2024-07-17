@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BookingApproved;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 
@@ -17,11 +18,13 @@ class ApproveBookingController extends Controller
         }
 
         $validated = $request->validate([
-            'observations' => ['string', 'max:255'],
+            'observations' => ['string', 'max:255', 'nullable'],
         ]);
 
         $booking->approve($validated['observations'] ?? null);
 
         $booking->save();
+
+        BookingApproved::dispatch($booking);
     }
 }

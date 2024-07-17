@@ -31,9 +31,13 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
         \App\Http\Controllers\DashboardController::class)->name('dashboard');
 
     Route::resource('/team', \App\Http\Controllers\TeamMemberController::class)
-        ->parameter("team", "user")
+        ->parameter('team', 'user')
         ->only(['index', 'store', 'destroy', 'update']);
 });
+
+Route::get('/bookings/{booking}/public', [BookingController::class, 'show'])
+    ->name('bookings.public.show')
+    ->middleware('signed');
 
 Route::resource('bookings', BookingController::class)
     ->only(['store']);
