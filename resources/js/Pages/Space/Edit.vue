@@ -44,8 +44,8 @@ const form = useForm({
 });
 
 function handleSubmit() {
-    form.post(
-        route("campuses.spaces.update", {
+    form.patch(
+        route("spaces.update", {
             space: props.space,
         }),
     );

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateSpaceRequest;
+use Illuminate\Validation\Rules\File;
 use App\Models\Space;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -73,9 +74,9 @@ class SpaceController extends Controller
     {
         $space->update($request->validate([
             'name' => 'required|string',
-            'description' => 'required|string',
             'capacity' => 'required|integer',
-            'campus_id' => 'required|integer',
+            'images' => ['array', 'max:5'],
+            'images.*' => ['required', File::image()->max('2mb')],
         ]));
 
         return redirect()->route('spaces.show', $space);
