@@ -67,7 +67,12 @@ const spaces = defineProps<{
             >
                 <SpaceCard
                     v-for="space in spaces.spaces"
-                    @click="() => router.visit(`/space/${space.id}`)"
+                    @click="
+                        () =>
+                            router.visit(
+                                route('spaces.show', { space: space.id }),
+                            )
+                    "
                     @delete="onSpaceCardDeleteClick(space.id)"
                     deletable
                     :key="space.id"
