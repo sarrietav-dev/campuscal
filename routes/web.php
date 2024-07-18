@@ -9,12 +9,14 @@ use App\Http\Controllers\SpaceController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function () {
-    Route::resource('campuses', CampusController::class)
-        ->only(['index', 'create', 'show', 'store', 'update', 'destroy', 'edit']);
+    Route::resource('campuses', CampusController::class);
 
     Route::resource('campuses.spaces', SpaceController::class)
         ->shallow()
-        ->only(['create', 'store', 'show', 'edit', 'destroy', 'update']);
+        ->except(['index']);
+
+    Route::resource('images', \App\Http\Controllers\ImageController::class)
+        ->only(['destroy']);
 
     Route::post('/bookings/export', \App\Http\Controllers\ExportBookingController::class)->name('bookings.export');
 
