@@ -39,8 +39,6 @@ const props = defineProps<{
     };
 }>();
 
-console.log(props.shifts);
-
 const shiftsForChart = computed(() => {
     return Object.entries(props.shifts).map(([key, value]) => ({
         category: Math.round((value / props.times_booked) * 100),
@@ -155,16 +153,12 @@ function hourTo12HourFormat(hour: string) {
                                 </h3>
                                 <DonutChart
                                     :data="shiftsForChart"
-                                    :colors="['#FFD700', '#FFC400', '#FF8F00']"
+                                    :colors="['#FFC107', '#FF5722', '#3F51B5']"
                                     index="name"
                                     category="category"
                                     type="pie"
                                     show-legend
-                                    :value-formatter="
-                                        (tick, i) => {
-                                            return `${tick}%`;
-                                        }
-                                    "
+                                    :value-formatter="(tick) => `${tick}%`"
                                 />
                             </div>
                         </div>
