@@ -16,6 +16,8 @@ import {
     CardTitle,
 } from "@/Components/ui/card";
 import CarouselImage from "@/Components/CarouselImage.vue";
+import { Button } from "@/Components/ui/button";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps<{
     space: {
@@ -67,12 +69,23 @@ const props = defineProps<{
             <div class="lg:flex lg:flex-col lg:justify-center">
                 <Card>
                     <CardHeader>
-                        <CardTitle>
-                            {{ props.space.name }}
-                        </CardTitle>
-                        <CardDescription>
-                            Capacidad: {{ props.space.capacity }}
-                        </CardDescription>
+                        <div class="flex justify-between">
+                            <div>
+                                <CardTitle>
+                                    {{ props.space.name }}
+                                </CardTitle>
+                                <CardDescription>
+                                    Capacidad: {{ props.space.capacity }}
+                                </CardDescription>
+                            </div>
+                            <Link
+                                :href="
+                                    route('spaces.edit', { space: space.id })
+                                "
+                            >
+                                <Button>{{ $t('Edit')}}</Button>
+                            </Link>
+                        </div>
                     </CardHeader>
                     <CardContent>
                         <div class="flex flex-col space-y-2">

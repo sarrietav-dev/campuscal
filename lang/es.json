@@ -51,5 +51,6 @@
     "Cancel": "Cancelar",
     "Delete": "Eliminar",
     "Failed to delete :thing": "Error al eliminar :thing.",
-    "Successfully deleted :thing": ":Thing eliminado exitosamente."
+    "Successfully deleted :thing": ":Thing eliminado exitosamente.",
+    "Edit": "Editar"
 }
