@@ -57,7 +57,8 @@
     "Peak usage hours": "Horas de mayor uso",
     "Total bookings": "Reservas totales",
     "Average usage time": "Tiempo de uso promedio",
-    "evenings": "noches",
-    "mornings": "mañanas",
-    "afternoons": "tardes"
+    "evenings": "Noches",
+    "mornings": "Mañanas",
+    "afternoons": "Tardes",
+    "Shifts distribution": "Distribución de jornadas"
 }

@@ -43,7 +43,7 @@ console.log(props.shifts);
 
 const shiftsForChart = computed(() => {
     return Object.entries(props.shifts).map(([key, value]) => ({
-        category: (value / props.times_booked) * 100,
+        category: Math.round((value / props.times_booked) * 100),
         name: trans(key),
     }));
 });
@@ -141,19 +141,30 @@ function hourTo12HourFormat(hour: string) {
                                     </h3>
                                     <p>
                                         {{
-                                        (
-                                            Math.abs(props.average_usage_time / 60)
-                                        ).toFixed(2)
-                                      }}
+                                            Math.abs(
+                                                props.average_usage_time / 60,
+                                            ).toFixed(2)
+                                        }}
                                         horas
                                     </p>
                                 </div>
                             </div>
                             <div>
+                                <h3 class="text-lg font-semibold my-4">
+                                    {{ $t("Shifts distribution") }}:
+                                </h3>
                                 <DonutChart
                                     :data="shiftsForChart"
+                                    :colors="['#FFD700', '#FFC400', '#FF8F00']"
                                     index="name"
                                     category="category"
+                                    type="pie"
+                                    show-legend
+                                    :value-formatter="
+                                        (tick, i) => {
+                                            return `${tick}%`;
+                                        }
+                                    "
                                 />
                             </div>
                         </div>
