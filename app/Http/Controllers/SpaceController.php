@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateSpaceRequest;
-use Illuminate\Validation\Rules\File;
 use App\Models\Space;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\File;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -72,12 +72,22 @@ class SpaceController extends Controller
      */
     public function update(Request $request, Space $space)
     {
-        $space->update($request->validate([
+        $validated = $request->validate([
             'name' => 'required|string',
             'capacity' => 'required|integer',
             'images' => ['array', 'max:5'],
             'images.*' => ['required', File::image()->max('2mb')],
-        ]));
+        ]);
+
+        if (collect($validated['images'])->count() + $space->images->count() > 5) {
+            return redirect()->back()->withErrors(['images' => 'You can only have 5 images']);
+        }
+
+        $space->images()->createMany(
+            collect($validated['images'])->map(fn ($image) => ['url' => Storage::url($image->store())])
+        );
+
+        $space->update($request->only(['name', 'capacity']));
 
         return redirect()->route('spaces.show', $space);
     }

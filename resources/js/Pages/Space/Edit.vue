@@ -44,10 +44,16 @@ const form = useForm({
 });
 
 function handleSubmit() {
-    form.patch(
+    router.post(
         route("spaces.update", {
             space: props.space,
         }),
+        {
+            _method: "put",
+            name: form.name,
+            capacity: form.capacity,
+            images: form.images,
+        },
     );
 }
 
