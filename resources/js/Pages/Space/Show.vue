@@ -18,6 +18,9 @@ import {
 import CarouselImage from "@/Components/CarouselImage.vue";
 import { Button } from "@/Components/ui/button";
 import { Link } from "@inertiajs/vue3";
+import { DonutChart } from "@/Components/ui/chart-donut";
+import { computed } from "vue";
+import { trans } from "laravel-vue-i18n";
 
 const props = defineProps<{
     space: {
@@ -28,7 +31,28 @@ const props = defineProps<{
         campus_id: number;
         capacity: string;
     };
+    peak_usage: { hour: string }[];
+    times_booked: number;
+    average_usage_time: number;
+    shifts: {
+        [key: string]: number;
+    };
 }>();
+
+console.log(props.shifts);
+
+const shiftsForChart = computed(() => {
+    return Object.entries(props.shifts).map(([key, value]) => ({
+        category: (value / props.times_booked) * 100,
+        name: trans(key),
+    }));
+});
+
+function hourTo12HourFormat(hour: string) {
+    const ampm = +hour >= 12 ? "pm" : "am";
+    const hours12 = +hour % 12 || 12;
+    return `${hours12} ${ampm}`;
+}
 </script>
 
 <template>
@@ -83,23 +107,54 @@ const props = defineProps<{
                                     route('spaces.edit', { space: space.id })
                                 "
                             >
-                                <Button>{{ $t('Edit')}}</Button>
+                                <Button>{{ $t("Edit") }}</Button>
                             </Link>
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <div class="flex flex-col space-y-2">
-                            <div v-if="props.space.resources.length > 0">
-                                <h3 class="text-lg font-semibold">Recursos</h3>
-                                <ul class="list-disc list-inside">
-                                    <li
-                                        v-for="resource in props.space
-                                            .resources"
-                                        :key="resource.name"
-                                    >
-                                        {{ resource.name }}
-                                    </li>
-                                </ul>
+                        <div class="flex">
+                            <div>
+                                <div class="mt-4">
+                                    <h3 class="text-lg font-semibold">
+                                        {{ $t("Peak usage hours") }}:
+                                    </h3>
+                                    <ul class="list-disc list-inside">
+                                        <li
+                                            v-for="peak in props.peak_usage"
+                                            :key="peak.hour"
+                                        >
+                                            {{ hourTo12HourFormat(peak.hour) }}
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="mt-4">
+                                    <h3 class="text-lg font-semibold">
+                                        {{ $t("Total bookings") }}:
+                                    </h3>
+                                    <p>{{ props.times_booked }}</p>
+                                </div>
+
+                                <div class="mt-4">
+                                    <h3 class="text-lg font-semibold">
+                                        {{ $t("Average usage time") }}:
+                                    </h3>
+                                    <p>
+                                        {{
+                                        (
+                                            Math.abs(props.average_usage_time / 60)
+                                        ).toFixed(2)
+                                      }}
+                                        horas
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <DonutChart
+                                    :data="shiftsForChart"
+                                    index="name"
+                                    category="category"
+                                />
                             </div>
                         </div>
                     </CardContent>

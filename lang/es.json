@@ -52,5 +52,12 @@
     "Delete": "Eliminar",
     "Failed to delete :thing": "Error al eliminar :thing.",
     "Successfully deleted :thing": ":Thing eliminado exitosamente.",
-    "Edit": "Editar"
+    "Edit": "Editar",
+    "Times booked last month": "Veces reservado el mes pasado",
+    "Peak usage hours": "Horas de mayor uso",
+    "Total bookings": "Reservas totales",
+    "Average usage time": "Tiempo de uso promedio",
+    "evenings": "noches",
+    "mornings": "mañanas",
+    "afternoons": "tardes"
 }

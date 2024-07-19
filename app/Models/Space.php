@@ -44,4 +44,46 @@ class Space extends Model
     {
         return $this->morphOne(Image::class, 'imageable')->oldestOfMany();
     }
+
+    public function timesBooked(): int
+    {
+        return $this->appointments()->count();
+    }
+
+    public function peakUsageTimes(): array
+    {
+        return $this->appointments()
+            ->selectRaw('strftime("%H", date_start) as hour, count(*) as count')
+            ->groupBy('hour')
+            ->orderBy('count', 'desc')
+            ->limit(3)
+            ->get()
+            ->toArray();
+    }
+
+    public function averageUsageTime(): float|int|null
+    {
+        return $this->appointments()->get()->avg(fn (Appointment $appointment) => $appointment->duration);
+    }
+
+    public function timesBookedInTheMorning(): int
+    {
+        return $this->appointments()
+            ->whereRaw('strftime("%H", date_start) < 12')
+            ->count();
+    }
+
+    public function timesBookedInTheAfternoon(): int
+    {
+        return $this->appointments()
+            ->whereRaw('strftime("%H", date_start) <= 17 AND strftime("%H", date_start) >= 12')
+            ->count();
+    }
+
+    public function timesBookedInTheEvening(): int
+    {
+        return $this->appointments()
+            ->whereRaw('strftime("%H", date_start) > 17')
+            ->count();
+    }
 }

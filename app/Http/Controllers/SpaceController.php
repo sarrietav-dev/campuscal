@@ -54,6 +54,18 @@ class SpaceController extends Controller
     {
         return Inertia::render('Space/Show', [
             'space' => $space->load('resources', 'images'),
+            'times_booked' => $space->timesBooked(),
+
+            'average_usage_time' => $space->averageUsageTime(),
+
+            'peak_usage' => $space->peakUsageTimes(),
+
+            'shifts' => [
+                'mornings' => $space->timesBookedInTheMorning(),
+                'afternoons' => $space->timesBookedInTheAfternoon(),
+                'evenings' => $space->timesBookedInTheEvening(),
+            ],
+
         ]);
     }
 
