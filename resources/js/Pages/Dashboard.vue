@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import LineChart from "@/Components/LineChart.vue";
 import { Link } from "@inertiajs/vue3";
 import { UseImage } from "@vueuse/components";
+import { Calendar } from "v-calendar";
+import axios from "axios";
 
 interface Stat {
     title: string;
@@ -54,6 +56,63 @@ interface MostRequestedSpace {
     appointments_count: number;
     images: { url: string }[];
 }
+
+interface Appointment {
+    id: number;
+    booking_id: number;
+    date_start: string;
+    date_end: string;
+    booking: { id: number; details: string };
+}
+
+const appointments = ref<Appointment[]>([]);
+
+onMounted(() => {
+    getMonthlyAppointments().then((res) => {
+        appointments.value = res.data;
+    });
+});
+
+async function getMonthlyAppointments(
+    date?: { month: number; year: number }[],
+) {
+    const currentDate = date ? date[0] : undefined;
+
+    return await axios.get<Appointment[]>(route("appointments.index"), {
+        params: {
+            month: currentDate?.month,
+            year: currentDate?.year,
+        },
+    });
+}
+
+function handlePageChange({ month, year }: { month: number; year: number }) {
+    getMonthlyAppointments([{ month, year }]).then((res) => {
+        appointments.value = res.data;
+    });
+}
+
+const calendarAttributes = computed(() => {
+    return appointments.value.map((appointment) => {
+        return {
+            key: appointment.id,
+            highlight: {
+                start: { fillMode: "outline" },
+                base: { fillMode: "light" },
+                end: { fillMode: "outline" },
+            },
+            popover: {
+                label:
+                    `#${appointment.booking_id} ` +
+                    appointment.booking.details,
+            },
+            dates: {
+                start: new Date(appointment.date_start),
+                end: new Date(appointment.date_end),
+            },
+        };
+    });
+});
 </script>
 
 <template>
@@ -141,7 +200,12 @@ interface MostRequestedSpace {
                 <div
                     class="col-start-5 col-end-13 col-span-8 content-center py-6"
                 >
-                    <LineChart />
+                    <Calendar
+                        expanded
+                        locale="es"
+                        :attributes="calendarAttributes"
+                        @did-move="handlePageChange($event[0])"
+                    />
                 </div>
             </div>
         </div>

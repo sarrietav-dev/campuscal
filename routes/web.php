@@ -18,6 +18,9 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
     Route::resource('images', \App\Http\Controllers\ImageController::class)
         ->only(['destroy']);
 
+    Route::resource('appointments', \App\Http\Controllers\AppointmentController::class)
+        ->only(['index']);
+
     Route::post('/bookings/export', \App\Http\Controllers\ExportBookingController::class)->name('bookings.export');
 
     Route::resource('bookings', BookingController::class)
