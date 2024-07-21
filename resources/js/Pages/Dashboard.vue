@@ -7,6 +7,7 @@ import { Link } from "@inertiajs/vue3";
 import { UseImage } from "@vueuse/components";
 import { Calendar } from "v-calendar";
 import axios from "axios";
+import {useColorMode} from "@vueuse/core";
 
 interface Stat {
     title: string;
@@ -22,6 +23,8 @@ const props = defineProps<{
     rejected_bookings: number;
     most_requested_spaces: MostRequestedSpace[];
 }>();
+
+const mode = useColorMode()
 
 const stats = ref<Stat[]>([
     {
@@ -92,7 +95,7 @@ function handlePageChange({ month, year }: { month: number; year: number }) {
     });
 }
 
-const calendarAttributes = computed(() => {
+const calendarAttributes: typeof Calendar['attributes'] = computed(() => {
     return appointments.value.map((appointment) => {
         return {
             key: appointment.id,
@@ -205,6 +208,7 @@ const calendarAttributes = computed(() => {
                         locale="es"
                         :attributes="calendarAttributes"
                         @did-move="handlePageChange($event[0])"
+                        :is-dark="{ selector: ':root', darkClass: 'dark' }"
                     />
                 </div>
             </div>
