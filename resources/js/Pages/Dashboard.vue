@@ -6,7 +6,7 @@ import { Link } from "@inertiajs/vue3";
 import { UseImage } from "@vueuse/components";
 import { Calendar } from "v-calendar";
 import axios from "axios";
-import {useColorMode} from "@vueuse/core";
+import { useColorMode } from "@vueuse/core";
 
 interface Stat {
     title: string;
@@ -23,7 +23,7 @@ const props = defineProps<{
     most_requested_spaces: MostRequestedSpace[];
 }>();
 
-const mode = useColorMode()
+const mode = useColorMode();
 
 const stats = ref<Stat[]>([
     {
@@ -94,19 +94,18 @@ function handlePageChange({ month, year }: { month: number; year: number }) {
     });
 }
 
-const calendarAttributes: typeof Calendar['attributes'] = computed(() => {
+const calendarAttributes: (typeof Calendar)["attributes"] = computed(() => {
     return appointments.value.map((appointment) => {
         return {
             key: appointment.id,
             highlight: {
-                start: { fillMode: "outline" },
-                base: { fillMode: "light" },
-                end: { fillMode: "outline" },
+                start: { color: "yellow", fillMode: "outline" },
+                base: { color: "yellow", fillMode: "light" },
+                end: { color: "yellow", fillMode: "outline" },
             },
             popover: {
                 label:
-                    `#${appointment.booking_id} ` +
-                    appointment.booking.details,
+                    `#${appointment.booking_id} ` + appointment.booking.details,
             },
             dates: {
                 start: new Date(appointment.date_start),
@@ -208,6 +207,7 @@ const calendarAttributes: typeof Calendar['attributes'] = computed(() => {
                         :attributes="calendarAttributes"
                         @did-move="handlePageChange($event[0])"
                         :is-dark="{ selector: ':root', darkClass: 'dark' }"
+                        transparent
                     />
                 </div>
             </div>
