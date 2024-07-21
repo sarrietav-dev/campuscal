@@ -2,7 +2,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
-import LineChart from "@/Components/LineChart.vue";
 import { Link } from "@inertiajs/vue3";
 import { UseImage } from "@vueuse/components";
 import { Calendar } from "v-calendar";
