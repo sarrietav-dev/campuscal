@@ -17,6 +17,7 @@ import { Checkbox } from "@/Components/ui/checkbox";
 defineProps<{
     canResetPassword?: boolean;
     status?: string;
+    isSignInWithGoogleEnabled: boolean;
 }>();
 
 const form = useForm({
@@ -114,6 +115,7 @@ const submit = () => {
                     </div>
                     <Button
                         as-child
+                        v-if="isSignInWithGoogleEnabled"
                         variant="outline"
                         class="w-full"
                         type="button"

@@ -56,6 +56,15 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        function isSignInWithGoogleEnabled()
+        {
+            $googleConfig = config('services.google');
+
+            return $googleConfig['client_id'] && $googleConfig['client_secret'] && $googleConfig['redirect'];
+        }
+
+        return Inertia::render('Auth/Register', [
+            'isSignInWithGoogleEnabled' => isSignInWithGoogleEnabled(),
+        ]);
     }
 }

@@ -13,6 +13,10 @@ import {
 } from "@/Components/ui/card";
 import ErrorMessage from "@/Components/ErrorMessage.vue";
 
+defineProps<{
+    isSignInWithGoogleEnabled: boolean
+}>()
+
 const form = useForm({
     name: "",
     email: route().params.email ?? "",
@@ -108,7 +112,7 @@ const submit = () => {
                         Regístrate
                     </Button>
                     <Button
-                        v-if="!route().params.email"
+                        v-if="!route().params.email && isSignInWithGoogleEnabled"
                         as-child
                         class="w-full"
                         type="button"
