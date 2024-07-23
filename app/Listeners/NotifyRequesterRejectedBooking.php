@@ -24,5 +24,10 @@ class NotifyRequesterRejectedBooking implements ShouldQueue
     {
         Notification::route('mail', $event->booking->requester->email)
             ->notify((new RejectedBooking($event->booking))->locale('es'));
+
+        \Log::info('Notified requester of rejected booking', [
+            'booking' => $event->booking->id,
+            'requester' => $event->booking->requester->id,
+        ]);
     }
 }

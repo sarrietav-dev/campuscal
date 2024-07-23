@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InterestedParty;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class InterestedPartyController extends Controller
 {
@@ -14,6 +15,11 @@ class InterestedPartyController extends Controller
         ]);
 
         InterestedParty::create($validated);
+
+        Log::info('Interested party created', [
+            'email' => $validated['email'],
+            'by' => auth()->id(),
+        ]);
 
         return redirect()->back()->with('success', 'Interested party created');
     }

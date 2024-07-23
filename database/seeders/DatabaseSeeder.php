@@ -27,25 +27,25 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
         ]);
 
-        User::factory()->create([
+        User::factory()->superAdmin()->create([
             'name' => 'Super Admin user',
             'email' => 'super@campuscal.com',
-        ])->assignRole(AppRoles::SUPER_ADMIN);
+        ]);
 
-        User::factory()->create([
+        User::factory()->admin()->create([
             'name' => 'Admin user',
             'email' => 'admin@campuscal.com',
-        ])->assignRole(AppRoles::ADMIN);
+        ]);
 
-        User::factory()->create([
+        User::factory()->developer()->create([
             'name' => 'Developer user',
             'email' => 'dev@campuscal.com',
-        ])->assignRole(AppRoles::DEVELOPER);
+        ]);
 
-        User::factory()->create([
+        User::factory()->requester()->create([
             'name' => 'User',
             'email' => 'user@campuscal.com',
-        ])->assignRole(AppRoles::REQUESTER);
+        ]);
 
         InterestedParty::factory(5)->create();
 

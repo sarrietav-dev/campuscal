@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\BookingRejected;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RejectBookingController extends Controller
 {
@@ -24,6 +25,8 @@ class RejectBookingController extends Controller
         $booking->reject($validated['observations'] ?? null);
 
         $booking->save();
+
+        Log::info('Booking rejected', ['booking' => $booking->id, 'by' => auth()->id()]);
 
         BookingRejected::dispatch($booking);
     }

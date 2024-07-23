@@ -9,6 +9,7 @@ use Cache;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -56,6 +57,9 @@ class CampusController extends Controller
             collect($request->images)->map(fn ($image) => ['url' => Storage::url($image->store())])
         );
 
+        Cache::forget('campuses');
+        Log::info('Campus created', ['campus' => $campus, 'by' => auth()->id()]);
+
         return redirect(route('campuses.index'));
     }
 
@@ -100,6 +104,9 @@ class CampusController extends Controller
 
         $campus->update($validated);
 
+        Cache::forget('campuses');
+        Log::info('Campus updated', ['campus' => $campus, 'by' => auth()->id()]);
+
         return redirect(route('campuses.index'));
     }
 
@@ -109,6 +116,9 @@ class CampusController extends Controller
     public function destroy(Campus $campus)
     {
         $campus->delete();
+
+        Cache::forget('campuses');
+        Log::info('Campus deleted', ['campus' => $campus, 'by' => auth()->id()]);
 
         return redirect(route('campuses.index'));
     }

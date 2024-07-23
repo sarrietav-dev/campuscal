@@ -7,6 +7,7 @@ use App\Authorization\TeamPermissions;
 use App\Events\UserInvited;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 
@@ -95,6 +96,12 @@ class TeamMemberController extends Controller
 
         $user->syncRoles([$validated['role']]);
 
+        Log::info("User role updated", [
+            'user' => $user->id,
+            'role' => $validated['role'],
+            'by' => auth()->id(),
+        ]);
+
         return redirect()->back()->with('message', __('User role updated successfully'));
     }
 
@@ -104,18 +111,33 @@ class TeamMemberController extends Controller
     public function destroy(User $user)
     {
         if (auth()->user()->cannot(TeamPermissions::REMOVE_MEMBER->value)) {
+            Log::notice("Unauthorized attempt to remove user from team", [
+                'user' => $user->id,
+                'by' => auth()->id(),
+            ]);
+
             return redirect()->back()->withErrors([
                 'message' => __('You are not authorized to remove members'),
             ], 403);
         }
 
         if ($user->hasRole(AppRoles::DEVELOPER)) {
+            Log::notice("Unauthorized attempt to remove developer from team", [
+                'user' => $user->id,
+                'by' => auth()->id(),
+            ]);
+
             return redirect()->back()->withErrors([
                 'message' => __('You cannot remove developers from the team'),
             ], 403);
         }
 
         $user->syncRoles([AppRoles::REQUESTER]);
+
+        Log::info("User removed from team", [
+            'user' => $user->id,
+            'by' => auth()->id(),
+        ]);
 
         return redirect()->back()->with('message', __('User removed from the team successfully'));
     }

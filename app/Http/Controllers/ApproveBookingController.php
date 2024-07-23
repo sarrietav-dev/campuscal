@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\BookingApproved;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ApproveBookingController extends Controller
 {
@@ -24,6 +25,8 @@ class ApproveBookingController extends Controller
         $booking->approve($validated['observations'] ?? null);
 
         $booking->save();
+
+        Log::info('Booking approved', ['booking' => $booking->id, 'by' => auth()->id()]);
 
         BookingApproved::dispatch($booking);
     }

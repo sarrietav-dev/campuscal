@@ -7,6 +7,7 @@ use App\Models\Audience;
 use App\Models\Booking;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -66,6 +67,8 @@ class BookingController extends Controller
             'company_role' => $validated['requester']['company_role'],
             'academic_unit' => $validated['requester']['academic_unit'],
         ]);
+
+        Log::info('Booking created', ['booking' => $booking->id, 'requester' => $booking->requester->id]);
 
         return redirect()->route('bookings.create');
     }

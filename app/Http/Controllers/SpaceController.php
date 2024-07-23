@@ -7,6 +7,7 @@ use App\Models\Space;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File;
 use Inertia\Inertia;
@@ -43,6 +44,8 @@ class SpaceController extends Controller
         $space->images()->createMany(
             collect($request->images)->map(fn ($image) => ['url' => Storage::url($image->store())])
         );
+
+        Log::info('Space created', ['space' => $space, 'by' => auth()->id()]);
 
         return redirect()->route('campuses.show', $space->campus_id);
     }
@@ -101,6 +104,8 @@ class SpaceController extends Controller
 
         $space->update($request->only(['name', 'capacity']));
 
+        Log::info('Space updated', ['space' => $space, 'by' => auth()->id()]);
+
         return redirect()->route('spaces.show', $space);
     }
 
@@ -110,6 +115,8 @@ class SpaceController extends Controller
     public function destroy(Space $space)
     {
         $space->delete();
+
+        Log::info('Space deleted', ['space' => $space, 'by' => auth()->id()]);
 
         return redirect()->route('campuses.show', $space->campus_id);
     }
