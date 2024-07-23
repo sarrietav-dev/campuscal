@@ -24,6 +24,7 @@
         "vue-tsc": "^2.0.26"
     },
     "dependencies": {
+        "@popperjs/core": "^2.11.8",
         "@tanstack/vue-query": "^5.48.2",
         "@tanstack/vue-table": "^8.17.3",
         "@unovis/ts": "^1.4.1",
@@ -42,6 +43,7 @@
         "radix-vue": "^1.8.4",
         "tailwind-merge": "^2.3.0",
         "tailwindcss-animate": "^1.0.7",
+        "v-calendar": "^3.1.2",
         "vaul-vue": "^0.2.0",
         "vee-validate": "^4.13.1",
         "vue-i18n": "^9.13.1",

@@ -2,20 +2,20 @@
 
 namespace App\Notifications;
 
+use App\Models\Booking;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Storage;
 
-class ExportReady extends Notification implements ShouldQueue
+class ApprovedBookingForInterestedParties extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(public readonly string $exportName)
+    public function __construct(private readonly Booking $booking)
     {
         //
     }
@@ -36,10 +36,17 @@ class ExportReady extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(__('Export Ready'))
-            ->greeting(__('Hello!'))
-            ->line(__('Your export is ready!'))
-            ->attach(Storage::url($this->exportName));
+            ->subject(__('A booking has been approved'))
+            ->line(__('A booking has been approved.'))
+            ->action(__('View booking'), $this->generateSignedUrl());
+    }
+
+    private function generateSignedUrl(): string
+    {
+        return url()->signedRoute(
+            'bookings.public.show',
+            ['booking' => $this->booking->id]
+        );
     }
 
     /**

@@ -9,12 +9,17 @@ use App\Http\Controllers\SpaceController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function () {
-    Route::resource('campuses', CampusController::class)
-        ->only(['index', 'create', 'show', 'store']);
+    Route::resource('campuses', CampusController::class);
 
     Route::resource('campuses.spaces', SpaceController::class)
         ->shallow()
-        ->only(['create', 'store', 'show']);
+        ->except(['index']);
+
+    Route::resource('images', \App\Http\Controllers\ImageController::class)
+        ->only(['destroy']);
+
+    Route::resource('appointments', \App\Http\Controllers\AppointmentController::class)
+        ->only(['index']);
 
     Route::post('/bookings/export', \App\Http\Controllers\ExportBookingController::class)->name('bookings.export');
 
@@ -31,9 +36,13 @@ Route::middleware(['auth', 'verified', 'can:view-dashboard'])->group(function ()
         \App\Http\Controllers\DashboardController::class)->name('dashboard');
 
     Route::resource('/team', \App\Http\Controllers\TeamMemberController::class)
-        ->parameter("team", "user")
+        ->parameter('team', 'user')
         ->only(['index', 'store', 'destroy', 'update']);
 });
+
+Route::get('/bookings/{booking}/public', [BookingController::class, 'show'])
+    ->name('bookings.public.show')
+    ->middleware('signed');
 
 Route::resource('bookings', BookingController::class)
     ->only(['store']);

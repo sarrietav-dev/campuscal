@@ -7,6 +7,8 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import { i18nVue } from "laravel-vue-i18n";
+import { setupCalendar } from "v-calendar";
+import "v-calendar/style.css";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -27,6 +29,7 @@ createInertiaApp({
                 },
             })
             .use(VueQueryPlugin)
+            .use(setupCalendar, {})
             .use(ZiggyVue)
             .mount(el);
     },

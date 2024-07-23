@@ -1,6 +1,7 @@
 <?php
 
 use App\Authorization\AppRoles;
+use App\Events\BookingRejected;
 use App\Models\Booking;
 use App\Models\User;
 
@@ -15,6 +16,8 @@ beforeEach(function () {
 });
 
 it('successfully rejects a booking when a user is an admin', function () {
+    Event::fake();
+
     $booking = Booking::factory()->pending()->create();
 
     $response = actingAs($this->adminUser)
@@ -51,4 +54,15 @@ it('returns conflict when a user is trying to reject a booking that is already r
         'id' => $booking->id,
         'status' => 'rejected',
     ]);
+});
+
+it('dispatches BookingRejected event when a booking is rejected', function () {
+    Event::fake();
+
+    $booking = Booking::factory()->pending()->create();
+
+    $this->actingAs($this->adminUser)
+        ->patch(route('bookings.reject', $booking));
+
+    Event::assertDispatched(BookingRejected::class);
 });

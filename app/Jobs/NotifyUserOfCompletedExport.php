@@ -28,5 +28,9 @@ class NotifyUserOfCompletedExport implements ShouldQueue
     public function handle(): void
     {
         $this->user->notify((new ExportReady($this->exportName))->locale('es'));
+        \Log::info('User notified of export completion.', [
+            'user_id' => $this->user->id,
+            'export_name' => $this->exportName,
+        ]);
     }
 }

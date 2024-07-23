@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ResponsiveModal from "@/Components/ResponsiveModal.vue";
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watch } from "vue";
 import { Button } from "@/Components/ui/button";
 import SpaceCard from "@/Components/SpaceCard.vue";
 import DatePicker from "@/Components/DatePicker.vue";
@@ -20,9 +20,9 @@ import {
 import CarouselImage from "@/Components/CarouselImage.vue";
 import { Card, CardContent } from "@/Components/ui/card";
 import { Badge } from "@/Components/ui/badge";
-import { useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useQuery } from "@tanstack/vue-query";
 import { getCampuses, getSpaces, Space } from "@/lib/api";
-import { useFetch } from "@vueuse/core";
+import ErrorMessage from "@/Components/ErrorMessage.vue";
 
 const date = ref<DateRange>();
 const startTime = ref<string | undefined>();
@@ -55,6 +55,7 @@ const isCampusSelected = computed(() => campusId.value !== undefined);
 
 const spaces = ref<Space[]>([]);
 const isSpacesLoading = ref(false);
+const calendarErrorMessage = ref<string | null>(null);
 
 const spaceId = ref<number | undefined>(undefined);
 const isSpaceSelected = computed(
@@ -88,13 +89,20 @@ function handleModalOpen(open: boolean) {
 }
 
 function handleCreate() {
-    if (
-        !spaceId.value ||
-        !date.value ||
-        !startTime.value ||
-        !endTime.value ||
-        date.value.start === undefined
-    ) {
+    if (!spaceId.value) {
+        calendarErrorMessage.value = "Selecciona un espacio";
+        return;
+    } else if (!date.value) {
+        console.warn("Date is not selected", date.value);
+        calendarErrorMessage.value = "Selecciona una fecha";
+        return;
+    } else if (!startTime.value) {
+        console.warn("Start time is not selected", startTime.value);
+        calendarErrorMessage.value = "Selecciona una hora de inicio";
+        return;
+    } else if (!endTime.value) {
+        console.warn("End time is not selected", endTime.value);
+        calendarErrorMessage.value = "Selecciona una hora de fin";
         return;
     }
 
@@ -243,12 +251,17 @@ function handleCreate() {
             <div
                 className="col-span-3 flex flex-col items-stretch md:flex-row gap-5 md:gap-3 justify-between mb-5 md:mb-0 self-stretch"
             >
-                <DatePicker
-                    :range="true"
-                    v-model="date"
-                    v-model:start-time="startTime"
-                    v-model:end-time="endTime"
-                />
+                <div class="w-full">
+                    <DatePicker
+                        :range="true"
+                        v-model="date"
+                        v-model:start-time="startTime"
+                        v-model:end-time="endTime"
+                    />
+                    <ErrorMessage v-if="calendarErrorMessage">
+                        {{ calendarErrorMessage }}
+                    </ErrorMessage>
+                </div>
                 <Button @click="handleCreate"> Seleccionar</Button>
             </div>
         </div>

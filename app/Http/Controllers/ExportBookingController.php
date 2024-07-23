@@ -19,6 +19,11 @@ class ExportBookingController extends Controller
             new NotifyUserOfCompletedExport($request->user(), $exportName),
         ]);
 
+        \Log::info('Export has been requested', [
+            'by' => $request->user()->name,
+            'export_name' => $exportName,
+        ]);
+
         return back()->with('message', __('Exporting the data. You will be notified once it is ready.'));
     }
 }

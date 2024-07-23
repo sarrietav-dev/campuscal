@@ -21,7 +21,7 @@ class BookingPolicy
      */
     public function view(User $user, Booking $booking): bool
     {
-        return $user->can(BookingPermissions::VIEW->value);
+        return true;
     }
 
     /**

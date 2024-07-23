@@ -7,7 +7,9 @@ use App\Models\Space;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\File;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -43,6 +45,8 @@ class SpaceController extends Controller
             collect($request->images)->map(fn ($image) => ['url' => Storage::url($image->store())])
         );
 
+        Log::info('Space created', ['space' => $space, 'by' => auth()->id()]);
+
         return redirect()->route('campuses.show', $space->campus_id);
     }
 
@@ -53,6 +57,18 @@ class SpaceController extends Controller
     {
         return Inertia::render('Space/Show', [
             'space' => $space->load('resources', 'images'),
+            'times_booked' => $space->timesBooked(),
+
+            'average_usage_time' => $space->averageUsageTime(),
+
+            'peak_usage' => $space->peakUsageTimes(),
+
+            'shifts' => [
+                'mornings' => $space->timesBookedInTheMorning(),
+                'afternoons' => $space->timesBookedInTheAfternoon(),
+                'evenings' => $space->timesBookedInTheEvening(),
+            ],
+
         ]);
     }
 
@@ -61,7 +77,9 @@ class SpaceController extends Controller
      */
     public function edit(Space $space)
     {
-        //
+        return Inertia::render('Space/Edit', [
+            'space' => $space->load('resources', 'images'),
+        ]);
     }
 
     /**
@@ -69,7 +87,26 @@ class SpaceController extends Controller
      */
     public function update(Request $request, Space $space)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'capacity' => 'required|integer',
+            'images' => ['array', 'max:5'],
+            'images.*' => ['required', File::image()->max('2mb')],
+        ]);
+
+        if (collect($validated['images'])->count() + $space->images->count() > 5) {
+            return redirect()->back()->withErrors(['images' => 'You can only have 5 images']);
+        }
+
+        $space->images()->createMany(
+            collect($validated['images'])->map(fn ($image) => ['url' => Storage::url($image->store())])
+        );
+
+        $space->update($request->only(['name', 'capacity']));
+
+        Log::info('Space updated', ['space' => $space, 'by' => auth()->id()]);
+
+        return redirect()->route('spaces.show', $space);
     }
 
     /**
@@ -77,6 +114,10 @@ class SpaceController extends Controller
      */
     public function destroy(Space $space)
     {
-        //
+        $space->delete();
+
+        Log::info('Space deleted', ['space' => $space, 'by' => auth()->id()]);
+
+        return redirect()->route('campuses.show', $space->campus_id);
     }
 }
