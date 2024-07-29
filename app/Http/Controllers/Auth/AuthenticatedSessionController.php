@@ -18,17 +18,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): Response
     {
-        function isSignInWithGoogleEnabled()
-        {
-            $googleConfig = config('services.google');
-
-            return $googleConfig['client_id'] && $googleConfig['client_secret'] && $googleConfig['redirect'];
-        }
+        $googleConfig = config('services.google');
 
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
-            'isSignInWithGoogleEnabled' => isSignInWithGoogleEnabled(),
+            'isSignInWithGoogleEnabled' => $googleConfig['client_id'] && $googleConfig['client_secret'] && $googleConfig['redirect'],
         ]);
     }
 

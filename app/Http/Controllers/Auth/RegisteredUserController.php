@@ -26,7 +26,7 @@ class RegisteredUserController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['exists:Spatie\Permission\Models\Role,name'],
         ]);
@@ -56,15 +56,10 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        function isSignInWithGoogleEnabled()
-        {
-            $googleConfig = config('services.google');
-
-            return $googleConfig['client_id'] && $googleConfig['client_secret'] && $googleConfig['redirect'];
-        }
+        $googleConfig = config('services.google');
 
         return Inertia::render('Auth/Register', [
-            'isSignInWithGoogleEnabled' => isSignInWithGoogleEnabled(),
+            'isSignInWithGoogleEnabled' => $googleConfig['client_id'] && $googleConfig['client_secret'] && $googleConfig['redirect'],
         ]);
     }
 }
