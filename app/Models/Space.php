@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Carbon;
 
 class Space extends Model
 {
@@ -50,7 +51,6 @@ class Space extends Model
         return $this->appointments()->count();
     }
 
-
     public function averageUsageTime(): float|int|null
     {
         return $this->appointments()->get()->avg(fn (Appointment $appointment) => $appointment->duration);
@@ -58,33 +58,35 @@ class Space extends Model
 
     public function peakUsageTimes(): array
     {
-        return $this->appointments()
-            ->selectRaw('HOUR(date_start) as hour, count(*) as count')
-            ->groupBy('hour')
-            ->orderBy('count', 'desc')
-            ->limit(3)
-            ->get()
-            ->toArray();
+        $appointments = $this->appointments()->get();
+
+        $hoursCount = $appointments->groupBy(function ($appointment) {
+            return Carbon::parse($appointment->date_start)->format('H');
+        })->map(function ($hourGroup) {
+            return count($hourGroup);
+        });
+
+        return $hoursCount->sortDesc()->take(3)->toArray();
     }
 
     public function timesBookedInTheMorning(): int
     {
         return $this->appointments()
-            ->whereRaw('HOUR(date_start) < 12')
+            ->whereBetween('date_start', [now()->startOfDay(), now()->startOfDay()->addHours(12)])
             ->count();
     }
 
     public function timesBookedInTheAfternoon(): int
     {
         return $this->appointments()
-            ->whereRaw('HOUR(date_start) <= 17 AND HOUR(date_start) >= 12')
+            ->whereBetween('date_start', [now()->startOfDay()->addHours(12), now()->startOfDay()->addHours(17)])
             ->count();
     }
 
     public function timesBookedInTheEvening(): int
     {
         return $this->appointments()
-            ->whereRaw('HOUR(date_start) > 17')
+            ->where('date_start', '>', now()->startOfDay()->addHours(17))
             ->count();
     }
 }
