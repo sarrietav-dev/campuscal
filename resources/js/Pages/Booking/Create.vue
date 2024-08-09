@@ -15,11 +15,23 @@ import FormItem from "@/Components/FormItem.vue";
 import { produce } from "immer";
 import { format } from "date-fns";
 import ErrorMessage from "@/Components/ErrorMessage.vue";
+import Combobox from "@/Components/Combobox.vue";
 
 const props = defineProps({
     audience: {
         type: Object,
     },
+    institutions: { type: Array },
+});
+
+const OTHER_INSTITUTION_ID = -1;
+
+const institutions = computed(() => {
+    return props.institutions.map((institution) => ({
+        value: institution.id,
+        label: institution.name,
+    }));
+
 });
 
 const step = ref("request");
@@ -50,6 +62,7 @@ const form = useForm({
         phone: "",
         email: "",
         company_name: "",
+        new_institution: "",
         company_role: "",
         academic_unit: "",
     },
@@ -68,6 +81,10 @@ const form = useForm({
     });
 });
 
+const choseOtherInstitution = computed(
+    () => form.requester.company_name === OTHER_INSTITUTION_ID,
+);
+
 const hasExternal = computed(() =>
     form.audience.includes(
         props.audience?.find((audience) => audience.name === "Personal externo")
@@ -80,6 +97,7 @@ function handleCheckboxChange(value, checked) {
     if (checked) {
         form.audience.push(value);
     } else {
+
         form.audience = form.audience.filter((audience) => audience !== value);
     }
 }
@@ -319,7 +337,7 @@ function handleSubmit() {
                             N° de Identificación
                         </Label>
                         <Input
-                            v-model="form.requester.identification"
+                            v-model.number="form.requester.identification"
                             id="requester.identification"
                             name="requester.identification"
                             type="text"
@@ -333,7 +351,7 @@ function handleSubmit() {
                     <FormItem>
                         <Label for="requester.phone">Teléfono</Label>
                         <Input
-                            v-model="form.requester.phone"
+                            v-model.number="form.requester.phone"
                             id="requester.phone"
                             name="requester.phone"
                             type="tel"
@@ -359,16 +377,32 @@ function handleSubmit() {
                             Entidad, empresa u organización a la que se
                             encuentra afiliado
                         </Label>
-                        <Input
+                        <Combobox
                             v-model="form.requester.company_name"
                             id="requester.companyName"
                             name="requester.companyName"
-                            type="text"
+                            :options="institutions"
                         />
                         <ErrorMessage
                             v-show="form.errors['requester.company_name']"
                         >
                             {{ form.errors["requester.company_name"] }}
+                        </ErrorMessage>
+                    </FormItem>
+                    <FormItem v-show="choseOtherInstitution">
+                        <Label>
+                            Indique la entidad, empresa u organización a la que
+                            se encuentra afiliado
+                        </Label>
+                        <Input
+                            v-model="form.requester.new_institution"
+                            id="requester.new_institution"
+                            name="requester.new_institution"
+                        />
+                        <ErrorMessage
+                            v-show="form.errors['requester.new_institution']"
+                        >
+                            {{ form.errors["requester.new_institution"] }}
                         </ErrorMessage>
                     </FormItem>
                     <FormItem>

@@ -21,6 +21,7 @@ import {
 defineProps<{
     options: { label: string; value: string }[];
     placeholder?: string;
+    withIcons?: boolean;
 }>();
 
 const open = ref(false);
@@ -41,7 +42,7 @@ const model = defineModel<string>();
                         model
                             ? options.find((option) => option.value === model)
                                   ?.label
-                            : placeholder ?? "Seleccionar..."
+                            : (placeholder ?? "Seleccionar...")
                     }}
                 </p>
 
@@ -58,17 +59,19 @@ const model = defineModel<string>();
                             :value="option.value"
                             @select="open = false"
                         >
+                            <span class="pr-3">
+                                {{ option.label }}
+                            </span>
                             <Check
                                 :class="
                                     cn(
-                                        'mr-2 h-4 w-4',
+                                        'ml-auto h-4 w-4',
                                         model === option.value
                                             ? 'opacity-100'
                                             : 'opacity-0',
                                     )
                                 "
                             />
-                            {{ option.label }}
                         </CommandItem>
                     </CommandGroup>
                 </CommandList>
