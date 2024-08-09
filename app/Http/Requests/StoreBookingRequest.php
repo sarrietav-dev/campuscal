@@ -39,9 +39,10 @@ class StoreBookingRequest extends FormRequest
             'requester.email' => ['required', 'email'],
             'requester.phone' => ['required', 'numeric', 'digits_between:1,16'],
             'requester.identification' => ['required', 'numeric', 'digits_between:1,16'],
-            'requester.company_name' => ['required', 'string', 'max:255'],
+            'requester.company_name' => ['required', 'exists:App\Models\Institution,id'],
             'requester.company_role' => ['required', 'string', 'max:255'],
             'requester.academic_unit' => ['required', 'string', 'max:255'],
+            'requester.new_institution' => ['required_if:requester.company_name,-1', 'string', 'max:255', 'unique:App\Models\Institution,name'],
             'agreement_contract' => ['required', 'boolean'],
             'agreement_contract_file' => ['exclude_unless:agreement_contract,true', 'required', 'file', 'mimes:pdf'],
         ];

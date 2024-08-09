@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBookingRequest;
 use App\Models\Audience;
 use App\Models\Booking;
+use App\Models\Institution;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -57,13 +58,20 @@ class BookingController extends Controller
             ]);
         }
 
+        $institution = $validated['requester']['company_name'];
+        if ($validated['requester']['company_name'] === -1) {
+            $institution = Institution::create([
+                'name' => $validated['requester']['new_institution'],
+            ]);
+        }
+
         $booking->requester()->create([
             'name' => $validated['requester']['name'],
             'surname' => $validated['requester']['surname'],
             'email' => $validated['requester']['email'],
             'phone' => $validated['requester']['phone'],
             'identification' => $validated['requester']['identification'],
-            'company_name' => $validated['requester']['company_name'],
+            'company_name' => $institution,
             'company_role' => $validated['requester']['company_role'],
             'academic_unit' => $validated['requester']['academic_unit'],
         ]);
@@ -80,6 +88,7 @@ class BookingController extends Controller
     {
 
         return Inertia::render('Booking/Create', [
+            'institutions' => Institution::get(),
             'audience' => Audience::get(),
         ]);
     }
@@ -90,9 +99,17 @@ class BookingController extends Controller
     public function show(Booking $booking): Response
     {
         return Inertia::render('Booking/Show', [
-            'booking' => $booking->load(['requester', 'audience', 'appointments:id,date_start,date_end,space_id,booking_id', 'appointments.space:name,id', 'appointments.space.images' => function ($query) {
-                $query->select(['url', 'imageable_id'])->limit(1);
-            }, 'agreementContracts']),
+            'booking' => $booking->load([
+                'audience',
+                'requester',
+                'requester.institution',
+                'appointments:id,date_start,date_end,space_id,booking_id',
+                'appointments.space:name,id',
+                'agreementContracts',
+                'appointments.space.images' => function ($query) {
+                    $query->select(['url', 'imageable_id'])->limit(1);
+                },
+            ]),
         ]);
     }
 
