@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Authorization\AppRoles;
 use App\Models\Appointment;
 use App\Models\Audience;
 use App\Models\Booking;
 use App\Models\Campus;
 use App\Models\File;
+use App\Models\Institution;
 use App\Models\InterestedParty;
 use App\Models\Requester;
 use App\Models\Space;
@@ -69,8 +69,16 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Personal externo']
         )->create();
 
+        $institutions = Institution::factory(5)->sequence(
+            ['name' => 'Universidad Nacional de Colombia'],
+            ['name' => 'Universidad de los Andes'],
+            ['name' => 'Universidad Javeriana'],
+            ['name' => 'Universidad del Rosario'],
+            ['name' => 'Universidad Externado de Colombia']
+        )->create();
+
         Booking::factory(50)
-            ->has(Requester::factory())
+            ->has(Requester::factory()->recycle($institutions))
             ->has(Appointment::factory(5)->recycle($spaces), 'appointments')
             ->has(File::factory()->count(3), 'agreementContracts')
             ->recycle($audiences)
