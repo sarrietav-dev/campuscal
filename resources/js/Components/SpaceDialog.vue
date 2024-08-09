@@ -106,6 +106,12 @@ function handleCreate() {
         return;
     }
 
+    if (!date.value?.start || !date.value?.end) {
+        console.warn("Date is not selected", date.value);
+        calendarErrorMessage.value = "Selecciona una fecha";
+        return;
+    }
+
     emit("create", {
         date: {
             start: toCalendarDateTime(
