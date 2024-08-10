@@ -31,7 +31,6 @@ const institutions = computed(() => {
         value: institution.id,
         label: institution.name,
     }));
-
 });
 
 const step = ref("request");
@@ -61,7 +60,7 @@ const form = useForm({
         identification: "",
         phone: "",
         email: "",
-        company_name: "",
+        institution: "",
         new_institution: "",
         company_role: "",
         academic_unit: "",
@@ -82,7 +81,7 @@ const form = useForm({
 });
 
 const choseOtherInstitution = computed(
-    () => form.requester.company_name === OTHER_INSTITUTION_ID,
+    () => form.requester.institution === OTHER_INSTITUTION_ID,
 );
 
 const hasExternal = computed(() =>
@@ -97,7 +96,6 @@ function handleCheckboxChange(value, checked) {
     if (checked) {
         form.audience.push(value);
     } else {
-
         form.audience = form.audience.filter((audience) => audience !== value);
     }
 }
@@ -378,15 +376,15 @@ function handleSubmit() {
                             encuentra afiliado
                         </Label>
                         <Combobox
-                            v-model="form.requester.company_name"
+                            v-model="form.requester.institution"
                             id="requester.companyName"
                             name="requester.companyName"
                             :options="institutions"
                         />
                         <ErrorMessage
-                            v-show="form.errors['requester.company_name']"
+                            v-show="form.errors['requester.institution']"
                         >
-                            {{ form.errors["requester.company_name"] }}
+                            {{ form.errors["requester.institution"] }}
                         </ErrorMessage>
                     </FormItem>
                     <FormItem v-show="choseOtherInstitution">

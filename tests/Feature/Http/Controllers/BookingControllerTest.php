@@ -161,7 +161,7 @@ function bookingData($campuses, $audiences, $agreementFile): array
             'email' => fake()->email(),
             'phone' => fake()->numberBetween(1, 9999999999),
             'identification' => fake()->numberBetween(1, 9999999999),
-            'company_name' => \App\Models\Institution::factory()->create()->id,
+            'institution' => \App\Models\Institution::factory()->create()->id,
             'company_role' => fake()->jobTitle(),
             'academic_unit' => fake()->company(),
         ],

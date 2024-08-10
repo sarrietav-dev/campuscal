@@ -58,8 +58,8 @@ class BookingController extends Controller
             ]);
         }
 
-        $institution = $validated['requester']['company_name'];
-        if ($validated['requester']['company_name'] === -1) {
+        $institution = $validated['requester']['institution'];
+        if ($validated['requester']['institution'] === -1) {
             $institution = Institution::create([
                 'name' => $validated['requester']['new_institution'],
             ]);
@@ -71,9 +71,9 @@ class BookingController extends Controller
             'email' => $validated['requester']['email'],
             'phone' => $validated['requester']['phone'],
             'identification' => $validated['requester']['identification'],
-            'company_name' => $institution,
             'company_role' => $validated['requester']['company_role'],
             'academic_unit' => $validated['requester']['academic_unit'],
+            'institution_id' => $institution,
         ]);
 
         Log::info('Booking created', ['booking' => $booking->id, 'requester' => $booking->requester->id]);

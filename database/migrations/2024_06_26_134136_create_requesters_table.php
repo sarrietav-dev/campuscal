@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Booking;
+use App\Models\Institution;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,9 +21,9 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone');
             $table->string('identification');
-            $table->string('company_name');
-            $table->string('company_role');
-            $table->string('academic_unit');
+            $table->foreignIdFor(Institution::class)->constrained()->cascadeOnDelete();
+            $table->string('company_role')->nullable();
+            $table->string('academic_unit')->nullable();
             $table->foreignIdFor(Booking::class)->constrained()->cascadeOnDelete();
         });
     }

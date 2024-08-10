@@ -42,7 +42,7 @@ const { booking } = defineProps<{
         observations: string;
         requester: {
             academic_unit: string;
-            company_name: string;
+            institution: { name: string };
             company_role: string;
             email: string;
             identification: string;
@@ -130,7 +130,7 @@ const { booking } = defineProps<{
                             <p class="font-semibold">
                                 <BookUser class="inline" />
                                 El numero de asistentes será
-                                <span class="rounded bg-muted p-1">
+                                <span class="p-1 rounded bg-muted">
                                     {{ booking.assistance }}
                                 </span>
                             </p>
@@ -166,7 +166,7 @@ const { booking } = defineProps<{
                     </ul>
                 </section>
                 <section>
-                    <div class="rounded-lg bg-muted p-5">
+                    <div class="p-5 rounded-lg bg-muted">
                         <Text variant="heading4" class="mb-4 text-center">
                             Información del solicitador
                         </Text>
@@ -210,7 +210,7 @@ const { booking } = defineProps<{
                                 <p class="inline font-semibold">
                                     Entidad o empresa:
                                 </p>
-                                {{ booking.requester.company_name }}
+                                {{ booking.requester.institution.name }}
                             </li>
 
                             <li>
@@ -241,5 +241,3 @@ const { booking } = defineProps<{
         </div>
     </AuthenticatedLayout>
 </template>
-
-<style scoped></style>

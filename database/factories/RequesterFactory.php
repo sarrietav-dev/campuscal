@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Booking;
+use App\Models\Institution;
 use App\Models\Requester;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,7 +25,7 @@ class RequesterFactory extends Factory
             'email' => $this->faker->email(),
             'phone' => $this->faker->phoneNumber(),
             'identification' => $this->faker->randomNumber(),
-            'company_name' => $this->faker->company(),
+            'institution_id' => Institution::factory(),
             'company_role' => $this->faker->jobTitle(),
             'academic_unit' => $this->faker->word(),
             'booking_id' => Booking::factory(),
