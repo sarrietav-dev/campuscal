@@ -42,7 +42,6 @@ class StoreBookingRequest extends FormRequest
             'requester.institution' => ['required', 'exists:App\Models\Institution,id'],
             'requester.company_role' => ['required', 'string', 'max:255'],
             'requester.academic_unit' => ['required', 'string', 'max:255'],
-            'requester.new_institution' => ['required_if:requester.institution,-1', 'string', 'max:255', 'unique:App\Models\Institution,name'],
             'agreement_contract' => ['required', 'boolean'],
             'agreement_contract_file' => ['exclude_unless:agreement_contract,true', 'required', 'file', 'mimes:pdf'],
         ];
@@ -59,6 +58,10 @@ class StoreBookingRequest extends FormRequest
             }
 
             return false;
+        });
+
+        $validator->sometimes('requester.new_institution', ['required', 'string', 'max:255', 'unique:App\Models\Institution,name'], function ($input) {
+            return $input->requester['institution'] == -1;
         });
     }
 }

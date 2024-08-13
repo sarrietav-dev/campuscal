@@ -16,6 +16,7 @@ import { produce } from "immer";
 import { format } from "date-fns";
 import ErrorMessage from "@/Components/ErrorMessage.vue";
 import Combobox from "@/Components/Combobox.vue";
+import { toast } from "vue-sonner";
 
 const props = defineProps({
     audience: {
@@ -114,7 +115,13 @@ function handleSpaceDelete(index) {
 }
 
 function handleSubmit() {
-    form.post(route("bookings.store"));
+    form.post(route("bookings.store"), {
+        onSuccess: (params) => {
+            toast.success("Reserva creada exitosamente");
+            handleStepChange("request");
+            form.reset();
+        },
+    });
 }
 </script>
 
@@ -128,9 +135,9 @@ function handleSubmit() {
             <template v-if="step === 'request'">
                 <Text variant="heading2">Datos de la petición</Text>
                 <FormItem>
-                    <Label for="details"
-                        >Detalle de la actividad a realizar</Label
-                    >
+                    <Label for="details">
+                        Detalle de la actividad a realizar
+                    </Label>
                     <Textarea
                         v-model="form.details"
                         id="details"
@@ -441,7 +448,7 @@ function handleSubmit() {
                     <Button type="button" @click="handleStepChange('request')">
                         Atrás
                     </Button>
-                    <Button type="submit"> Enviar</Button>
+                    <Button type="submit" :disabled="form.processing"> Enviar</Button>
                 </div>
             </template>
         </form>

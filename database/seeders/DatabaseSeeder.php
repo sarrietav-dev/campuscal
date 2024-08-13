@@ -74,8 +74,11 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Universidad de los Andes'],
             ['name' => 'Universidad Javeriana'],
             ['name' => 'Universidad del Rosario'],
-            ['name' => 'Universidad Externado de Colombia']
         )->create();
+
+        Institution::create(
+            ['name' => 'Otra', 'id' => -1],
+        );
 
         Booking::factory(50)
             ->has(Requester::factory()->recycle($institutions))

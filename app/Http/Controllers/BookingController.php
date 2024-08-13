@@ -78,7 +78,7 @@ class BookingController extends Controller
 
         Log::info('Booking created', ['booking' => $booking->id, 'requester' => $booking->requester->id]);
 
-        return redirect()->route('bookings.create');
+        return redirect()->back();
     }
 
     /**
