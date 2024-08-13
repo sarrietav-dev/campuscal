@@ -53,40 +53,40 @@ class Space extends Model
 
     public function averageUsageTime(): float|int|null
     {
-        return $this->appointments()->get()->avg(fn (Appointment $appointment) => $appointment->duration);
+        return $this->appointments()->pluck('duration')->avg(fn (Appointment $appointment) => $appointment->duration);
     }
 
     public function peakUsageTimes(): array
     {
-        $appointments = $this->appointments()->get();
+        $appointments = $this->appointments()->pluck('date_start');
 
-        $hoursCount = $appointments->groupBy(function ($appointment) {
-            return Carbon::parse($appointment->date_start)->format('H');
-        })->map(function ($hourGroup) {
-            return count($hourGroup);
-        });
+        $hoursCount = $appointments
+            ->map(fn ($dateStart) => Carbon::parse($dateStart)->format('H'))
+            ->countBy();
 
-        return $hoursCount->sortDesc()->take(3)->toArray();
+        return $hoursCount->sortDesc()->take(3)->keys()->toArray();
     }
 
     public function timesBookedInTheMorning(): int
     {
         return $this->appointments()
-            ->whereBetween('date_start', [now()->startOfDay(), now()->startOfDay()->addHours(12)])
+            ->whereDate('date_start', '>', now()->startOfDay())
+            ->whereDate('date_start', '<', now()->startOfDay()->addHours(12))
             ->count();
     }
 
     public function timesBookedInTheAfternoon(): int
     {
         return $this->appointments()
-            ->whereBetween('date_start', [now()->startOfDay()->addHours(12), now()->startOfDay()->addHours(17)])
+            ->whereDate('date_start', '>', now()->startOfDay()->addHours(12))
+            ->whereDate('date_start', '<', now()->startOfDay()->addHours(17))
             ->count();
     }
 
     public function timesBookedInTheEvening(): int
     {
         return $this->appointments()
-            ->where('date_start', '>', now()->startOfDay()->addHours(17))
+            ->whereDate('date_start', '>', now()->startOfDay()->addHours(17))
             ->count();
     }
 }
