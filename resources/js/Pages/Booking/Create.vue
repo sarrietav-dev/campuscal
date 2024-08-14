@@ -25,7 +25,7 @@ const props = defineProps({
     institutions: { type: Array },
 });
 
-const OTHER_INSTITUTION_ID = -1;
+const OTHER_INSTITUTION_ID = 0;
 
 const institutions = computed(() => {
     return props.institutions.map((institution) => ({
@@ -127,53 +127,33 @@ function handleSubmit() {
 
 <template>
     <GuestLayout>
+
         <Head title="Reservar espacio" />
-        <form
-            @submit.prevent="handleSubmit"
-            class="container mx-auto max-w-4xl space-y-5"
-        >
+        <form @submit.prevent="handleSubmit" class="container mx-auto max-w-4xl space-y-5">
             <template v-if="step === 'request'">
                 <Text variant="heading2">Datos de la petición</Text>
                 <FormItem>
                     <Label for="details">
                         Detalle de la actividad a realizar
                     </Label>
-                    <Textarea
-                        v-model="form.details"
-                        id="details"
-                        name="details"
-                        rows="4"
-                        cols="50"
-                        placeholder="Anote detalladamente la actividad que desea realizar"
-                    ></Textarea>
+                    <Textarea v-model="form.details" id="details" name="details" rows="4" cols="50"
+                        placeholder="Anote detalladamente la actividad que desea realizar"></Textarea>
                     <ErrorMessage v-show="form.errors.details">
                         {{ form.errors.details }}
                     </ErrorMessage>
                 </FormItem>
                 <div class="grid grid-cols-2">
                     <FormItem>
-                        <Label for="audience"
-                            >¿A qué público está dirigida la actividad?</Label
-                        >
+                        <Label for="audience">¿A qué público está dirigida la actividad?</Label>
                         <div class="space-y-2">
-                            <div
-                                class="flex items-center gap-1"
-                                v-for="audience in props.audience"
-                            >
-                                <Checkbox
-                                    :id="audience.id.toString()"
-                                    :key="audience.id"
-                                    :checked="
-                                        form.audience.includes(audience.id)
-                                    "
-                                    @update:checked="
-                                        (checked) =>
+                            <div class="flex items-center gap-1" v-for="audience in props.audience">
+                                <Checkbox :id="audience.id.toString()" :key="audience.id" :checked="form.audience.includes(audience.id)
+                                    " @update:checked="(checked) =>
                                             handleCheckboxChange(
                                                 audience.id,
                                                 checked,
                                             )
-                                    "
-                                />
+                                        " />
                                 <Label :for="audience.id.toString()">
                                     {{ audience.name }}
                                 </Label>
@@ -184,17 +164,9 @@ function handleSubmit() {
                         </ErrorMessage>
                     </FormItem>
                     <div class="space-y-3" v-show="hasExternal">
-                        <Label for="external"
-                            >Para personal externo: ¿Cuál?</Label
-                        >
-                        <Textarea
-                            v-model="form.external"
-                            id="external"
-                            name="external"
-                            rows="4"
-                            cols="50"
-                            placeholder="Indique el grupo poblacional"
-                        ></Textarea>
+                        <Label for="external">Para personal externo: ¿Cuál?</Label>
+                        <Textarea v-model="form.external" id="external" name="external" rows="4" cols="50"
+                            placeholder="Indique el grupo poblacional"></Textarea>
                         <ErrorMessage v-show="form.errors.external">
                             {{ form.errors.external }}
                         </ErrorMessage>
@@ -229,17 +201,11 @@ function handleSubmit() {
                     </Label>
                     <RadioGroup v-model="form.agreement_contract">
                         <div class="flex gap-2 items-center">
-                            <RadioGroupItem
-                                id="agreementContractYes"
-                                value="1"
-                            />
+                            <RadioGroupItem id="agreementContractYes" value="1" />
                             <Label for="agreementContractYes">Sí</Label>
                         </div>
                         <div class="flex gap-2 items-center">
-                            <RadioGroupItem
-                                id="agreementContractNo"
-                                value="0"
-                            />
+                            <RadioGroupItem id="agreementContractNo" value="0" />
                             <Label for="agreementContractNo">No</Label>
                         </div>
                     </RadioGroup>
@@ -251,61 +217,37 @@ function handleSubmit() {
                     <Label for="agreementContract">
                         Anexar copia del convenio o contrato
                     </Label>
-                    <Input
-                        type="file"
-                        @change="handleFileChange($event)"
-                        id="agreementContract"
-                        name="agreementContract"
-                    />
+                    <Input type="file" @change="handleFileChange($event)" id="agreementContract"
+                        name="agreementContract" />
                     <ErrorMessage v-show="form.errors.agreement_contract_file">
                         {{ form.errors.agreement_contract_file }}
                     </ErrorMessage>
                 </FormItem>
                 <FormItem>
                     <template v-for="(space, index) in form.appointments">
-                        <SelectedSpaceCard
-                            deletable
-                            :space-name="space.name"
-                            @delete="handleSpaceDelete(index)"
-                            :date="{
-                                to: space.date.end.toLocaleDateString(),
-                                from: space.date.start.toLocaleDateString(),
-                            }"
-                            :image-url="space.imageUrl"
-                        />
-                        <ErrorMessage
-                            v-show="form.errors[`appointments.${index}`]"
-                        >
+                        <SelectedSpaceCard deletable :space-name="space.name" @delete="handleSpaceDelete(index)" :date="{
+                            to: space.date.end.toLocaleDateString(),
+                            from: space.date.start.toLocaleDateString(),
+                        }" :image-url="space.imageUrl" />
+                        <ErrorMessage v-show="form.errors[`appointments.${index}`]">
                             {{ form.errors[`appointments.${index}`] }}
                         </ErrorMessage>
                     </template>
-                    <SpaceDialog
-                        :open="modalOpen"
-                        @update:open="handleModalOpen($event)"
-                        @create="handleSpacesChange($event)"
-                    />
+                    <SpaceDialog :open="modalOpen" @update:open="handleModalOpen($event)"
+                        @create="handleSpacesChange($event)" />
                     <ErrorMessage v-show="form.errors.appointments">
                         {{ form.errors.appointments }}
                     </ErrorMessage>
                 </FormItem>
                 <FormItem>
                     <Label for="assistance">Número de asistentes</Label>
-                    <Input
-                        type="number"
-                        v-model.number="form.assistance"
-                        id="assistance"
-                        name="assistance"
-                        min="1"
-                    />
+                    <Input type="number" v-model.number="form.assistance" id="assistance" name="assistance" min="1" />
                     <ErrorMessage v-show="form.errors.assistance">
                         {{ form.errors.assistance }}
                     </ErrorMessage>
                 </FormItem>
                 <div class="flex justify-end">
-                    <Button
-                        @click="handleStepChange('requester')"
-                        type="button"
-                    >
+                    <Button @click="handleStepChange('requester')" type="button">
                         Siguiente
                     </Button>
                 </div>
@@ -315,24 +257,15 @@ function handleSubmit() {
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                     <FormItem>
                         <Label for="requester.name">Nombre</Label>
-                        <Input
-                            v-model="form.requester.name"
-                            id="requester.name"
-                            name="requester.name"
-                            type="text"
-                        />
+                        <Input v-model="form.requester.name" id="requester.name" name="requester.name" type="text" />
                         <ErrorMessage v-if="form.errors['requester.name']">
                             {{ form.errors["requester.name"] }}
                         </ErrorMessage>
                     </FormItem>
                     <FormItem>
                         <Label for="requester.surname">Apellido</Label>
-                        <Input
-                            v-model="form.requester.surname"
-                            id="requester.surname"
-                            name="requester.surname"
-                            type="text"
-                        />
+                        <Input v-model="form.requester.surname" id="requester.surname" name="requester.surname"
+                            type="text" />
                         <ErrorMessage v-if="form.errors['requester.surname']">
                             {{ form.errors["requester.surname"] }}
                         </ErrorMessage>
@@ -341,38 +274,24 @@ function handleSubmit() {
                         <Label for="requester.identification">
                             N° de Identificación
                         </Label>
-                        <Input
-                            v-model.number="form.requester.identification"
-                            id="requester.identification"
-                            name="requester.identification"
-                            type="text"
-                        />
-                        <ErrorMessage
-                            v-show="form.errors['requester.identification']"
-                        >
+                        <Input v-model.number="form.requester.identification" id="requester.identification"
+                            name="requester.identification" type="text" />
+                        <ErrorMessage v-show="form.errors['requester.identification']">
                             {{ form.errors["requester.identification"] }}
                         </ErrorMessage>
                     </FormItem>
                     <FormItem>
                         <Label for="requester.phone">Teléfono</Label>
-                        <Input
-                            v-model.number="form.requester.phone"
-                            id="requester.phone"
-                            name="requester.phone"
-                            type="tel"
-                        />
+                        <Input v-model.number="form.requester.phone" id="requester.phone" name="requester.phone"
+                            type="tel" />
                         <ErrorMessage v-show="form.errors['requester.phone']">
                             {{ form.errors["requester.phone"] }}
                         </ErrorMessage>
                     </FormItem>
                     <FormItem class="sm:col-span-2">
                         <Label for="requester.email">Correo electrónico</Label>
-                        <Input
-                            v-model="form.requester.email"
-                            id="requester.email"
-                            name="requester.email"
-                            type="email"
-                        />
+                        <Input v-model="form.requester.email" id="requester.email" name="requester.email"
+                            type="email" />
                         <ErrorMessage v-show="form.errors['requester.email']">
                             {{ form.errors["requester.email"] }}
                         </ErrorMessage>
@@ -382,15 +301,9 @@ function handleSubmit() {
                             Entidad, empresa u organización a la que se
                             encuentra afiliado
                         </Label>
-                        <Combobox
-                            v-model="form.requester.institution"
-                            id="requester.companyName"
-                            name="requester.companyName"
-                            :options="institutions"
-                        />
-                        <ErrorMessage
-                            v-show="form.errors['requester.institution']"
-                        >
+                        <Combobox v-model="form.requester.institution" id="requester.companyName"
+                            name="requester.companyName" :options="institutions" />
+                        <ErrorMessage v-show="form.errors['requester.institution']">
                             {{ form.errors["requester.institution"] }}
                         </ErrorMessage>
                     </FormItem>
@@ -399,14 +312,9 @@ function handleSubmit() {
                             Indique la entidad, empresa u organización a la que
                             se encuentra afiliado
                         </Label>
-                        <Input
-                            v-model="form.requester.new_institution"
-                            id="requester.new_institution"
-                            name="requester.new_institution"
-                        />
-                        <ErrorMessage
-                            v-show="form.errors['requester.new_institution']"
-                        >
+                        <Input v-model="form.requester.new_institution" id="requester.new_institution"
+                            name="requester.new_institution" />
+                        <ErrorMessage v-show="form.errors['requester.new_institution']">
                             {{ form.errors["requester.new_institution"] }}
                         </ErrorMessage>
                     </FormItem>
@@ -414,15 +322,9 @@ function handleSubmit() {
                         <Label for="requester.companyRole">
                             Cargo en la empresa
                         </Label>
-                        <Input
-                            v-model="form.requester.company_role"
-                            id="requester.companyRole"
-                            name="requester.companyRole"
-                            type="text"
-                        />
-                        <ErrorMessage
-                            v-show="form.errors['requester.company_role']"
-                        >
+                        <Input v-model="form.requester.company_role" id="requester.companyRole"
+                            name="requester.companyRole" type="text" />
+                        <ErrorMessage v-show="form.errors['requester.company_role']">
                             {{ form.errors["requester.company_role"] }}
                         </ErrorMessage>
                     </FormItem>
@@ -431,15 +333,9 @@ function handleSubmit() {
                             Unidad Académica o Administrativa de la U de C a la
                             que pertenece
                         </Label>
-                        <Input
-                            v-model="form.requester.academic_unit"
-                            id="requester.academicUnit"
-                            name="requester.academicUnit"
-                            type="text"
-                        />
-                        <ErrorMessage
-                            v-show="form.errors['requester.academic_unit']"
-                        >
+                        <Input v-model="form.requester.academic_unit" id="requester.academicUnit"
+                            name="requester.academicUnit" type="text" />
+                        <ErrorMessage v-show="form.errors['requester.academic_unit']">
                             {{ form.errors["requester.academic_unit"] }}
                         </ErrorMessage>
                     </FormItem>

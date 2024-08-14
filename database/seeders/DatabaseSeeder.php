@@ -77,7 +77,7 @@ class DatabaseSeeder extends Seeder
         )->create();
 
         Institution::create(
-            ['name' => 'Otra', 'id' => -1],
+            ['name' => 'Otra', 'id' => 0],
         );
 
         Booking::factory(50)
