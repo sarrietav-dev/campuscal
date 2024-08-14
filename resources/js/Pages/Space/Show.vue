@@ -46,10 +46,8 @@ const shiftsForChart = computed(() => {
     }));
 });
 
-function hourTo12HourFormat(hour: string) {
-    const ampm = +hour >= 12 ? "pm" : "am";
-    const hours12 = +hour % 12 || 12;
-    return `${hours12} ${ampm}`;
+function hourTo12HourFormat(hour: number) {
+    return hour > 12 ? hour - 12 : hour;
 }
 </script>
 
@@ -121,7 +119,9 @@ function hourTo12HourFormat(hour: string) {
                                             v-for="peak in props.peak_usage"
                                             :key="peak.hour"
                                         >
-                                            {{ hourTo12HourFormat(peak.hour) }}
+                                            {{ hourTo12HourFormat(+peak) }}:00 {{
+                                                +peak > 12 ? "PM" : "AM"
+                                            }}
                                         </li>
                                     </ul>
                                 </div>

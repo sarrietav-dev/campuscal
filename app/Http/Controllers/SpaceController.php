@@ -61,7 +61,7 @@ class SpaceController extends Controller
 
             'average_usage_time' => $space->averageUsageTime(),
 
-            'peak_usage' => $space->peakUsageTimes(),
+            'peak_usage' => collect($space->peakUsageTimes())->map(fn ($time) => $time['hour']),
 
             'shifts' => [
                 'mornings' => $space->timesBookedInTheMorning(),

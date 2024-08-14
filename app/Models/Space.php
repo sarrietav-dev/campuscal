@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Space extends Model
 {
@@ -53,40 +53,55 @@ class Space extends Model
 
     public function averageUsageTime(): float|int|null
     {
-        return $this->appointments()->pluck('duration')->avg(fn (Appointment $appointment) => $appointment->duration);
+        return $this->appointments()->get()->avg(fn (Appointment $appointment) => $appointment->duration);
     }
 
+    private function hourExpresion()
+    {
+        $hourExpression = DB::getDriverName() === 'sqlite'
+            ? "CAST(strftime('%H', date_start) AS INTEGER)"
+            : 'HOUR(date_start)';
+
+        return $hourExpression;
+    }
+
+    /**
+     * Return the top 3 most used hours
+     */
     public function peakUsageTimes(): array
     {
-        $appointments = $this->appointments()->pluck('date_start');
-
-        $hoursCount = $appointments
-            ->map(fn ($dateStart) => Carbon::parse($dateStart)->format('H'))
-            ->countBy();
-
-        return $hoursCount->sortDesc()->take(3)->keys()->toArray();
+        return $this->appointments()
+            ->selectRaw($this->hourExpresion().' as hour, count(*) as count')
+            ->groupBy('hour')
+            ->orderByDesc('count')
+            ->limit(3)
+            ->get()
+            ->map(fn ($item) => [
+                'hour' => $item->hour,
+                'count' => $item->count,
+            ])
+            ->toArray();
     }
 
     public function timesBookedInTheMorning(): int
     {
         return $this->appointments()
-            ->whereDate('date_start', '>', now()->startOfDay())
-            ->whereDate('date_start', '<', now()->startOfDay()->addHours(12))
+            ->whereRaw($this->hourExpresion().' < 12')
             ->count();
     }
 
     public function timesBookedInTheAfternoon(): int
     {
         return $this->appointments()
-            ->whereDate('date_start', '>', now()->startOfDay()->addHours(12))
-            ->whereDate('date_start', '<', now()->startOfDay()->addHours(17))
+            ->whereRaw($this->hourExpresion().' >= 12')
+            ->whereRaw($this->hourExpresion().' < 18')
             ->count();
     }
 
     public function timesBookedInTheEvening(): int
     {
         return $this->appointments()
-            ->whereDate('date_start', '>', now()->startOfDay()->addHours(17))
+            ->whereRaw($this->hourExpresion().' >= 18')
             ->count();
     }
 }
