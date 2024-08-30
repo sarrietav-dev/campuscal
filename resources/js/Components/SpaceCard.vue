@@ -25,7 +25,7 @@ const sizeClasses = computed(() => {
 </script>
 
 <template>
-    <button class="size-full relative group">
+    <button class="relative group">
         <button
             v-if="deletable"
             @click="emit('delete')"
@@ -40,7 +40,7 @@ const sizeClasses = computed(() => {
                 <img
                     :src="spaceImage"
                     :alt="props.title"
-                    class="transform transition-transform group-hover:scale-105 aspect-square"
+                    class="transform transition-transform group-hover:scale-105 aspect-square object-cover w-full"
                     :height="props.height"
                     :width="props.width"
                     v-show="isReady"
