@@ -117,6 +117,7 @@ const { booking } = defineProps<{
                                 se llevará acabo dentro del marco de un convenio
                                 o contrato interadministrativo:
                                 <a
+                                    v-if="booking.agreement_contracts.length"
                                     :href="booking.agreement_contracts[0].url"
                                     target="_blank"
                                 >
