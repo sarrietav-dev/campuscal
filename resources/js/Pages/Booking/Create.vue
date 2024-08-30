@@ -12,7 +12,7 @@ import GuestLayout from "@/Layouts/GuestLayout.vue";
 import SelectedSpaceCard from "@/Components/SelectedSpaceCard.vue";
 import Text from "@/Components/ui/Text.vue";
 import FormItem from "@/Components/FormItem.vue";
-import { produce } from "immer";
+import {produce, setAutoFreeze} from "immer";
 import { format } from "date-fns";
 import ErrorMessage from "@/Components/ErrorMessage.vue";
 import Combobox from "@/Components/Combobox.vue";
@@ -67,6 +67,7 @@ const form = useForm({
         academic_unit: "",
     },
 }).transform((form) => {
+    setAutoFreeze(false);
     return produce(form, (draft) => {
         draft.appointments.forEach((appointment) => {
             appointment.date.start = format(
@@ -116,7 +117,8 @@ function handleSpaceDelete(index) {
 
 function handleSubmit() {
     form.post(route("bookings.store"), {
-        onSuccess: (params) => {
+        preserveState: 'errors',
+        onSuccess: () => {
             toast.success("Reserva creada exitosamente");
             handleStepChange("request");
             form.reset();
@@ -301,8 +303,8 @@ function handleSubmit() {
                             Entidad, empresa u organización a la que se
                             encuentra afiliado
                         </Label>
-                        <Combobox v-model="form.requester.institution" id="requester.companyName"
-                            name="requester.companyName" :options="institutions" />
+                        <Combobox v-model="form.requester.institution" id="requester.institution"
+                            name="requester.institution" :options="institutions" />
                         <ErrorMessage v-show="form.errors['requester.institution']">
                             {{ form.errors["requester.institution"] }}
                         </ErrorMessage>
