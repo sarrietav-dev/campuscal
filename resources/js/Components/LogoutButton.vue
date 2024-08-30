@@ -7,7 +7,7 @@ import { Link } from "@inertiajs/vue3";
 <template>
     <Button as-child variant="outline" size="icon">
         <Link :href="route('logout')" method="post" as="button">
-            <LogOut className="h-5 w-5" />
+            <LogOut class="h-5 w-5" />
         </Link>
     </Button>
 </template>
