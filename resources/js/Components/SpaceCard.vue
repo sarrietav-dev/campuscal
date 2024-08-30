@@ -25,7 +25,7 @@ const sizeClasses = computed(() => {
 </script>
 
 <template>
-    <button class="relative group">
+    <button class="md:size-full relative group">
         <button
             v-if="deletable"
             @click="emit('delete')"
@@ -35,12 +35,12 @@ const sizeClasses = computed(() => {
         </button>
         <div @click="emit('click')">
             <div
-                class="group relative max-h-64 cursor-pointer overflow-hidden rounded-md"
+                class="group relative max-w-sm md:max-w-none md:max-h-64 cursor-pointer overflow-hidden rounded-md md:w-full"
             >
                 <img
                     :src="spaceImage"
                     :alt="props.title"
-                    class="transform transition-transform group-hover:scale-105 aspect-square object-cover w-full"
+                    class="transform transition-transform group-hover:scale-105 aspect-square w-full md:object-cover"
                     :height="props.height"
                     :width="props.width"
                     v-show="isReady"

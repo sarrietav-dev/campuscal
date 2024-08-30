@@ -142,7 +142,7 @@ function handleCreate() {
         <template #title v-else-if="!isSpaceSelected">Spaces</template>
         <div class="overflow-y-auto">
             <div
-                class="sm:grid sm:grid-cols-4 gap-5"
+                class="grid grid-cols-1  place-items-center sm:grid-cols-4 gap-5"
                 v-show="campusId === undefined"
             >
                 <SpaceCard
@@ -185,7 +185,7 @@ function handleCreate() {
             "
         >
             <div
-                class="flex items-center gap-2"
+                class="flex justify-center items-center gap-2"
                 v-for="space in spaces"
                 :key="space.id"
             >
