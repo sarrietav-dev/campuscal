@@ -34,11 +34,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('viewPulse', function (User $user) {
-            if ($this->app->environment('production')) {
-                return $user->hasRole(AppRoles::DEVELOPER);
-            }
-
-            return true;
+            return $user->hasRole(AppRoles::DEVELOPER);
         });
     }
 }
