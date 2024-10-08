@@ -22,10 +22,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
         $this->call([
             RolePermissionSeeder::class,
+            AudienceSeeder::class
         ]);
+
 
         User::factory()->superAdmin()->create([
             'name' => 'Super Admin user',
@@ -61,14 +62,6 @@ class DatabaseSeeder extends Seeder
             ->hasImages(5)
             ->create();
 
-        $audiences = Audience::factory(5)->sequence(
-            ['name' => 'Estudiantes'],
-            ['name' => 'Docentes'],
-            ['name' => 'Administrativos'],
-            ['name' => 'Egresados'],
-            ['name' => 'Personal externo']
-        )->create();
-
         $institutions = Institution::factory(5)->sequence(
             ['name' => 'Universidad Nacional de Colombia'],
             ['name' => 'Universidad de los Andes'],
@@ -79,6 +72,8 @@ class DatabaseSeeder extends Seeder
         Institution::create(
             ['name' => 'Otra', 'id' => 0],
         );
+
+        $audiences = Audience::all();
 
         Booking::factory(50)
             ->has(Requester::factory()->recycle($institutions))
