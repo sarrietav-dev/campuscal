@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Database\Seeders\RolePermissionSeeder;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Database\Events\DatabaseRefreshed;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Event;
@@ -15,7 +15,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         Event::listen(DatabaseRefreshed::class, function () {
-            $this->artisan('db:seed', ['--class' => RolePermissionSeeder::class]);
+            $this->artisan('db:seed', ['--class' => RolesAndPermissionsSeeder::class]);
             $this->app->make(PermissionRegistrar::class)->forgetCachedPermissions();
         });
     }

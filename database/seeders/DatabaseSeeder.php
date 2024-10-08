@@ -22,12 +22,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            RolePermissionSeeder::class,
-            AudienceSeeder::class
-        ]);
-
-
         User::factory()->superAdmin()->create([
             'name' => 'Super Admin user',
             'email' => 'super@campuscal.com',

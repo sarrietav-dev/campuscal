@@ -2,7 +2,7 @@
 
 use App\Authorization\AppRoles;
 use App\Models\User;
-use Database\Seeders\RolePermissionSeeder;
+use Database\Seeders\RolesAndPermissionsSeeder;
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
