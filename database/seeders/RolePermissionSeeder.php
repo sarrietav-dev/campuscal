@@ -22,51 +22,65 @@ class RolePermissionSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        Permission::create(['name' => CampusPermissions::CREATE->value]);
-        Permission::create(['name' => CampusPermissions::VIEW->value]);
-        Permission::create(['name' => CampusPermissions::LIST->value]);
-        Permission::create(['name' => CampusPermissions::UPDATE->value]);
-        Permission::create(['name' => CampusPermissions::DELETE->value]);
+        foreach (CampusPermissions::cases() as $case) {
+            Permission::create(['name' => $case->value]);
+        }
 
-        Permission::create(['name' => SpacePermissions::CREATE->value]);
-        Permission::create(['name' => SpacePermissions::VIEW->value]);
-        Permission::create(['name' => SpacePermissions::LIST->value]);
-        Permission::create(['name' => SpacePermissions::UPDATE->value]);
-        Permission::create(['name' => SpacePermissions::DELETE->value]);
+        foreach (SpacePermissions::cases() as $case) {
+            Permission::create(['name' => $case->value]);
+        }
 
-        Permission::create(['name' => BookingPermissions::CREATE->value]);
-        Permission::create(['name' => BookingPermissions::VIEW->value]);
-        Permission::create(['name' => BookingPermissions::LIST->value]);
-        Permission::create(['name' => BookingPermissions::UPDATE->value]);
-        Permission::create(['name' => BookingPermissions::DELETE->value]);
+        foreach (BookingPermissions::cases() as $case) {
+            Permission::create(['name' => $case->value]);
+        }
 
-        Permission::create(['name' => TeamPermissions::INVITE_MEMBER->value]);
-        Permission::create(['name' => TeamPermissions::UPDATE_ROLE->value]);
-        Permission::create(['name' => TeamPermissions::REMOVE_MEMBER->value]);
-        Permission::create(['name' => TeamPermissions::VIEW_TEAM->value]);
+        foreach (TeamPermissions::cases() as $case) {
+            Permission::create(['name' => $case->value]);
+        }
 
-        Permission::create(['name' => DeveloperPermissions::VIEW_PULSE->value]);
+        foreach (DeveloperPermissions::cases() as $case) {
+            Permission::create(['name' => $case->value]);
+        }
 
-        Role::create(['name' => AppRoles::REQUESTER])->syncPermissions([
-            CampusPermissions::VIEW->value,
-            SpacePermissions::VIEW->value,
-            CampusPermissions::LIST->value,
-            SpacePermissions::LIST->value,
-            BookingPermissions::CREATE->value,
-        ]);
-
-        Role::create(['name' => AppRoles::ADMIN])->syncPermissions(Permission::query()->whereNotIn('name', [
-            TeamPermissions::REMOVE_MEMBER->value,
-            TeamPermissions::UPDATE_ROLE->value,
-            TeamPermissions::INVITE_MEMBER->value,
-            TeamPermissions::VIEW_TEAM->value,
-            DeveloperPermissions::VIEW_PULSE->value,
-        ]));
-
-        Role::create(['name' => AppRoles::SUPER_ADMIN]);
-
-        Role::create(['name' => AppRoles::DEVELOPER]);
+        foreach (AppRoles::cases() as $role) {
+            $this->syncPermissionsToRoles($role);
+        }
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
+
+    function syncPermissionsToRoles(AppRoles $role): void
+    {
+        $permissions = [];
+
+        switch ($role->name) {
+            case AppRoles::REQUESTER:
+                $permissions = [
+                    CampusPermissions::VIEW->value,
+                    SpacePermissions::VIEW->value,
+                    CampusPermissions::LIST->value,
+                    SpacePermissions::LIST->value,
+                    BookingPermissions::CREATE->value,
+                ];
+                break;
+            case AppRoles::ADMIN:
+                $permissions = Permission::query()->whereNotIn('name', [
+                    TeamPermissions::REMOVE_MEMBER->value,
+                    TeamPermissions::UPDATE_ROLE->value,
+                    TeamPermissions::INVITE_MEMBER->value,
+                    TeamPermissions::VIEW_TEAM->value,
+                    DeveloperPermissions::VIEW_PULSE->value,
+                ])->get()->pluck('name')->toArray();
+                break;
+            case AppRoles::SUPER_ADMIN:
+                $permissions = Permission::all()->pluck('name')->toArray();
+                break;
+            case AppRoles::DEVELOPER:
+                $permissions = DeveloperPermissions::cases()->pluck('value')->toArray();
+                break;
+        }
+
+        Role::create(['name' => $role])->syncPermissions($permissions);
+    }
 }
+
