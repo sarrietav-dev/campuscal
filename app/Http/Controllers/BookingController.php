@@ -26,7 +26,7 @@ class BookingController extends Controller
             )->select(['id', 'details', 'assistance', 'created_at', 'status'])->get();
         });
 
-        return Inertia::render('Booking/Index', [
+        return Inertia::render('', [
             'bookings' => $bookings,
         ]);
     }

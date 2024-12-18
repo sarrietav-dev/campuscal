@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for my-mysql-patient-forest-6347 on 2024-08-14T13:07:00-05:00
+# fly.toml app configuration file generated for my-mysql-patient-forest-6347 on 2024-12-09T14:40:39-05:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -7,21 +7,20 @@ app = 'my-mysql-patient-forest-6347'
 primary_region = 'bog'
 
 [build]
-image = 'mysql:8.4'
-
-[[vm]]
-memory = '2gb'
-cpu_kind = 'shared'
-cpus = 1
-
-[processes]
-app = """--datadir /data/mysql \
-    --mysql-native-password=ON"""
-
-[mounts]
-source = "mysqldata"
-destination = "/data"
+  image = 'mysql:8.4'
 
 [env]
-MYSQL_DATABASE = "campuscal"
-MYSQL_USER = "campuscal"
+  MYSQL_DATABASE = 'campuscal'
+  MYSQL_USER = 'campuscal'
+
+[processes]
+  app = '--datadir /data/mysql --mysql-native-password=ON'
+
+[[mounts]]
+  source = 'mysqldata'
+  destination = '/data'
+
+[[vm]]
+  memory = '2gb'
+  cpu_kind = 'shared'
+  cpus = 1
