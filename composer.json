@@ -12,6 +12,7 @@
         "ext-pdo": "*",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.9",
+        "laravel/pail": "^1.2",
         "laravel/prompts": "^0.3.2",
         "laravel/pulse": "^1.2",
         "laravel/sanctum": "^4.0",

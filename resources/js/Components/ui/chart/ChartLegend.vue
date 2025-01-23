@@ -27,7 +27,7 @@ onMounted(() => {
             " ",
         );
         elements?.forEach((el) =>
-            el.classList.add(...classes, "!inline-flex", "!mr-2"),
+            el.classList.add(...classes, "inline-flex!", "mr-2!"),
         );
     });
 });

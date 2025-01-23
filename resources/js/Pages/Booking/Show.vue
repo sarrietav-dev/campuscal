@@ -57,7 +57,7 @@ const { booking } = defineProps<{
 <template>
     <Head :title="`Solicitud ${booking.id}`" />
     <AuthenticatedLayout>
-        <div class="container max-w-screen-md">
+        <div class="container max-w-(--breakpoint-md)">
             <div class="space-y-16">
                 <section>
                     <Text variant="heading2" class="mb-5 text-center">

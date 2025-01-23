@@ -12,7 +12,7 @@ const classes = {
         props.variant === "heading3",
     "scroll-m-20 text-xl font-semibold tracking-tight":
         props.variant === "heading4",
-    "leading-7 [&:not(:first-child)]:mt-6": !props.variant,
+    "leading-7 not-first:mt-6": !props.variant,
 };
 </script>
 
